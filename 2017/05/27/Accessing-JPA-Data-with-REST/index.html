@@ -11,18 +11,18 @@
     
 
     <meta name="keywords" content="java, spring, REST, JPA">
-    <meta name="description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+    <meta name="description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的 —URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。下面就让我">
 <meta name="keywords" content="java, spring, REST, JPA">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Accessing JPA Data with REST">
 <meta property="og:url" content="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+<meta property="og:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的 —URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。下面就让我">
 <meta property="og:image" content="https://gaoliming123.github.io/images/blog_0.png">
-<meta property="og:updated_time" content="2017-05-28T03:23:02.301Z">
+<meta property="og:updated_time" content="2017-05-28T03:27:26.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Accessing JPA Data with REST">
-<meta name="twitter:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+<meta name="twitter:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的 —URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。下面就让我">
 <meta name="twitter:image" content="https://gaoliming123.github.io/images/blog_0.png">
 
     
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +63,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -86,20 +86,20 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-27T12:01:28.000Z" itemprop="datePublished"> 发表于 2017-05-27</time>
+    <time datetime="2017-05-27T12:01:28.000Z" itemprop="datePublished"> Published 2017-05-27</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#create-Entity"><span class="toc-number">1.</span> <span class="toc-text">create Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Entity"><span class="toc-number">1.1.</span> <span class="toc-text">create Person Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Repository"><span class="toc-number">1.2.</span> <span class="toc-text">create Person Repository</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个小Bug"><span class="toc-number">1.2.1.</span> <span class="toc-text">一个小Bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make-the-application-executable"><span class="toc-number">1.3.</span> <span class="toc-text">make the application executable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-the-application"><span class="toc-number">2.</span> <span class="toc-text">Test the application</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#show-what-happend"><span class="toc-number">2.1.</span> <span class="toc-text">show what happend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存数据-POST"><span class="toc-number">2.2.</span> <span class="toc-text">保存数据 POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看保存数据"><span class="toc-number">2.3.</span> <span class="toc-text">查看保存数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新数据-PUT"><span class="toc-number">2.4.</span> <span class="toc-text">更新数据 PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据-DELETE"><span class="toc-number">2.5.</span> <span class="toc-text">删除数据 DELETE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p>对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于<a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST</a>思想的。下面就让我们来看一下spring是怎么快捷的完成吧！</p>
+		<p>对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于<a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST</a>思想的 —<code>URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。</code>下面就让我们来看一下在spring怎么实现吧！</p>
 <a id="more"></a>
 <h2 id="create-Entity"><a href="#create-Entity" class="headerlink" title="create Entity"></a>create Entity</h2><h3 id="create-Person-Entity"><a href="#create-Person-Entity" class="headerlink" title="create Person Entity"></a>create Person Entity</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">package com.mengyunzhi.Repository;</div><div class="line"></div><div class="line">import javax.persistence.Entity;</div><div class="line">import javax.persistence.GeneratedValue;</div><div class="line">import javax.persistence.GenerationType;</div><div class="line">import javax.persistence.Id;</div><div class="line"></div><div class="line"></div><div class="line">@Entity</div><div class="line">class Person &#123;</div><div class="line">    @Id @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line">    private String lastName;</div><div class="line">    private String firstName;</div><div class="line"></div><div class="line">    public Person(String lastName, String firstName) &#123;</div><div class="line">        this.lastName = lastName;</div><div class="line">        this.firstName = firstName;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public Person() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Person&#123;&quot; +</div><div class="line">                &quot;id=&quot; + id +</div><div class="line">                &quot;, lastName=&apos;&quot; + lastName + &apos;\&apos;&apos; +</div><div class="line">                &quot;, firstName=&apos;&quot; + firstName + &apos;\&apos;&apos; +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Long getId() &#123;</div><div class="line">        return id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setId(Long id) &#123;</div><div class="line">        this.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getLastName() &#123;</div><div class="line">        return lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setLastName(String lastName) &#123;</div><div class="line">        this.lastName = lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getFirstName() &#123;</div><div class="line">        return firstName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setFirstName(String firstName) &#123;</div><div class="line">        this.firstName = firstName;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>id的两个注解分别对应了声明此字段是主健和自动生成的策略，我们可以不用管这些问题</p>
@@ -188,22 +188,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#create-Entity"><span class="toc-number">1.</span> <span class="toc-text">create Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Entity"><span class="toc-number">1.1.</span> <span class="toc-text">create Person Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Repository"><span class="toc-number">1.2.</span> <span class="toc-text">create Person Repository</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个小Bug"><span class="toc-number">1.2.1.</span> <span class="toc-text">一个小Bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make-the-application-executable"><span class="toc-number">1.3.</span> <span class="toc-text">make the application executable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-the-application"><span class="toc-number">2.</span> <span class="toc-text">Test the application</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#show-what-happend"><span class="toc-number">2.1.</span> <span class="toc-text">show what happend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存数据-POST"><span class="toc-number">2.2.</span> <span class="toc-text">保存数据 POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看保存数据"><span class="toc-number">2.3.</span> <span class="toc-text">查看保存数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新数据-PUT"><span class="toc-number">2.4.</span> <span class="toc-text">更新数据 PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据-DELETE"><span class="toc-number">2.5.</span> <span class="toc-text">删除数据 DELETE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -216,7 +216,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -240,7 +240,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -482,7 +482,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
