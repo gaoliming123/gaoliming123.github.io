@@ -1,0 +1,503 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Accessing JPA Data with REST | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
+    
+
+    <meta name="keywords" content="java, spring, REST, JPA">
+    <meta name="description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+<meta name="keywords" content="java, spring, REST, JPA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Accessing JPA Data with REST">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+<meta property="og:image" content="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/blog-0.png">
+<meta property="og:updated_time" content="2017-05-28T01:22:11.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Accessing JPA Data with REST">
+<meta name="twitter:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的。下面就让我们来看一下spring是怎么快捷的完成吧！">
+<meta name="twitter:image" content="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/blog-0.png">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/27/Accessing-JPA-Data-with-REST/" title="Accessing JPA Data with REST" itemprop="url">Accessing JPA Data with REST</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-27T12:01:28.000Z" itemprop="datePublished"> Published 2017-05-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#create-Entity"><span class="toc-number">1.</span> <span class="toc-text">create Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Entity"><span class="toc-number">1.1.</span> <span class="toc-text">create Person Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Repository"><span class="toc-number">1.2.</span> <span class="toc-text">create Person Repository</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个小Bug"><span class="toc-number">1.2.1.</span> <span class="toc-text">一个小Bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make-the-application-executable"><span class="toc-number">1.3.</span> <span class="toc-text">make the application executable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-the-application"><span class="toc-number">2.</span> <span class="toc-text">Test the application</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#show-what-happend"><span class="toc-number">2.1.</span> <span class="toc-text">show what happend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存数据-POST"><span class="toc-number">2.2.</span> <span class="toc-text">保存数据 POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看保存数据"><span class="toc-number">2.3.</span> <span class="toc-text">查看保存数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新数据-PUT"><span class="toc-number">2.4.</span> <span class="toc-text">更新数据 PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据-DELETE"><span class="toc-number">2.5.</span> <span class="toc-text">删除数据 DELETE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+		
+		</div>
+		
+		<p>对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于<a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST</a>思想的。下面就让我们来看一下spring是怎么快捷的完成吧！</p>
+<a id="more"></a>
+<h2 id="create-Entity"><a href="#create-Entity" class="headerlink" title="create Entity"></a>create Entity</h2><h3 id="create-Person-Entity"><a href="#create-Person-Entity" class="headerlink" title="create Person Entity"></a>create Person Entity</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">package com.mengyunzhi.Repository;</div><div class="line"></div><div class="line">import javax.persistence.Entity;</div><div class="line">import javax.persistence.GeneratedValue;</div><div class="line">import javax.persistence.GenerationType;</div><div class="line">import javax.persistence.Id;</div><div class="line"></div><div class="line"></div><div class="line">@Entity</div><div class="line">class Person &#123;</div><div class="line">    @Id @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line">    private String lastName;</div><div class="line">    private String firstName;</div><div class="line"></div><div class="line">    public Person(String lastName, String firstName) &#123;</div><div class="line">        this.lastName = lastName;</div><div class="line">        this.firstName = firstName;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public Person() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;Person&#123;&quot; +</div><div class="line">                &quot;id=&quot; + id +</div><div class="line">                &quot;, lastName=&apos;&quot; + lastName + &apos;\&apos;&apos; +</div><div class="line">                &quot;, firstName=&apos;&quot; + firstName + &apos;\&apos;&apos; +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Long getId() &#123;</div><div class="line">        return id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setId(Long id) &#123;</div><div class="line">        this.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getLastName() &#123;</div><div class="line">        return lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setLastName(String lastName) &#123;</div><div class="line">        this.lastName = lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getFirstName() &#123;</div><div class="line">        return firstName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setFirstName(String firstName) &#123;</div><div class="line">        this.firstName = firstName;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>id的两个注解分别对应了声明此字段是主健和自动生成的策略，我们可以不用管这些问题</p>
+<h3 id="create-Person-Repository"><a href="#create-Person-Repository" class="headerlink" title="create Person Repository"></a>create Person Repository</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">package com.mengyunzhi.Repository;</div><div class="line"></div><div class="line">import org.springframework.data.repository.CrudRepository;</div><div class="line">import org.springframework.data.rest.core.annotation.RepositoryRestResource;</div><div class="line"></div><div class="line">@RepositoryRestResource(collectionResourceRel = &quot;people&quot;, path = &quot;people&quot;)</div><div class="line">interface PersonRepository extends CrudRepository&lt;Person, Long&gt; &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当程序运行的时候，然后它使用<a href="http://docs.spring.io/spring-data/rest/docs/current/api/org/springframework/data/rest/core/annotation/RepositoryRestResource.html" target="_blank" rel="external">@RepositoryRestResource</a>注解来引导Spring MVC创建  <code>&quot;/people&quot;</code>  RESTful endpoints。</p>
+<h4 id="一个小Bug"><a href="#一个小Bug" class="headerlink" title="一个小Bug"></a>一个小Bug</h4><p>我用的是ideaIDE，但我初始化一个项目的时候就会发现无法引入<code>@RepositoryRestResource</code>这个注解,如图所示<br><img src="blog-0.png" alt=""></p>
+<p>google关键字:  <code>@RepositoryRestResource can&#39;t find in spring</code><br>然后我们参考Stack Overflow中这篇文章解决<a href="https://stackoverflow.com/questions/31274121/unable-to-import-spring-repositoryrestresource" target="_blank" rel="external">Unable to import Spring RepositoryRestResource</a><br>在项目pom.xml中加$<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;spring-boot-starter-data-rest&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;1.2.5.RELEASE&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p>重新导入依赖即可</p>
+<h3 id="make-the-application-executable"><a href="#make-the-application-executable" class="headerlink" title="make the application executable"></a>make the application executable</h3><p>运行程序</p>
+<h2 id="Test-the-application"><a href="#Test-the-application" class="headerlink" title="Test the application"></a>Test the application</h2><h3 id="show-what-happend"><a href="#show-what-happend" class="headerlink" title="show what happend"></a>show what happend</h3><p>现在程序已经开始运行了，我们可以用postman发送请求，也可以自己用js代码写ajax请求，但是在这里我们将使用 *nix tool <code>curl</code></p>
+<p>我们在终端(Linux)或者git Bash(Windows)中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080</div></pre></td></tr></table></figure>
+<p>然后就会发现spring已经为我们写好了url:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;people&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这里我们看到了服务器能提供给我们什么。我们可以看到一个people link :<br><a href="http://localhost:8080/people" target="_blank" rel="external">http://localhost:8080/people</a></p>
+<p>然后让我们在终端输入url <code>http://localhost:8080/people&quot;</code> 看看会有什么结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people</div></pre></td></tr></table></figure>
+<p>result:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="保存数据-POST"><a href="#保存数据-POST" class="headerlink" title="保存数据 POST"></a>保存数据 POST</h3><p>我们发现数据库还是空的，一起让我们来添加一条数据吧!</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl -i -X POST -H &quot;Content-Type:application/json&quot; -d &apos;&#123;  &quot;lastName&quot; : &quot;Frodo&quot;,  &quot;firstName&quot; : &quot;Baggins&quot; &#125;&apos; http://localhost:8080/people</div></pre></td></tr></table></figure>
+<p>让我们来解释一下这都是什么意思吧！</p>
+<p>#### </p>
+<ul>
+<li><code>- i</code> 使我们能够看到响应的headers</li>
+<li><code>- X POST</code> 使用POST方法创建实体</li>
+<li><code>-H &quot;Content-Type:application/json&quot;</code> content type是json对象</li>
+<li><code>-d &#39;{  &quot;lastName&quot; : &quot;Frodo&quot;,  &quot;firstName&quot; : &quot;Baggins&quot; }&#39;</code> json数据格式的Person对象</li>
+</ul>
+<p>然后让我们一起来查看服务器给我们返回了什么？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 201 </div><div class="line">Location: http://localhost:8080/people/1</div><div class="line">Content-Type: application/hal+json;charset=UTF-8</div><div class="line">Transfer-Encoding: chunked</div><div class="line">Date: Sun, 28 May 2017 00:47:48 GMT</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;lastName&quot; : &quot;Frodo&quot;,</div><div class="line">  &quot;firstName&quot; : &quot;Baggins&quot;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;person&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="查看保存数据"><a href="#查看保存数据" class="headerlink" title="查看保存数据"></a>查看保存数据</h3><p>然后让我们查询一下person数据表中到底存储了多少条记录呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ &#123;</div><div class="line">      &quot;lastName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后我们想要查询某一条记录呢？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people/1</div><div class="line">&#123;</div><div class="line">  &quot;lastName&quot; : &quot;Frodo&quot;,</div><div class="line">  &quot;firstName&quot; : &quot;Baggins&quot;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;person&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="更新数据-PUT"><a href="#更新数据-PUT" class="headerlink" title="更新数据 PUT"></a>更新数据 PUT</h3><p>让我们来将刚才保存数据的firstName改为Gao试一下吧！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">curl -i -X PUT -H &quot;Content-Type:application/json&quot; -d &apos;&#123;  &quot;lastName&quot; : &quot;Gao&quot;,  &quot;firstName&quot; : &quot;Baggins&quot; &#125;&apos; http://localhost:8080/people/1</div><div class="line">HTTP/1.1 200 </div><div class="line">Location: http://localhost:8080/people/1</div><div class="line">Content-Type: application/hal+json;charset=UTF-8</div><div class="line">Transfer-Encoding: chunked</div><div class="line">Date: Sun, 28 May 2017 01:05:09 GMT</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;lastName&quot; : &quot;Gao&quot;,</div><div class="line">  &quot;firstName&quot; : &quot;Baggins&quot;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;person&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>是的，现在这条记录已经被我们更新啦！</p>
+<h3 id="删除数据-DELETE"><a href="#删除数据-DELETE" class="headerlink" title="删除数据 DELETE"></a>删除数据 DELETE</h3><p>让我们把唯一的一条数据删除吧！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl -X DELETE http://localhost:8080/people/1</div></pre></td></tr></table></figure>
+<p>让我们来查看一下吧！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>是的，记录被我们删除了。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://spring.io/guides/gs/accessing-data-rest/" target="_blank" rel="external">Accessing JPA Data with REST</a> <code>Spring Guides</code><br><a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST 架构该怎么生动地理解？</a> <code>知乎</code><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-spring-jpa/" target="_blank" rel="external">使用 Spring Data JPA 简化 JPA 开发</a><br><a href="http://www.jianshu.com/p/3423fa97d185" target="_blank" rel="external">Spring Boot之@RepositoryRestResource注解入门使用教程</a> <code>简书</code><br><a href="https://stackoverflow.com/questions/31274121/unable-to-import-spring-repositoryrestresource" target="_blank" rel="external">Unable to import Spring RepositoryRestResource</a> <code>Stack Overflow</code></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/spring/">spring</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/spring/">spring</a><a href="/tags/java/">java</a><a href="/tags/REST/">REST</a><a href="/tags/JPA/">JPA</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/" data-title="Accessing JPA Data with REST | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/05/27/hello-world/"  title="Hello World">
+ <strong>下一篇：</strong><br/> 
+ <span>Hello World
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#create-Entity"><span class="toc-number">1.</span> <span class="toc-text">create Entity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Entity"><span class="toc-number">1.1.</span> <span class="toc-text">create Person Entity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Person-Repository"><span class="toc-number">1.2.</span> <span class="toc-text">create Person Repository</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一个小Bug"><span class="toc-number">1.2.1.</span> <span class="toc-text">一个小Bug</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make-the-application-executable"><span class="toc-number">1.3.</span> <span class="toc-text">make the application executable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-the-application"><span class="toc-number">2.</span> <span class="toc-text">Test the application</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#show-what-happend"><span class="toc-number">2.1.</span> <span class="toc-text">show what happend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存数据-POST"><span class="toc-number">2.2.</span> <span class="toc-text">保存数据 POST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看保存数据"><span class="toc-number">2.3.</span> <span class="toc-text">查看保存数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新数据-PUT"><span class="toc-number">2.4.</span> <span class="toc-text">更新数据 PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据-DELETE"><span class="toc-number">2.5.</span> <span class="toc-text">删除数据 DELETE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming <br/>
+			Thanks to all those who bring me knowledge, especially my teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学梦云智软件开发团队成员)">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
