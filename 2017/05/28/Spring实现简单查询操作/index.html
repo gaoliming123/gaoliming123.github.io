@@ -20,7 +20,7 @@
 <meta property="og:description" content="我们知道Spring中为我们对域模型的操作提供了和多的接口。例如 CrudRepository 接口提供了复杂的CRUD功能来管理实体类。">
 <meta property="og:image" content="https://gaoliming123.github.io/images/blog_1.png">
 <meta property="og:image" content="https://gaoliming123.github.io/images/blog_2.png">
-<meta property="og:updated_time" content="2017-05-28T08:52:12.683Z">
+<meta property="og:updated_time" content="2017-05-28T08:58:03.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring实现简单查询操作">
 <meta name="twitter:description" content="我们知道Spring中为我们对域模型的操作提供了和多的接口。例如 CrudRepository 接口提供了复杂的CRUD功能来管理实体类。">
@@ -50,7 +50,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -64,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -87,14 +87,14 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-28T03:32:57.000Z" itemprop="datePublished"> 发表于 2017-05-28</time>
+    <time datetime="2017-05-28T03:32:57.000Z" itemprop="datePublished"> Published 2017-05-28</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CrudRepository"><span class="toc-number">1.</span> <span class="toc-text">CrudRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-creation"><span class="toc-number">2.</span> <span class="toc-text">Query creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Entity-and-declare-interface-Repository"><span class="toc-number">2.1.</span> <span class="toc-text">create Entity and declare interface Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-creation-1"><span class="toc-number">2.2.</span> <span class="toc-text">Query creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#test-the-Query"><span class="toc-number">3.</span> <span class="toc-text">test the Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#保存实体"><span class="toc-number">3.1.</span> <span class="toc-text">保存实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改PersonRepository"><span class="toc-number">3.2.</span> <span class="toc-text">修改PersonRepository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test-continue"><span class="toc-number">3.3.</span> <span class="toc-text">test continue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
@@ -110,14 +110,14 @@
 <p>Example</p>
 <p>当我们写方法的时候，会惊喜的发现Spring竟然能够自动补全我们还没有写的方法。这是不是很神奇呢！</p>
 <p><img src="/images/blog_1.png" alt=""><br><img src="/images/blog_2.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@RepositoryRestResource(collectionResourceRel = &quot;people&quot;, path = &quot;people&quot;)</div><div class="line">interface PersonRepository extends CrudRepository&lt;Person, Long&gt; &#123;</div><div class="line"></div><div class="line">    //按lastname查询</div><div class="line">    List&lt;Person&gt; findByLastName(@Param(&quot;lastname&quot;) String lastname);</div><div class="line"></div><div class="line">    //按lastname或者firstname查询</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstName(@Param(&quot;lastname&quot;) String lastname,</div><div class="line">                                                         @Param(&quot;firstname&quot;) String firstname);</div><div class="line"></div><div class="line">    //为查询启用静态排序</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstNameAsc(@Param(&quot;lastname&quot;) String lastname);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@RepositoryRestResource(collectionResourceRel = &quot;people&quot;, path = &quot;people&quot;)</div><div class="line">interface PersonRepository extends CrudRepository&lt;Person, Long&gt; &#123;</div><div class="line"></div><div class="line">    //按lastname查询</div><div class="line">    List&lt;Person&gt; findByLastName(String lastname);</div><div class="line"></div><div class="line">    //按lastname或者firstname查询</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstName( String lastname, String firstname);</div><div class="line"></div><div class="line">    //为查询启用静态排序</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstNameAsc(String lastname);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="test-the-Query"><a href="#test-the-Query" class="headerlink" title="test the Query"></a>test the Query</h2><p>如果你对Spring实现 <code>REST</code>不熟悉的话，那请读一下<a href="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/">上一篇文</a>章吧！</p>
 <h3 id="保存实体"><a href="#保存实体" class="headerlink" title="保存实体"></a>保存实体</h3><p>终端输入命令:<br> $ curl -i -X POST -H “Content-Type:application/json” -d ‘{  “firstName” : “Frodo”,  “lastName” : “Baggins” , “emailAddress”: “mengynzhi@yunzhiclub” }’ <a href="http://localhost:8080/people" target="_blank" rel="external">http://localhost:8080/people</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">$ curl -i -X POST -H &quot;Content-Type:application/json&quot; -d &apos;&#123;  &quot;firstName&quot; : &quot;Frodo&quot;,  &quot;lastName&quot; : &quot;Baggins&quot; , &quot;emailAddress&quot;: &quot;mengynzhi@yunzhiclub&quot; &#125;&apos; http://localhost:8080/people</div><div class="line">HTTP/1.1 201 </div><div class="line">Location: http://localhost:8080/people/1</div><div class="line">Content-Type: application/hal+json;charset=UTF-8</div><div class="line">Transfer-Encoding: chunked</div><div class="line">Date: Sun, 28 May 2017 08:22:18 GMT</div><div class="line"></div><div class="line">&#123;</div><div class="line">  &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">  &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">  &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;person&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <p>发现保存成功了。</p>
 <p>我们在终端输入 <code>$ curl http://localhost:8080</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080</div><div class="line">&#123;</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;people&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>同上，继续输入命令    <code>$ curl http://localhost:8080/people/search</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people/search</div><div class="line">&#123;</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;findByLastName&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search/findByLastName&quot;,</div><div class="line">      &quot;templated&quot; : true</div><div class="line">    &#125;,</div><div class="line">    &quot;findByLastNameOrderByFirstNameAsc&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search/findByLastNameOrderByFirstNameAsc&quot;,</div><div class="line">      &quot;templated&quot; : true</div><div class="line">    &#125;,</div><div class="line">    &quot;findByLastNameOrderByFirstName&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search/findByLastNameOrderByFirstName&quot;,</div><div class="line">      &quot;templated&quot; : true</div><div class="line">    &#125;,</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后让我们测试第一个方法吧！<code>$ curl http://localhost:8080/people/search/findByLastNameAndFirstName</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people/search/findByLastName</div><div class="line">&#123;&quot;cause&quot;:null,&quot;message&quot;:&quot;Unable to detect parameter names for query method com.mengyunzhi.Repository.PersonRepository.findByLastNameAndFirstNameAllIgnoreCase! Use @Param or compile with -parameters on JDK 8.&quot;&#125;</div></pre></td></tr></table></figure></p>
+<p>然后让我们测试第一个方法吧！<code>$ curl http://localhost:8080/people/search/findByLastNameAndFirstName</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people/search/findByLastNameAndFirstName</div><div class="line">&#123;&quot;cause&quot;:null,&quot;message&quot;:&quot;Unable to detect parameter names for query method com.mengyunzhi.Repository.PersonRepository.findByLastNameAndFirstNameAllIgnoreCase! Use @Param or compile with -parameters on JDK 8.&quot;&#125;</div></pre></td></tr></table></figure></p>
 <p>然后我们会发现报错了，查看错误信息。因为我们需要用ajax来请求这些方法，错误信息告诉我们需要给我们函数加 <code>@Param</code>这个注解，我们对代码进行修改</p>
 <h3 id="修改PersonRepository"><a href="#修改PersonRepository" class="headerlink" title="修改PersonRepository"></a>修改PersonRepository</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@RepositoryRestResource(collectionResourceRel = &quot;people&quot;, path = &quot;people&quot;)</div><div class="line">interface PersonRepository extends CrudRepository&lt;Person, Long&gt; &#123;</div><div class="line"></div><div class="line">    //按lastname查询</div><div class="line">    List&lt;Person&gt; findByLastName(@Param(&quot;lastname&quot;) String lastname);</div><div class="line"></div><div class="line">    //按lastname或者firstname查询</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstName(@Param(&quot;lastname&quot;) String lastname,</div><div class="line">                                                         @Param(&quot;firstname&quot;) String firstname);</div><div class="line"></div><div class="line">    //为查询启用静态排序</div><div class="line">    List&lt;Person&gt; findByLastNameOrderByFirstNameAsc(@Param(&quot;lastname&quot;) String lastname);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="test-continue"><a href="#test-continue" class="headerlink" title="test continue"></a>test continue</h3><p>终端输入命令:<br><code>http://localhost:8080/people/search/findByLastName?lastname=Baggins</code><br>就会发现Spring已经为我们查询出了结果</p>
@@ -173,22 +173,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CrudRepository"><span class="toc-number">1.</span> <span class="toc-text">CrudRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-creation"><span class="toc-number">2.</span> <span class="toc-text">Query creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Entity-and-declare-interface-Repository"><span class="toc-number">2.1.</span> <span class="toc-text">create Entity and declare interface Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-creation-1"><span class="toc-number">2.2.</span> <span class="toc-text">Query creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#test-the-Query"><span class="toc-number">3.</span> <span class="toc-text">test the Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#保存实体"><span class="toc-number">3.1.</span> <span class="toc-text">保存实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改PersonRepository"><span class="toc-number">3.2.</span> <span class="toc-text">修改PersonRepository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test-continue"><span class="toc-number">3.3.</span> <span class="toc-text">test continue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -201,7 +201,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -229,7 +229,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -471,7 +471,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
