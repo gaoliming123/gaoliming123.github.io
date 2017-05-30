@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2017/05/30/shell/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：Linux脚本文件。">
-<meta property="og:updated_time" content="2017-05-30T02:57:43.211Z">
+<meta property="og:updated_time" content="2017-05-30T05:59:20.784Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux下编写脚本文件">
 <meta name="twitter:description" content="刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：Linux脚本文件。">
@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +63,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -86,16 +86,16 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-30T00:27:18.000Z" itemprop="datePublished"> Published 2017-05-30</time>
+    <time datetime="2017-05-30T00:27:18.000Z" itemprop="datePublished"> 发表于 2017-05-30</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-download"><span class="toc-number">3.</span> <span class="toc-text">Code download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dowload-ZIP"><span class="toc-number">3.1.</span> <span class="toc-text">Dowload ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
@@ -111,7 +111,7 @@
 <h3 id="execute-the-curl-sh"><a href="#execute-the-curl-sh" class="headerlink" title="execute the curl.sh"></a>execute the curl.sh</h3><p>让我们看一看执行的结果吧！终端输入命令行: <code>sh curl.sh</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line">RESTful is:</div><div class="line">&#123;</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;people&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">请输入url:</div><div class="line">people</div><div class="line">拼接成的url是: http://localhost:8080/people</div><div class="line">看一下我们可以测试除了REST之外还有哪儿些方法和所有的数据:</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;, &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;search&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">开始测试REST方法: 请输入http的请求方法</div><div class="line">DELETE</div><div class="line">查看所有的数据</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;, &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;search&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">输入想要删除的数据id</div><div class="line">2</div></pre></td></tr></table></figure>
 <p>此时如果我们在执行一次的话就会发现id为person表中2的数据删除了。当然了，你也可以直接去数据库查看。当然，在这里我只写了<code>POST, DELETE</code>这两个方法，curl命令是如此丰富和功能强大，需要我们慢慢学习。路漫漫其修远兮呀！嘻嘻。</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/linux/linux-shell-variable.html" target="_blank" rel="external">Shell 变量</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-process-control.html" target="_blank" rel="external">Shell 流程控制</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-test.html" target="_blank" rel="external">Shell test 命令</a> <code>菜鸟教程</code><br><a href="http://jingyan.baidu.com/article/fcb5aff7ae3b28edaa4a7195.html?st=3&amp;net_type=1&amp;bd_page_type=1&amp;os=0&amp;showimg=1&amp;rst=2" target="_blank" rel="external">编写一个简单的linuxshell脚本</a> <code>百度经验</code><br><a href="http://www.linuxdiyf.com/linux/2800.html" target="_blank" rel="external">Linux curl命令详解</a> <code>Linux系统教程</code><br><a href="https://segmentfault.com/q/1010000000134356" target="_blank" rel="external">shell怎么打印换行</a> <code>segmentfault</code></p>
+<h2 id="Code-download"><a href="#Code-download" class="headerlink" title="Code download"></a>Code download</h2><h3 id="Dowload-ZIP"><a href="#Dowload-ZIP" class="headerlink" title="Dowload ZIP"></a><a href="https://github.com/gaoliming123/blog/archive/master.zip" target="_blank" rel="external">Dowload ZIP</a></h3><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/linux/linux-shell-variable.html" target="_blank" rel="external">Shell 变量</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-process-control.html" target="_blank" rel="external">Shell 流程控制</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-test.html" target="_blank" rel="external">Shell test 命令</a> <code>菜鸟教程</code><br><a href="http://jingyan.baidu.com/article/fcb5aff7ae3b28edaa4a7195.html?st=3&amp;net_type=1&amp;bd_page_type=1&amp;os=0&amp;showimg=1&amp;rst=2" target="_blank" rel="external">编写一个简单的linuxshell脚本</a> <code>百度经验</code><br><a href="http://www.linuxdiyf.com/linux/2800.html" target="_blank" rel="external">Linux curl命令详解</a> <code>Linux系统教程</code><br><a href="https://segmentfault.com/q/1010000000134356" target="_blank" rel="external">shell怎么打印换行</a> <code>segmentfault</code></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -161,22 +161,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-download"><span class="toc-number">3.</span> <span class="toc-text">Code download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dowload-ZIP"><span class="toc-number">3.1.</span> <span class="toc-text">Dowload ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -193,7 +193,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -233,7 +233,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -475,7 +475,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
