@@ -1,0 +1,495 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>linux下编写脚本文件 | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
+    
+
+    <meta name="keywords" content="linux, shell, curl, http">
+    <meta name="description" content="刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：Linux脚本文件。">
+<meta name="keywords" content="linux, shell, curl, http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux下编写脚本文件">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/05/30/shell/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：Linux脚本文件。">
+<meta property="og:updated_time" content="2017-05-30T02:52:30.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux下编写脚本文件">
+<meta name="twitter:description" content="刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：Linux脚本文件。">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">关于 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/30/shell/" title="linux下编写脚本文件" itemprop="url">linux下编写脚本文件</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-30T00:27:18.000Z" itemprop="datePublished"> Published 2017-05-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+		
+		</div>
+		
+		<p>刚开始使用Ubuntu的时候，由于Ubuntu的GUI已经做的很好了，只是觉得和windows不是一个风格的界面而已。后来接触了命令行，感觉比用图形交互界面的客户端要随心多了。时间久了，开机是要启动的程序越来越多了，写程序时也越来越依赖命令行了，就发现一条一条的从终端输入命令有点儿麻烦了。当然了，Linux能流行到今天，那一定有它的解决办法咯！哈哈，那就是今天的主题：<code>Linux脚本文件</code>。<br><a id="more"></a></p>
+<h2 id="the-first-shell-file"><a href="#the-first-shell-file" class="headerlink" title="the first shell file"></a>the first shell file</h2><h3 id="create-the-sh-file"><a href="#create-the-sh-file" class="headerlink" title="create the .sh file"></a>create the .sh file</h3><p>for example:<br>让我们创建一个<code>first.sh</code>文件</p>
+<h3 id="echo-“hello-word-”"><a href="#echo-“hello-word-”" class="headerlink" title="echo “hello word!”"></a>echo “hello word!”</h3><p>然后打开文件，开始编写shell脚本<br>注意: <code>#号后面表示注释</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 注意第一行的代码解释器的指定，这里使用的是/bin/bash/ 解释器</div><div class="line">#! /bin/bash</div><div class="line"># 输出hello word!</div><div class="line">echo &quot;hello word!&quot;</div></pre></td></tr></table></figure>
+<p>然后保存文件即可</p>
+<h3 id="execute-first-sh"><a href="#execute-first-sh" class="headerlink" title="execute first.sh"></a>execute first.sh</h3><p>然后我们在终端输入: <code>sh first.sh</code><br>然后就会惊喜的发现终端输出了 <code>hello word!</code><br>是的，这样我们的第一个脚本文件就算是执行成功了。</p>
+<h2 id="编写利用终端发送http请求的脚本文件"><a href="#编写利用终端发送http请求的脚本文件" class="headerlink" title="编写利用终端发送http请求的脚本文件"></a>编写利用终端发送http请求的脚本文件</h2><p>注意：在发送http请求之前，后台的服务要开启。我这里用的是<a href="https://spring.io/" target="_blank" rel="external">Spring</a>， 当然你可以参考我写的另一篇文章<a href="https://gaoliming123.github.io/2017/05/27/Accessing-JPA-Data-with-REST/">Accessing JPA Data with REST</a>， 这样也许能够更明白我写这篇文章的意思了，当然如果读不懂也没关系啦！你可以参考下面<a href="http://www.runoob.com/linux/linux-shell-variable.html" target="_blank" rel="external">菜鸟教程</a>去编写自己需要的shell脚本。</p>
+<h3 id="create-the-curl-sh-file"><a href="#create-the-curl-sh-file" class="headerlink" title="create the curl.sh file"></a>create the curl.sh file</h3><p>在终端输入命令: <code>touch curl.sh</code><br>就会发现当前目录下已经建好了crul.sh文件，这是是不是要比右击，新建文件要快呢！哈哈</p>
+<h3 id="编写shell文件"><a href="#编写shell文件" class="headerlink" title="编写shell文件"></a>编写shell文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">#! /bin/bash</div><div class="line"># 环境</div><div class="line"># 查看spring server提供的方法</div><div class="line"># 定义http请求的动词</div><div class="line">POST=&quot;POST&quot;</div><div class="line">DELETE=&quot;DELETE&quot;</div><div class="line">echo &quot;RESTful is:&quot;</div><div class="line">curl http://localhost:8080		# crul命令行</div><div class="line">echo &quot;\n请输入url:&quot;			# \n是换行符</div><div class="line">read url_name				# 从屏幕上输入一个字符串并赋值给url_name</div><div class="line">base_url=&quot;http://localhost:8080/&quot;	#最基本的url</div><div class="line">your_url=&quot;$base_url$url_name&quot;		#拼接字符串</div><div class="line">echo &quot;拼接成的url是: $your_url&quot;</div><div class="line">echo &quot;看一下我们可以测试除了REST之外还有哪儿些方法和所有的数据:&quot;</div><div class="line">curl $your_url</div><div class="line">echo &quot;\n开始测试REST方法: 请输入http的请求方法&quot;</div><div class="line">read method				#读取屏幕上输入的方法</div><div class="line">#if-else条件判断语句</div><div class="line">if test $method = $POST			#用test命令判断两个字符串是否相等</div><div class="line">then</div><div class="line">	curl -i -X POST -H &quot;Content-Type:application/json&quot; -d &apos;&#123;&quot;firstName&quot;:&quot;Frodo&quot;,&quot;lastName&quot;:&quot;Baggins&quot;,&quot;emailAddress&quot;:&quot;mengynzhi@yunzhiclub&quot;&#125;&apos; http://localhost:8080/people		# 发送http请求保存数据</div><div class="line">	echo &quot;\n保存数据成功&quot;</div><div class="line">elif test $method = $DELETE</div><div class="line">then</div><div class="line">	echo &quot;查看所有的数据&quot;</div><div class="line">	curl $your_url</div><div class="line">	echo &quot;\n输入想要删除的数据id&quot;</div><div class="line">	read id</div><div class="line">	delete_url=&quot;$your_url/$id&quot;	#拼接删除的url</div><div class="line">	delete=&quot;-X DELETE $delete_url&quot;	#拼接删除命令</div><div class="line">	curl $delete			#执行删除命令</div><div class="line">fi</div></pre></td></tr></table></figure>
+<h3 id="execute-the-curl-sh"><a href="#execute-the-curl-sh" class="headerlink" title="execute the curl.sh"></a>execute the curl.sh</h3><p>让我们看一看执行的结果吧！终端输入命令行: <code>sh curl.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line">RESTful is:</div><div class="line">&#123;</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;people&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">请输入url:</div><div class="line">people</div><div class="line">拼接成的url是: http://localhost:8080/people</div><div class="line">看一下我们可以测试除了REST之外还有哪儿些方法和所有的数据:</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;, &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;search&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">开始测试REST方法: 请输入http的请求方法</div><div class="line">DELETE</div><div class="line">查看所有的数据</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/1&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;, &#123;</div><div class="line">      &quot;emailAddress&quot; : &quot;mengynzhi@yunzhiclub&quot;,</div><div class="line">      &quot;lastName&quot; : &quot;Baggins&quot;,</div><div class="line">      &quot;firstName&quot; : &quot;Frodo&quot;,</div><div class="line">      &quot;_links&quot; : &#123;</div><div class="line">        &quot;self&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;,</div><div class="line">        &quot;person&quot; : &#123;</div><div class="line">          &quot;href&quot; : &quot;http://localhost:8080/people/2&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;search&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people/search&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">输入想要删除的数据id</div><div class="line">2</div></pre></td></tr></table></figure>
+<p>此时如果我们在执行一次的话就会发现id为person表中2的数据删除了。当然了，你也可以直接去数据库查看。当然，在这里我只写了<code>POST, DELETE</code>这两个方法，curl命令是如此丰富和功能强大，需要我们慢慢学习。路漫漫其修远兮呀！嘻嘻。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.runoob.com/linux/linux-shell-variable.html" target="_blank" rel="external">Shell 变量</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-process-control.html" target="_blank" rel="external">Shell 流程控制</a> <code>菜鸟教程</code><br><a href="http://www.runoob.com/linux/linux-shell-test.html" target="_blank" rel="external">Shell test 命令</a> <code>菜鸟教程</code><br><a href="http://jingyan.baidu.com/article/fcb5aff7ae3b28edaa4a7195.html?st=3&amp;net_type=1&amp;bd_page_type=1&amp;os=0&amp;showimg=1&amp;rst=2" target="_blank" rel="external">编写一个简单的linuxshell脚本</a> <code>百度经验</code><br><a href="http://www.linuxdiyf.com/linux/2800.html" target="_blank" rel="external">Linux curl命令详解</a> <code>Linux系统教程</code><br><a href="https://segmentfault.com/q/1010000000134356" target="_blank" rel="external">shell怎么打印换行</a> <code>segmentfault</code></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/linux/">linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/shell/">shell</a><a href="/tags/curl/">curl</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2017/05/30/shell/" data-title="linux下编写脚本文件 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/05/28/Spring实现简单查询操作/"  title="Spring实现简单查询操作">
+ <strong>下一篇：</strong><br/> 
+ <span>Spring实现简单查询操作
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-first-shell-file"><span class="toc-number">1.</span> <span class="toc-text">the first shell file</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-sh-file"><span class="toc-number">1.1.</span> <span class="toc-text">create the .sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#echo-“hello-word-”"><span class="toc-number">1.2.</span> <span class="toc-text">echo “hello word!”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-first-sh"><span class="toc-number">1.3.</span> <span class="toc-text">execute first.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写利用终端发送http请求的脚本文件"><span class="toc-number">2.</span> <span class="toc-text">编写利用终端发送http请求的脚本文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-the-curl-sh-file"><span class="toc-number">2.1.</span> <span class="toc-text">create the curl.sh file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编写shell文件"><span class="toc-number">2.2.</span> <span class="toc-text">编写shell文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-curl-sh"><span class="toc-number">2.3.</span> <span class="toc-text">execute the curl.sh</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming in 河北工业大学 <br/>
+			Thanks to all those who bring me knowledge and accompany me, especially my parents and teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学梦云智软件开发团队成员)">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

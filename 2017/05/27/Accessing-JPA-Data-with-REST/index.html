@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的 —URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。下面就让我">
 <meta property="og:image" content="https://gaoliming123.github.io/images/blog_0.png">
-<meta property="og:updated_time" content="2017-05-28T03:27:26.811Z">
+<meta property="og:updated_time" content="2017-05-30T01:17:05.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Accessing JPA Data with REST">
 <meta name="twitter:description" content="对于熟悉MVC思想的人来时(前后台完全分离的情况下)，如果前台向后台发送ajax请求的话，我们惯性的思想来说都是要在C层接受转发数据，将数据交给Service层处理这里我们将M层分为—Entity(元数据)与Service(处理实体数据的方法)。但是Spring中对于crud操作却是基于REST思想的 —URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。下面就让我">
@@ -140,7 +140,7 @@
 <p>让我们来查看一下吧！</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ curl http://localhost:8080/people</div><div class="line">&#123;</div><div class="line">  &quot;_embedded&quot; : &#123;</div><div class="line">    &quot;people&quot; : [ ]</div><div class="line">  &#125;,</div><div class="line">  &quot;_links&quot; : &#123;</div><div class="line">    &quot;self&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/people&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;profile&quot; : &#123;</div><div class="line">      &quot;href&quot; : &quot;http://localhost:8080/profile/people&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>是的，记录被我们删除了。</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://spring.io/guides/gs/accessing-data-rest/" target="_blank" rel="external">Accessing JPA Data with REST</a> <code>Spring Guides</code><br><a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="external">Representational State Transfer (REST)</a><br><a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST 架构该怎么生动地理解？</a> <code>知乎</code><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-spring-jpa/" target="_blank" rel="external">使用 Spring Data JPA 简化 JPA 开发</a><br><a href="http://www.jianshu.com/p/3423fa97d185" target="_blank" rel="external">Spring Boot之@RepositoryRestResource注解入门使用教程</a> <code>简书</code><br><a href="https://stackoverflow.com/questions/31274121/unable-to-import-spring-repositoryrestresource" target="_blank" rel="external">Unable to import Spring RepositoryRestResource</a> <code>Stack Overflow</code></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://spring.io/guides/gs/accessing-data-rest/" target="_blank" rel="external">Accessing JPA Data with REST</a> <code>Spring Guides</code><br><a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="external">Representational State Transfer (REST)</a><br><a href="https://www.zhihu.com/question/27785028" target="_blank" rel="external">REST 架构该怎么生动地理解？</a> <code>知乎</code><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-spring-jpa/" target="_blank" rel="external">使用 Spring Data JPA 简化 JPA 开发</a><br><a href="http://www.linuxdiyf.com/linux/2800.html" target="_blank" rel="external">Linux curl命令详解</a> <code>Linux系统教程</code><br><a href="http://www.jianshu.com/p/3423fa97d185" target="_blank" rel="external">Spring Boot之@RepositoryRestResource注解入门使用教程</a> <code>简书</code><br><a href="https://stackoverflow.com/questions/31274121/unable-to-import-spring-repositoryrestresource" target="_blank" rel="external">Unable to import Spring RepositoryRestResource</a> <code>Stack Overflow</code></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -217,6 +217,10 @@
 		<ul>
 		
 		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/spring/" title="spring">spring<sup>2</sup></a></li>
 		  
 		
@@ -238,15 +242,27 @@
 			
 		
 			
-				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/REST/" title="REST">REST<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/JPA/" title="JPA">JPA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
 			
 		
 		</ul>
