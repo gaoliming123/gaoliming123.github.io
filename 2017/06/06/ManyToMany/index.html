@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下Hiberate才能明白其中的道理。">
 <meta property="og:image" content="https://gaoliming123.github.io/images/domain.png">
-<meta property="og:updated_time" content="2017-06-06T14:33:44.827Z">
+<meta property="og:updated_time" content="2017-06-06T23:41:25.656Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hibernate @ManyToMany总结">
 <meta name="twitter:description" content="Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下Hiberate才能明白其中的道理。">
@@ -117,8 +117,9 @@
 <p>这句话大体中 <code>cascade = CascadeType.PERSIST</code>的意思是当该集合引用新<code>Teacher</code>是，<code>Hibernate</code>会让其持久化。但是为什么会错呢？让我们来分析一下原因：</p>
 <h3 id="entity-status"><a href="#entity-status" class="headerlink" title="entity status"></a>entity status</h3><h4 id="状态迁移"><a href="#状态迁移" class="headerlink" title="状态迁移"></a>状态迁移</h4><p><code>new Java</code>操作符创建的实例是瞬时的。也就是说当这句话<code>Teacher teacher = new Teacher()</code>的时候，teacher是瞬时实例，我们可以用<code>EntityManager具有数据#persist()</code>方法能够是teacher这个对象变得持久化。这里的持久化你可以简单的理解成保存到数据库的过程。</p>
 <h4 id="持久化状态"><a href="#持久化状态" class="headerlink" title="持久化状态"></a>持久化状态</h4><p>持久化状态是我们能够对数据进行操作CRUD操作的时候对数据的一个事务过程。</p>
-<h4 id="移除状态"><a href="#移除状态" class="headerlink" title="移除状态"></a>移除状态</h4><h4 id="分离状态"><a href="#分离状态" class="headerlink" title="分离状态"></a>分离状态</h4><p>当我们通过唯一标识从数据库里面取出数据<code>findOne(id)</code>, 保存数据<code>save(teacher)</code>的时候，这时候Hiberinate已经关闭了持久化上下文，实体对象将处于游离状态。而此时我们需要刷新数据库中的记录，我们就需要调用merge()方法在新的工作单元中进行修改。也就是刷新操作。</p>
-<h3 id="bug修复"><a href="#bug修复" class="headerlink" title="bug修复"></a>bug修复</h3><p>所有我们就需要将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.PERSIST)</div></pre></td></tr></table></figure></p>
+<h4 id="移除状态"><a href="#移除状态" class="headerlink" title="移除状态"></a>移除状态</h4><p>当我们数据库中的一条记录删除后，这个实体对象就会处于移除状态</p>
+<h4 id="分离状态"><a href="#分离状态" class="headerlink" title="分离状态"></a>分离状态</h4><p>当我们通过唯一标识从数据库里面取出数据<code>findOne(id)</code>, 保存数据<code>save(teacher)</code>的时候，这时候Hiberinate已经关闭了持久化上下文，实体对象将处于游离状态。而此时我们需要刷新数据库中的记录，我们就需要调用merge()方法在新的工作单元中进行修改。也就是刷新操作。</p>
+<h3 id="bug修复"><a href="#bug修复" class="headerlink" title="bug修复"></a>bug修复</h3><p>如果对于一个游离态（detached）的实体执行persist操作，则抛出IllegalArgumentException异常。所有我们就需要将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.PERSIST)</div></pre></td></tr></table></figure></p>
 <p>改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.MERGE)</div></pre></td></tr></table></figure></p>
 <p>然后我们就会发现能够单元测试成功啦！哈哈哈</p>
 <h2 id="级联操作"><a href="#级联操作" class="headerlink" title="级联操作"></a>级联操作</h2><h3 id="级联更新"><a href="#级联更新" class="headerlink" title="级联更新"></a>级联更新</h3><p>我知道我写的很不到位，可能你还没有感受到我讲这些的目的，我讲这些就是为了引出后面的级联操作操作。但是很遗憾好像没有达到目的。<br>然我们来看看Hibernate级联更新:测试代码做如下修改，然后我们需要打一个断点在如下位置：</p>
@@ -135,7 +136,7 @@
 <p>发现数据也被删除了。没有错，这就是级联删除。嘻嘻！</p>
 <h3 id="级联保存"><a href="#级联保存" class="headerlink" title="级联保存"></a>级联保存</h3><p><code>CascadeType.PERSIST</code>：级联新增（又称级联保存）<br>自己写代码吧！</p>
 <h3 id="级联所有"><a href="#级联所有" class="headerlink" title="级联所有"></a>级联所有</h3><p>如果你向一句话完成所有级联，那你就用<code>CascadeType.ALL</code>吧！</p>
-<h2 id="Code-Download"><a href="#Code-Download" class="headerlink" title="Code Download"></a>Code Download</h2><h3 id="Download-Zip"><a href="#Download-Zip" class="headerlink" title="Download Zip"></a><a href="https://github.com/gaoliming123/blog/archive/master.zip" target="_blank" rel="external">Download Zip</a></h3><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>Hibernate实战第八章第三节，第十章<br><a href="http://blog.csdn.net/w410589502/article/details/54892961" target="_blank" rel="external">Hibernate cascade级联属性的CascadeType的用法</a> <code>CSDN</code></p>
+<h2 id="Code-Download"><a href="#Code-Download" class="headerlink" title="Code Download"></a>Code Download</h2><h3 id="Download-Zip"><a href="#Download-Zip" class="headerlink" title="Download Zip"></a><a href="https://github.com/gaoliming123/blog/archive/master.zip" target="_blank" rel="external">Download Zip</a></h3><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>《Hibernate实战》第八章第三节，第十章<br><a href="http://toknowme.iteye.com/blog/2235981" target="_blank" rel="external">Spring Data Jpa 实体状态分析</a><br><a href="http://blog.csdn.net/w410589502/article/details/54892961" target="_blank" rel="external">Hibernate cascade级联属性的CascadeType的用法</a> <code>CSDN</code><br><a href="http://www.cnblogs.com/jacksun1978/archive/2012/03/23/2414387.html" target="_blank" rel="external">JPA——管理实体</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -229,23 +230,11 @@
 			
 		
 			
-				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
 			
 		
 			
@@ -253,19 +242,23 @@
 			
 		
 			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
 			
 		
 			
@@ -278,6 +271,14 @@
 		
 			
 				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
 			
 		
 		</ul>
