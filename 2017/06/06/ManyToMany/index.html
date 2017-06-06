@@ -1,0 +1,547 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Hibernate @ManyToMany总结 | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
+    
+
+    
+    <meta name="description" content="Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下Hiberate才能明白其中的道理。">
+<meta name="keywords" content="hibernate,Spring,ORM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hibernate @ManyToMany总结">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/06/06/ManyToMany/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下Hiberate才能明白其中的道理。">
+<meta property="og:image" content="https://gaoliming123.github.io/images/domain.png">
+<meta property="og:updated_time" content="2017-06-06T14:33:44.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hibernate @ManyToMany总结">
+<meta name="twitter:description" content="Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下Hiberate才能明白其中的道理。">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/domain.png">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/college">大学生活 | College life</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">关于 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/06/ManyToMany/" title="Hibernate @ManyToMany总结" itemprop="url">Hibernate @ManyToMany总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-06T07:55:47.000Z" itemprop="datePublished"> 发表于 2017-06-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-the-domain-model"><span class="toc-number">1.</span> <span class="toc-text">Create the domain model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-entity-and-Repositiry-and-use-ManyToMany"><span class="toc-number">1.1.</span> <span class="toc-text">create entity and Repositiry and use @ManyToMany</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-application"><span class="toc-number">1.2.</span> <span class="toc-text">execute the application</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit-test"><span class="toc-number">2.</span> <span class="toc-text">Unit test</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unit-test"><span class="toc-number">2.1.</span> <span class="toc-text">unit test</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#entity-status"><span class="toc-number">2.2.</span> <span class="toc-text">entity status</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#状态迁移"><span class="toc-number">2.2.1.</span> <span class="toc-text">状态迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#持久化状态"><span class="toc-number">2.2.2.</span> <span class="toc-text">持久化状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#移除状态"><span class="toc-number">2.2.3.</span> <span class="toc-text">移除状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分离状态"><span class="toc-number">2.2.4.</span> <span class="toc-text">分离状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bug修复"><span class="toc-number">2.3.</span> <span class="toc-text">bug修复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#级联操作"><span class="toc-number">3.</span> <span class="toc-text">级联操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#级联更新"><span class="toc-number">3.1.</span> <span class="toc-text">级联更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联删除"><span class="toc-number">3.2.</span> <span class="toc-text">级联删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联保存"><span class="toc-number">3.3.</span> <span class="toc-text">级联保存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联所有"><span class="toc-number">3.4.</span> <span class="toc-text">级联所有</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-Download"><span class="toc-number">4.</span> <span class="toc-text">Code Download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Download-Zip"><span class="toc-number">4.1.</span> <span class="toc-text">Download Zip</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
+		
+		</div>
+		
+		<p>Spring中封装了Hibernate,虽然极大的方便了我们的开发。但是有些问题还是需要我们自己去读一下<code>Hiberate</code>才能明白其中的道理。<br><a id="more"></a></p>
+<h2 id="Create-the-domain-model"><a href="#Create-the-domain-model" class="headerlink" title="Create the domain model"></a>Create the domain model</h2><h3 id="create-entity-and-Repositiry-and-use-ManyToMany"><a href="#create-entity-and-Repositiry-and-use-ManyToMany" class="headerlink" title="create entity and Repositiry and use @ManyToMany"></a>create entity and Repositiry and use @ManyToMany</h3><p>让我们从@ManyToMany注解入手，一起来看一下我们能学到什么吧!<br>IDE：idea 框架:Spring<br>让我们先举一个简单的例子.看一下域模型<br><img src="/images/domain.png" alt=""><br>我们说学生和老师是多对多的关系，一个学生会有多个老师，一个老师会有多个学生。下面就让我们来建立实体吧！<br><code>scr/main/java/com.mengyunzhi/repository/Student.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Student &#123;</div><div class="line"></div><div class="line">    @Id @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    //姓名</div><div class="line">    private String name;</div><div class="line">    //班级</div><div class="line">    private String klass;</div><div class="line"></div><div class="line">    @ManyToMany(cascade = CascadeType.PERSIST)</div><div class="line">    @JoinTable(</div><div class="line">            name = &quot;student_teacher&quot;,</div><div class="line">            joinColumns = @JoinColumn(name = &quot;student_id&quot;),</div><div class="line">            inverseJoinColumns = @JoinColumn(name = &quot;teacher_id&quot;)</div><div class="line">    )</div><div class="line">    private Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();</div><div class="line"></div><div class="line">    public Student() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Student(String name, String klass, Set&lt;Teacher&gt; teachers) &#123;</div><div class="line">        this.name = name;</div><div class="line">        this.klass = klass;</div><div class="line">        this.teachers = teachers;</div><div class="line">    &#125;</div><div class="line">    //getter and setter</div><div class="line">    ........</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>scr/main/java/com.mengyunzhi/repository/StudentRepository.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public interface StudentRepository extends CrudRepository&lt;Student, Long&gt; &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>scr/main/java/com.mengyunzhi/repository/Teacher.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Teacher &#123;</div><div class="line">    @Id @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    //姓名</div><div class="line">    private String name;</div><div class="line"></div><div class="line">    @ManyToMany(cascade = CascadeType.PERSIST)</div><div class="line">    @JoinTable(</div><div class="line">            name = &quot;student_teacher&quot;,</div><div class="line">            joinColumns = @JoinColumn(name = &quot;teacher_id&quot;),</div><div class="line">            inverseJoinColumns = @JoinColumn(name = &quot;student_id&quot;)</div><div class="line">    )</div><div class="line">    private Set&lt;Student&gt; students = new HashSet&lt;&gt;();</div><div class="line">    public Teacher() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Teacher(String name, Set&lt;Student&gt; students) &#123;</div><div class="line">        this.name = name;</div><div class="line">        this.students = students;</div><div class="line">    &#125;</div><div class="line">   //getter and setter</div><div class="line">   .........</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>scr/main/java/com.mengyunzhi/repository/TeacherRepository.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public interface TeacherRepository extends CrudRepository&lt;Teacher, Long&gt; &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="execute-the-application"><a href="#execute-the-application" class="headerlink" title="execute the application"></a>execute the application</h3><p>我们可以看到数据库中除了<code>teacher</code>和<code>student</code>这两张表，还多了<code>student_teacher</code>者张表。这是因为常规的<code>@ManyToMany</code>会隐藏这张链接表，没有对应的Java类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">+------------+------------+------+-----+---------+-------+</div><div class="line">| Field      | Type       | Null | Key | Default | Extra |</div><div class="line">+------------+------------+------+-----+---------+-------+</div><div class="line">| teacher_id | bigint(20) | NO   | PRI | NULL    |       |</div><div class="line">| student_id | bigint(20) | NO   | PRI | NULL    |       |</div><div class="line">+------------+------------+------+-----+---------+-------+</div></pre></td></tr></table></figure></p>
+<h2 id="Unit-test"><a href="#Unit-test" class="headerlink" title="Unit test"></a>Unit test</h2><h3 id="unit-test"><a href="#unit-test" class="headerlink" title="unit test"></a>unit test</h3><p><code>scr/test/java/com.mengyunzhi/repository/Student.java</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">@RunWith(SpringRunner.class)</div><div class="line">@SpringBootTest</div><div class="line">public class StudentRepositoryTest &#123;</div><div class="line">    @Autowired      //自动实例化</div><div class="line">    private StudentRepository studentRepository;</div><div class="line">    @Autowired</div><div class="line">    private TeacherRepository teacherRepository;</div><div class="line">    static private Logger logger = Logger.getLogger(StudentRepositoryTest.class.getName());</div><div class="line">    @Test</div><div class="line">    public void saveTest() &#123;</div><div class="line">        logger.info(&quot;--------------------student save test-----------------------&quot;);</div><div class="line">        logger.info(&quot;新建新建一个教师实体&quot;);</div><div class="line">        Teacher teacher = new Teacher();</div><div class="line">        logger.info(&quot;保存教师实体&quot;);</div><div class="line">        teacherRepository.save(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;新建一个学生实体&quot;);</div><div class="line">        Student student = new Student();</div><div class="line">        logger.info(&quot;关联教师&quot;);</div><div class="line">        Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();</div><div class="line">        teachers.add(teacher);</div><div class="line">        student.setTeachers(teachers);</div><div class="line">        logger.info(&quot;保存学生实体&quot;);</div><div class="line">        studentRepository.save(student);</div><div class="line"></div><div class="line">        logger.info(&quot;断言保存成功&quot;);</div><div class="line">        assertThat(student.getId()).isNotNull();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后我们会发现如下的报错信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">2017-06-06 19:09:02.445  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : --------------------student save test-----------------------</div><div class="line">2017-06-06 19:09:02.447  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : 新建新建一个教师实体</div><div class="line">2017-06-06 19:09:02.447  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : 保存教师实体</div><div class="line">2017-06-06 19:09:02.582  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : 新建一个学生实体</div><div class="line">2017-06-06 19:09:02.582  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : 关联教师</div><div class="line">2017-06-06 19:09:02.583  INFO 23472 --- [           main] c.m.repository.StudentRepositoryTest     : 保存学生实体</div><div class="line"></div><div class="line">org.springframework.dao.InvalidDataAccessApiUsageException: detached entity passed to persist: com.mengyunzhi.repository.Teacher; nested exception is org.hibernate.PersistentObjectException: detached entity passed to persist: com.mengyunzhi.repository.Teacher</div></pre></td></tr></table></figure>
+<p>然后我们大体翻译一下错误就会发现原来是将处于分离状态的实体传递给持久化。然后我们会发现原因出现在了这句话上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.PERSIST)</div></pre></td></tr></table></figure></p>
+<p>这句话大体中 <code>cascade = CascadeType.PERSIST</code>的意思是当该集合引用新<code>Teacher</code>是，<code>Hibernate</code>会让其持久化。但是为什么会错呢？让我们来分析一下原因：</p>
+<h3 id="entity-status"><a href="#entity-status" class="headerlink" title="entity status"></a>entity status</h3><h4 id="状态迁移"><a href="#状态迁移" class="headerlink" title="状态迁移"></a>状态迁移</h4><p><code>new Java</code>操作符创建的实例是瞬时的。也就是说当这句话<code>Teacher teacher = new Teacher()</code>的时候，teacher是瞬时实例，我们可以用<code>EntityManager具有数据#persist()</code>方法能够是teacher这个对象变得持久化。这里的持久化你可以简单的理解成保存到数据库的过程。</p>
+<h4 id="持久化状态"><a href="#持久化状态" class="headerlink" title="持久化状态"></a>持久化状态</h4><p>持久化状态是我们能够对数据进行操作CRUD操作的时候对数据的一个事务过程。</p>
+<h4 id="移除状态"><a href="#移除状态" class="headerlink" title="移除状态"></a>移除状态</h4><h4 id="分离状态"><a href="#分离状态" class="headerlink" title="分离状态"></a>分离状态</h4><p>当我们通过唯一标识从数据库里面取出数据<code>findOne(id)</code>, 保存数据<code>save(teacher)</code>的时候，这时候Hiberinate已经关闭了持久化上下文，实体对象将处于游离状态。而此时我们需要刷新数据库中的记录，我们就需要调用merge()方法在新的工作单元中进行修改。也就是刷新操作。</p>
+<h3 id="bug修复"><a href="#bug修复" class="headerlink" title="bug修复"></a>bug修复</h3><p>所有我们就需要将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.PERSIST)</div></pre></td></tr></table></figure></p>
+<p>改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@ManyToMany(cascade = CascadeType.MERGE)</div></pre></td></tr></table></figure></p>
+<p>然后我们就会发现能够单元测试成功啦！哈哈哈</p>
+<h2 id="级联操作"><a href="#级联操作" class="headerlink" title="级联操作"></a>级联操作</h2><h3 id="级联更新"><a href="#级联更新" class="headerlink" title="级联更新"></a>级联更新</h3><p>我知道我写的很不到位，可能你还没有感受到我讲这些的目的，我讲这些就是为了引出后面的级联操作操作。但是很遗憾好像没有达到目的。<br>然我们来看看Hibernate级联更新:测试代码做如下修改，然后我们需要打一个断点在如下位置：</p>
+<p><code>scr/test/java/com.mengyunzhi/repository/Student.java</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">@RunWith(SpringRunner.class)</div><div class="line">@SpringBootTest</div><div class="line">public class StudentRepositoryTest &#123;</div><div class="line">    @Autowired      //自动实例化</div><div class="line">    private StudentRepository studentRepository;</div><div class="line">    @Autowired</div><div class="line">    private TeacherRepository teacherRepository;</div><div class="line">    static private Logger logger = Logger.getLogger(StudentRepositoryTest.class.getName());</div><div class="line">    @Test</div><div class="line">    public void saveTest() &#123;</div><div class="line">        logger.info(&quot;--------------------student save test-----------------------&quot;);</div><div class="line">        logger.info(&quot;新建新建一个教师实体&quot;);</div><div class="line">        Teacher teacher = new Teacher();</div><div class="line">        logger.info(&quot;保存教师实体&quot;);</div><div class="line">        teacherRepository.save(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;新建一个学生实体&quot;);</div><div class="line">        Student student = new Student();</div><div class="line">        logger.info(&quot;关联教师&quot;);</div><div class="line">        Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();</div><div class="line">        teachers.add(teacher);</div><div class="line">        student.setTeachers(teachers);</div><div class="line"></div><div class="line">        logger.info(&quot;更新教师&quot;);</div><div class="line">        teacher.setName(&quot;TeacherPan&quot;);</div><div class="line">        teacherRepository.save(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;保存学生实体&quot;);</div><div class="line">        studentRepository.save(student);</div><div class="line"></div><div class="line">        logger.info(&quot;断言保存成功&quot;);</div><div class="line">        assertThat(student.getId()).isNotNull();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后运行程序。<br>程序停止在断点处，我们来查<code>teacher</code>表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+----+------+</div><div class="line">| id | name |</div><div class="line">+----+------+</div><div class="line">|  1 | NULL |</div><div class="line">+----+------+</div></pre></td></tr></table></figure></p>
+<p>然后接着运行程序，然后你再次查看teacher表的时候就会发现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+----+------------+</div><div class="line">| id | name       |</div><div class="line">+----+------------+</div><div class="line">|  1 | TeacherPan |</div><div class="line">+----+------------+</div></pre></td></tr></table></figure>
+<p>对没有错，当我们更新teacher的时候，如果teachers中有此游离态状态的实体对象，这样，我们保存student就会自动更新这个teacher实体对象。</p>
+<h3 id="级联删除"><a href="#级联删除" class="headerlink" title="级联删除"></a>级联删除</h3><p><code>cascade = CascadeType.REMOVE</code>代表级联删除。<br>然后我们可以修改<code>scr/test/java/com.mengyunzhi/repository/Student.java</code>文件，并打一个断点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">@RunWith(SpringRunner.class)</div><div class="line">@SpringBootTest</div><div class="line">public class StudentRepositoryTest &#123;</div><div class="line">    @Autowired      //自动实例化</div><div class="line">    private StudentRepository studentRepository;</div><div class="line">    @Autowired</div><div class="line">    private TeacherRepository teacherRepository;</div><div class="line">    static private Logger logger = Logger.getLogger(StudentRepositoryTest.class.getName());</div><div class="line">    @Test</div><div class="line">    public void saveTest() &#123;</div><div class="line">        logger.info(&quot;--------------------student save test-----------------------&quot;);</div><div class="line">        logger.info(&quot;新建新建一个教师实体&quot;);</div><div class="line">        Teacher teacher = new Teacher();</div><div class="line">        logger.info(&quot;保存教师实体&quot;);</div><div class="line">        teacherRepository.save(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;新建一个学生实体&quot;);</div><div class="line">        Student student = new Student();</div><div class="line">        logger.info(&quot;关联教师&quot;);</div><div class="line">        Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();</div><div class="line">        teachers.add(teacher);</div><div class="line">        student.setTeachers(teachers);</div><div class="line"></div><div class="line">        logger.info(&quot;保存学生实体&quot;);</div><div class="line">        studentRepository.save(student);</div><div class="line"></div><div class="line">        logger.info(&quot;断言保存成功&quot;);			</div><div class="line">        assertThat(student.getId()).isNotNull();		//此处打断点</div><div class="line"></div><div class="line">        logger.info(&quot;删除教师&quot;);</div><div class="line">        teacherRepository.delete(teacher.getId());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后运行程序。<br>程序停止在断点处，我们来查<code>student_teacher</code>表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+------------+------------+</div><div class="line">| teacher_id | student_id |</div><div class="line">+------------+------------+</div><div class="line">|          1 |          1 |</div><div class="line">+------------+------------+</div></pre></td></tr></table></figure>
+<p>然后接着运行程序，再次查看<code>student_teacher</code>表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Empty set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>发现数据也被删除了。没有错，这就是级联删除。嘻嘻！</p>
+<h3 id="级联保存"><a href="#级联保存" class="headerlink" title="级联保存"></a>级联保存</h3><p><code>CascadeType.PERSIST</code>：级联新增（又称级联保存）<br>自己写代码吧！</p>
+<h3 id="级联所有"><a href="#级联所有" class="headerlink" title="级联所有"></a>级联所有</h3><p>如果你向一句话完成所有级联，那你就用<code>CascadeType.ALL</code>吧！</p>
+<h2 id="Code-Download"><a href="#Code-Download" class="headerlink" title="Code Download"></a>Code Download</h2><h3 id="Download-Zip"><a href="#Download-Zip" class="headerlink" title="Download Zip"></a><a href="https://github.com/gaoliming123/blog/archive/master.zip" target="_blank" rel="external">Download Zip</a></h3><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>Hibernate实战第八章第三节，第十章<br><a href="http://blog.csdn.net/w410589502/article/details/54892961" target="_blank" rel="external">Hibernate cascade级联属性的CascadeType的用法</a> <code>CSDN</code></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/hibernate/">hibernate</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hibernate/">hibernate</a><a href="/tags/Spring/">Spring</a><a href="/tags/ORM/">ORM</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2017/06/06/ManyToMany/" data-title="Hibernate @ManyToMany总结 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/06/02/spring-security/"  title="Spring Security and Angular JS(TODO)">
+ <strong>下一篇：</strong><br/> 
+ <span>Spring Security and Angular JS(TODO)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-the-domain-model"><span class="toc-number">1.</span> <span class="toc-text">Create the domain model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-entity-and-Repositiry-and-use-ManyToMany"><span class="toc-number">1.1.</span> <span class="toc-text">create entity and Repositiry and use @ManyToMany</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-the-application"><span class="toc-number">1.2.</span> <span class="toc-text">execute the application</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unit-test"><span class="toc-number">2.</span> <span class="toc-text">Unit test</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unit-test"><span class="toc-number">2.1.</span> <span class="toc-text">unit test</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#entity-status"><span class="toc-number">2.2.</span> <span class="toc-text">entity status</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#状态迁移"><span class="toc-number">2.2.1.</span> <span class="toc-text">状态迁移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#持久化状态"><span class="toc-number">2.2.2.</span> <span class="toc-text">持久化状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#移除状态"><span class="toc-number">2.2.3.</span> <span class="toc-text">移除状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分离状态"><span class="toc-number">2.2.4.</span> <span class="toc-text">分离状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bug修复"><span class="toc-number">2.3.</span> <span class="toc-text">bug修复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#级联操作"><span class="toc-number">3.</span> <span class="toc-text">级联操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#级联更新"><span class="toc-number">3.1.</span> <span class="toc-text">级联更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联删除"><span class="toc-number">3.2.</span> <span class="toc-text">级联删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联保存"><span class="toc-number">3.3.</span> <span class="toc-text">级联保存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#级联所有"><span class="toc-number">3.4.</span> <span class="toc-text">级联所有</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-Download"><span class="toc-number">4.</span> <span class="toc-text">Code Download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Download-Zip"><span class="toc-number">4.1.</span> <span class="toc-text">Download Zip</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming in 河北工业大学 <br/>
+			Thanks to all those who bring me knowledge and accompany me, especially my parents and teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学梦云智软件开发团队成员)">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
