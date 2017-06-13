@@ -81,6 +81,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/06/07/jackson/" title="jackson循化加载数据的问题" itemprop="url">jackson循化加载数据的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-07T09:45:55.000Z" itemprop="datePublished"> Published 2017-06-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>当我们对两个实体进行关联的时候例如我们<a href="https://gaoliming123.github.io/2017/06/06/ManyToMany/">上一篇文章</a>中提到的teacher与student实体中提到的@ManyToMany的时候，就会遇到一个问题，当我们获取给前台传送数据的时候就会遇到对象被<code>jackson</code>转化为json格式的数据的时候，就会有循环加载的问题，及teacher里面student, student里面有teacher……这样就会有四循环的问题。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/06/07/jackson/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/hibernate/">hibernate</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/JPA/">JPA</a><a href="/tags/hibernate/">hibernate</a><a href="/tags/jackson/">jackson</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/06/06/ManyToMany/" title="Hibernate @ManyToMany总结" itemprop="url">Hibernate @ManyToMany总结</a>
   </h1>
   <p class="article-author">By
@@ -506,7 +567,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
+			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>2</sup></a></li>
 		  
 		
 		  
@@ -535,19 +596,15 @@
 			
 		
 			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JPA/" title="JPA">JPA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>1</sup></a></li>
 			
 		
 			
@@ -555,11 +612,19 @@
 			
 		
 			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/jackson/" title="jackson">jackson<sup>1</sup></a></li>
 			
 		
 			
@@ -579,7 +644,7 @@
 			
 		
 			
-				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
 			
 		
 		</ul>
