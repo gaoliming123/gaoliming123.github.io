@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2017/06/07/jackson/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="当我们对两个实体进行关联的时候例如我们上一篇文章中提到的teacher与student实体中提到的@ManyToMany的时候，就会遇到一个问题，当我们获取给前台传送数据的时候就会遇到对象被jackson转化为json格式的数据的时候，就会有循环加载的问题，及teacher里面student, student里面有teacher……这样就会有四循环的问题。">
-<meta property="og:updated_time" content="2017-06-07T14:51:47.804Z">
+<meta property="og:updated_time" content="2017-06-17T06:45:32.284Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jackson循化加载数据的问题">
 <meta name="twitter:description" content="当我们对两个实体进行关联的时候例如我们上一篇文章中提到的teacher与student实体中提到的@ManyToMany的时候，就会遇到一个问题，当我们获取给前台传送数据的时候就会遇到对象被jackson转化为json格式的数据的时候，就会有循环加载的问题，及teacher里面student, student里面有teacher……这样就会有四循环的问题。">
@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -88,16 +88,16 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-07T09:45:55.000Z" itemprop="datePublished"> Published 2017-06-07</time>
+    <time datetime="2017-06-07T09:45:55.000Z" itemprop="datePublished"> 发表于 2017-06-07</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#question"><span class="toc-number">1.1.</span> <span class="toc-text">question</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-first-way"><span class="toc-number">2.1.</span> <span class="toc-text">the first way</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-second-way"><span class="toc-number">2.2.</span> <span class="toc-text">the second way</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#question"><span class="toc-number">1.1.</span> <span class="toc-text">question</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-first-way"><span class="toc-number">2.1.</span> <span class="toc-text">the first way</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-second-way-TODO"><span class="toc-number">2.2.</span> <span class="toc-text">the second way(TODO)</span></a></li></ol></li></ol>
 		
 		</div>
 		
@@ -116,10 +116,7 @@
 <p><code>src/test/java/com.mengyunzhi/controller/TeacherController.java</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">@RunWith(SpringRunner.class)</div><div class="line">@SpringBootTest</div><div class="line">@AutoConfigureMockMvc       //在测试的时候实现MVC的测试</div><div class="line">public class TeacherControllerTest &#123;</div><div class="line">    @Autowired</div><div class="line">    private TeacherRepository teacherRepository;</div><div class="line">    @Autowired</div><div class="line">    private StudentRepository studentRepository;</div><div class="line">    @Autowired</div><div class="line">    private MockMvc mockMvc;        //实现MVC测试</div><div class="line"></div><div class="line">    static private Logger logger = Logger.getLogger(TeacherControllerTest.class.getName());</div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void getAllTest() throws Exception &#123;</div><div class="line">        logger.info(&quot;--------------------TeacherController getAllTest---------------------&quot;);</div><div class="line">        logger.info(&quot;新建一个Teacher实体&quot;);</div><div class="line">        Teacher teacher = new Teacher();</div><div class="line">        logger.info(&quot;保存Teacher实体&quot;);</div><div class="line">        teacherRepository.save(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;新建一个Student实体&quot;);</div><div class="line">        Student student = new Student();</div><div class="line"></div><div class="line">        logger.info(&quot;建立Teacher集合&quot;);</div><div class="line">        Set&lt;Teacher&gt; teachers = new HashSet&lt;&gt;();</div><div class="line">        teachers.add(teacher);</div><div class="line"></div><div class="line">        logger.info(&quot;保存Student实体&quot;);</div><div class="line">        studentRepository.save(student);</div><div class="line"></div><div class="line">        logger.info(&quot;模拟发送数据&quot;);</div><div class="line">        MvcResult result =  this.mockMvc.perform(get(&quot;/Teacher/getAll&quot;)</div><div class="line">                .contentType(&quot;application/json&quot;))</div><div class="line">                .andDo(print())</div><div class="line">                .andExpect(status().isOk())</div><div class="line">                .andReturn();</div><div class="line"></div><div class="line">        logger.info(&quot;获取返回数据&quot;);</div><div class="line">        String content = result.getResponse().getContentAsString();</div><div class="line"></div><div class="line">        logger.info(&quot;将获取的内容转化为jsonArray对象, 并断言数组长度不为0&quot;);</div><div class="line">        JSONArray jsonArray = JSONArray.fromObject(content);</div><div class="line">        assertThat(jsonArray.size()).isNotEqualTo(0);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后我们发现测试成功了</p>
-<h3 id="the-second-way"><a href="#the-second-way" class="headerlink" title="the second way"></a>the second way</h3><p>上面一种方法存在着缺陷，让我们来看一下接下来我们会怎么办吧～<br>我们需要在示例类的前面加入这段代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@JsonIgnoreProperties(value = &#123; &quot;hibernateLazyInitializer&quot;, &quot;handler&quot;&#125;)</div></pre></td></tr></table></figure>
-<p>然后我们继续测试<br>终端输入:  <code>curl http://127.0.0.1:8080/Teacher/getAll</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>  
+<h3 id="the-second-way-TODO"><a href="#the-second-way-TODO" class="headerlink" title="the second way(TODO)"></a>the second way(TODO)</h3>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -154,6 +151,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017/06/17/computer-composition/" title="存储程序,程序控制">
+  <strong>上一篇：</strong><br/>
+  <span>
+  存储程序,程序控制</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2017/06/06/ManyToMany/"  title="Hibernate @ManyToMany总结">
@@ -168,23 +173,27 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#question"><span class="toc-number">1.1.</span> <span class="toc-text">question</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-first-way"><span class="toc-number">2.1.</span> <span class="toc-text">the first way</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-second-way"><span class="toc-number">2.2.</span> <span class="toc-text">the second way</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#question"><span class="toc-number">1.1.</span> <span class="toc-text">question</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-first-way"><span class="toc-number">2.1.</span> <span class="toc-text">the first way</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-second-way-TODO"><span class="toc-number">2.2.</span> <span class="toc-text">the second way(TODO)</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
+		
+		  
+			<li><a href="/categories/computer/" title="computer">computer<sup>1</sup></a></li>
+		  
 		
 		  
 			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>2</sup></a></li>
@@ -204,7 +213,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -236,11 +245,15 @@
 			
 		
 			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
 			
 		
 			
@@ -264,7 +277,7 @@
 			
 		
 			
-				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -272,7 +285,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -514,7 +527,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

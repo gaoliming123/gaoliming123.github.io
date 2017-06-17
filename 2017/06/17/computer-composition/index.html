@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Spring Security and Angular JS(TODO) | 山里的坏孩子</title>
+    <title>存储程序,程序控制 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
-<meta name="keywords" content="spring,angularjs,security">
+    <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
+<meta name="keywords" content="computer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring Security and Angular JS(TODO)">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/06/02/spring-security/index.html">
+<meta property="og:title" content="存储程序,程序控制">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/06/17/computer-composition/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
-<meta property="og:updated_time" content="2017-06-17T06:38:06.351Z">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
+<meta property="og:updated_time" content="2017-06-17T08:23:24.951Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring Security and Angular JS(TODO)">
-<meta name="twitter:description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
+<meta name="twitter:title" content="存储程序,程序控制">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/02/spring-security/" title="Spring Security and Angular JS(TODO)" itemprop="url">Spring Security and Angular JS(TODO)</a>
+      <a href="/2017/06/17/computer-composition/" title="存储程序,程序控制" itemprop="url">存储程序,程序控制</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-02T06:35:16.000Z" itemprop="datePublished"> 发表于 2017-06-02</time>
+    <time datetime="2017-06-17T06:47:42.000Z" itemprop="datePublished"> 发表于 2017-06-17</time>
     
   </p>
 </header>
@@ -97,17 +97,15 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Security"><span class="toc-number">1.</span> <span class="toc-text">Spring Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Web-Security-Java-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Hello Web Security Java Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">2.</span> <span class="toc-text">参考文献</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#感悟"><span class="toc-number">4.</span> <span class="toc-text">感悟</span></a></li></ol>
 		
 		</div>
 		
-		<p>这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。<br><a id="more"></a><br><code>IDE:idea</code>,首先，我们用maven构建一个Spring项目，然后用yemon构建一个Angular JS项目。Spring项目我们依旧会用之前的那个<a href="https://github.com/gaoliming123/blog" target="_blank" rel="external">项目</a>, 当然其中我们也可以着大Angular JS的项目</p>
-<h2 id="Spring-Security"><a href="#Spring-Security" class="headerlink" title="Spring Security"></a>Spring Security</h2><h3 id="Hello-Web-Security-Java-Configuration"><a href="#Hello-Web-Security-Java-Configuration" class="headerlink" title="Hello Web Security Java Configuration"></a>Hello Web Security Java Configuration</h3><p>在项目里使用<code>spring-security</code>推荐的方法时在pox.xml中增加依赖,但是本文讲解的是如何通过配置WebConfig去配置<code>spring-security</code>。<br>首先，创建配置文件。然后创建Servlet Filter。下面我们来讲解一个简单的例子。</p>
-<p><code>pom.xml</code>中增加如下配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.security&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-security-config&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;4.2.2.RELEASE&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p><code>src/java/main/com.mengyunzhi.com/config/WebSecurityConfig.java</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>然后我们启动项目，输入url开始</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://projects.spring.io/spring-security/" target="_blank" rel="external">Spring Security</a> <code>Spring Guides</code><br><a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#spring-security-config" target="_blank" rel="external">Hello Web Security Java Configuration</a><code>Spring Security Reference</code></p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了<strong>存储程序,程序控制</strong>这句话，但也可能理解的不对。一篇零散的感悟留给自己。<br><a id="more"></a></p>
+<h2 id="自动执行"><a href="#自动执行" class="headerlink" title="自动执行"></a>自动执行</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们说如果想让一个事物能够连续不断进行下去，那么这个事物一定会有<strong>周期</strong>。就像让一个圆滚起来一样，当它滚动到<strong>终点亦是起点</strong>，然后就又会接着滚（当然，这需要物理题中的理想状态下，忽略一切阻力），周而复始，如果没有外作用力它停止，它就会永远滚动。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们想让计算机自动执行的话，就需要有周期，如果我们把一个个指令作为计算机最基本的周期的话，但是完成一条指令的时间长短不一，有些难控制。所以，我们把<strong>机器周期</strong>当成计算机重要的周期。简单的说机器周期就是<strong>一个数从可存储器件出发到另一个可保存地址的时间</strong>就是一个机器周期。</p>
+<h2 id="存储程序"><a href="#存储程序" class="headerlink" title="存储程序"></a>存储程序</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们来理解一下存储程序这句话。我们说<strong>指令</strong>就是计算机中的那个滚动的圆。指令一条一条的连续不断的执行，控制计算机的数据流向，然后计算机就可以完成各种功能。当然我们都知道一条指令不就是<code>01100011</code>吗？我们给加上自然语言的语义，读出A寄存器的数到SA。（本实验中的具体指令），指令怎么起作用呢？指令会解析成微指令，然后生成操作信号，这些操作信号又会和时序电路相与，然后分时起作用，就可以完成对各个器件的控制。最后，一定会有一个信号取指令公共操作，让圆连续的滚动起来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样，我们把一条条指令顺序存储，然后让指令这个圆滚起来，计算机就能够自动执行，完成各种功能。</p>
+<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，不知道是应该该怎么说？我所做的考核实验比较简单。因为每个组的考核实验都不一样，我想说的考核实验是我自己没有做过的，但是我自己做的考核实验应该没有什么可说的。我想说的一个考核实验就是三个数排序的问题，因为题目局限在了三个数，所以大部分人的目光也就只针对了三个数。如果是多个书呢？用看了一下数据结构中排序算法的程序，也许这个算法成功与否的关键在于如何解析好for循环这条语句，也就是如何把指令设计的具有周期性完成对普遍情况问题的解决。</p>
+<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实践总是比理论有趣，但是理论总是在教学中占据了大部分时间。不开心。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -115,13 +113,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/spring/">spring</a>
+  <a class="article-category-link" href="/categories/computer/">computer</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/spring/">spring</a><a href="/tags/angularjs/">angularjs</a><a href="/tags/security/">security</a>
+  <span></span> <a href="/tags/computer/">computer</a>
   </div>
 
 </div>
@@ -130,7 +128,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/06/02/spring-security/" data-title="Spring Security and Angular JS(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/06/17/computer-composition/" data-title="存储程序,程序控制 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -143,19 +141,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/06/06/ManyToMany/" title="Hibernate @ManyToMany总结">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Hibernate @ManyToMany总结</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/05/31/cors/"  title="Spring解决跨域请求">
+<a href="/2017/06/07/jackson/"  title="jackson循化加载数据的问题">
  <strong>下一篇：</strong><br/> 
- <span>Spring解决跨域请求
+ <span>jackson循化加载数据的问题
 </span>
 </a>
 </div>
@@ -170,7 +160,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Security"><span class="toc-number">1.</span> <span class="toc-text">Spring Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Web-Security-Java-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Hello Web Security Java Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">2.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#感悟"><span class="toc-number">4.</span> <span class="toc-text">感悟</span></a></li></ol>
  
   </div>
 
