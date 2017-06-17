@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2017/06/17/computer-composition/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
-<meta property="og:updated_time" content="2017-06-17T08:23:24.951Z">
+<meta property="og:updated_time" content="2017-06-17T08:28:31.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="存储程序,程序控制">
 <meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -88,24 +88,24 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-17T06:47:42.000Z" itemprop="datePublished"> 发表于 2017-06-17</time>
+    <time datetime="2017-06-17T06:47:42.000Z" itemprop="datePublished"> Published 2017-06-17</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#感悟"><span class="toc-number">4.</span> <span class="toc-text">感悟</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
 		
 		</div>
 		
 		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了<strong>存储程序,程序控制</strong>这句话，但也可能理解的不对。一篇零散的感悟留给自己。<br><a id="more"></a></p>
 <h2 id="自动执行"><a href="#自动执行" class="headerlink" title="自动执行"></a>自动执行</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们说如果想让一个事物能够连续不断进行下去，那么这个事物一定会有<strong>周期</strong>。就像让一个圆滚起来一样，当它滚动到<strong>终点亦是起点</strong>，然后就又会接着滚（当然，这需要物理题中的理想状态下，忽略一切阻力），周而复始，如果没有外作用力它停止，它就会永远滚动。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们想让计算机自动执行的话，就需要有周期，如果我们把一个个指令作为计算机最基本的周期的话，但是完成一条指令的时间长短不一，有些难控制。所以，我们把<strong>机器周期</strong>当成计算机重要的周期。简单的说机器周期就是<strong>一个数从可存储器件出发到另一个可保存地址的时间</strong>就是一个机器周期。</p>
 <h2 id="存储程序"><a href="#存储程序" class="headerlink" title="存储程序"></a>存储程序</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们来理解一下存储程序这句话。我们说<strong>指令</strong>就是计算机中的那个滚动的圆。指令一条一条的连续不断的执行，控制计算机的数据流向，然后计算机就可以完成各种功能。当然我们都知道一条指令不就是<code>01100011</code>吗？我们给加上自然语言的语义，读出A寄存器的数到SA。（本实验中的具体指令），指令怎么起作用呢？指令会解析成微指令，然后生成操作信号，这些操作信号又会和时序电路相与，然后分时起作用，就可以完成对各个器件的控制。最后，一定会有一个信号取指令公共操作，让圆连续的滚动起来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样，我们把一条条指令顺序存储，然后让指令这个圆滚起来，计算机就能够自动执行，完成各种功能。</p>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，不知道是应该该怎么说？我所做的考核实验比较简单。因为每个组的考核实验都不一样，我想说的考核实验是我自己没有做过的，但是我自己做的考核实验应该没有什么可说的。我想说的一个考核实验就是三个数排序的问题，因为题目局限在了三个数，所以大部分人的目光也就只针对了三个数。如果是多个书呢？用看了一下数据结构中排序算法的程序，也许这个算法成功与否的关键在于如何解析好for循环这条语句，也就是如何把指令设计的具有周期性完成对普遍情况问题的解决。</p>
-<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实践总是比理论有趣，但是理论总是在教学中占据了大部分时间。不开心。</p>
+<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，不知道是应该该怎么说？我所做的考核实验比较简单。因为每个组的考核实验都不一样，我想说的考核实验是我自己没有做过的，但是我自己做的考核实验应该没有什么可说的。我想说的一个考核实验就是三个数排序的问题，因为题目局限在了三个数，所以大部分人的目光也就只针对了三个数。如果是多个书呢？又看了一下数据结构中排序算法的程序，也许这个算法成功与否的关键在于如何解析好for循环这条语句，也就是如何把指令设计的具有周期性完成对普遍情况问题的解决。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢张军老师在实验过程中的耐心教导。实践总是比理论有趣，但是理论总是在教学中占据了大部分时间。不开心。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -155,22 +155,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#感悟"><span class="toc-number">4.</span> <span class="toc-text">感悟</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -195,7 +195,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -267,7 +267,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -509,7 +509,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
