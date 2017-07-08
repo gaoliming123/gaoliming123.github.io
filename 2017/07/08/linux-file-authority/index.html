@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>存储程序,程序控制 | 山里的坏孩子</title>
+    <title>Linux文件权限 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
-<meta name="keywords" content="computer">
+    <meta name="description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="存储程序,程序控制">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/06/17/computer-composition/index.html">
+<meta property="og:title" content="Linux文件权限">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/08/linux-file-authority/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
-<meta property="og:updated_time" content="2017-06-17T08:31:28.066Z">
+<meta property="og:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
+<meta property="og:updated_time" content="2017-07-08T06:11:34.439Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="存储程序,程序控制">
-<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了存储程序,程序控制这句话，但也可能理解的不对。一篇零散的感悟留给自己。">
+<meta name="twitter:title" content="Linux文件权限">
+<meta name="twitter:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/17/computer-composition/" title="存储程序,程序控制" itemprop="url">存储程序,程序控制</a>
+      <a href="/2017/07/08/linux-file-authority/" title="Linux文件权限" itemprop="url">Linux文件权限</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-17T06:47:42.000Z" itemprop="datePublished"> 發表於 2017-06-17</time>
+    <time datetime="2017-07-08T05:40:18.000Z" itemprop="datePublished"> 發表於 2017-07-08</time>
     
   </p>
 </header>
@@ -97,15 +97,32 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连续两天的计算机组成原理实验，虽然实验做的很水吧！但是还是想写一些东西记录一下我曾经学过计算机组成原理。似乎懂了<strong>存储程序,程序控制</strong>这句话，但也可能理解的不对。一篇零散的感悟留给自己。<br><a id="more"></a></p>
-<h2 id="自动执行"><a href="#自动执行" class="headerlink" title="自动执行"></a>自动执行</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们说如果想让一个事物能够连续不断进行下去，那么这个事物一定会有<strong>周期</strong>。就像让一个圆滚起来一样，当它滚动到<strong>终点亦是起点</strong>，然后就又会接着滚（当然，这需要物理题中的理想状态下，忽略一切阻力），周而复始，如果没有外作用力它停止，它就会永远滚动。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果我们想让计算机自动执行的话，就需要有周期，如果我们把一个个指令作为计算机最基本的周期的话，但是完成一条指令的时间长短不一，有些难控制。所以，我们把<strong>机器周期</strong>当成计算机重要的周期。简单的说机器周期就是<strong>一个数从可存储器件出发到另一个可保存地址的时间</strong>就是一个机器周期。</p>
-<h2 id="存储程序"><a href="#存储程序" class="headerlink" title="存储程序"></a>存储程序</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在我们来理解一下存储程序这句话。我们说<strong>指令</strong>就是计算机中的那个滚动的圆。指令一条一条的连续不断的执行，控制计算机的数据流向，然后计算机就可以完成各种功能。当然我们都知道一条指令不就是<code>01100011</code>吗？我们给加上自然语言的语义，读出A寄存器的数到SA。（本实验中的具体指令），指令怎么起作用呢？指令会解析成微指令，然后生成操作信号，这些操作信号又会和时序电路相与，然后分时起作用，就可以完成对各个器件的控制。最后，一定会有一个信号取指令公共操作，让圆连续的滚动起来。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这样，我们把一条条指令顺序存储，然后让指令这个圆滚起来，计算机就能够自动执行，完成各种功能。</p>
-<h2 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然，不知道是应该该怎么说？我所做的考核实验比较简单。因为每个组的考核实验都不一样，我想说的考核实验是我自己没有做过的，但是我自己做的考核实验应该没有什么可说的。我想说的一个考核实验就是三个数排序的问题，因为题目局限在了三个数，所以大部分人的目光也就只针对了三个数。如果是多个书呢？又看了一下数据结构中排序算法的程序，也许这个算法成功与否的关键在于如何解析好for循环这条语句，也就是如何把指令设计的具有周期性完成对普遍情况问题的解决。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢张军老师在实验过程中的耐心教导。实践总是比理论有趣，但是理论总是在教学中占据了大部分时间。不开心。</p>
+		<p>Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。<br><a id="more"></a></p>
+<h2 id="改变目录的所属用户组"><a href="#改变目录的所属用户组" class="headerlink" title="改变目录的所属用户组"></a>改变目录的所属用户组</h2><p><code>chown -R 用户组:用户 目录 or chown -R 用户 目录</code></p>
+<p>例如我要将属于root用户MeasurementItemFrontEnd目录改为liming这个用户</p>
+<p>sudo chown -R liming MeasurementItemFrontEnd/</p>
+<h2 id="改变文件的权限"><a href="#改变文件的权限" class="headerlink" title="改变文件的权限"></a>改变文件的权限</h2><p><code>chmod</code>命令可以改变文件权限</p>
+<p> 例如 <code>chmod 754  test</code></p>
+<p>  首先让我们说一下这都是什么含义？</p>
+<ul>
+<li>7 = 4 + 2+ 1</li>
+<li>5 = 4 + 1</li>
+<li>4 = 4</li>
+</ul>
+<p><strong>4代表读权限，2代表写权限，1代表执行权限，0 代表没有任何权限</strong></p>
+<p> 所以这段话的意思就是</p>
+<ul>
+<li>所有者拥有可读可写可执行权限</li>
+<li>同组用户有可读，可执行权限</li>
+<li>其它用户有可执行权限</li>
+</ul>
+<p><strong>思考下为什么是4，2，1分别代表读写执行权限,而不是其它数字？</strong><br>我们知道计算机最底层编码都是二进制，即0，1。要表示一个文件读写执行权限，底层只需一个字节，即8位即可。</p>
+<p>约定从右数起第3位为1，代表拥有读权限；第2位为1，代表拥有写权限；第1位为1，代表拥有可执行权限。为0，则没有相应的权限。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.linuxidc.com/Linux/2014-10/108114.htm" target="_blank" rel="external">Linux文件权限查看及修改命令chmod</a> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -113,13 +130,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/computer/">computer</a>
+  <a class="article-category-link" href="/categories/linux/">linux</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/computer/">computer</a>
+  <span></span> <a href="/tags/linux/">linux</a>
   </div>
 
 </div>
@@ -128,7 +145,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/06/17/computer-composition/" data-title="存储程序,程序控制 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/08/linux-file-authority/" data-title="Linux文件权限 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -141,19 +158,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/08/mvn-package/" title="mvn package命令总结">
-  <strong>上一篇：</strong><br/>
-  <span>
-  mvn package命令总结</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/06/07/jackson/"  title="jackson循化加载数据的问题">
+<a href="/2017/07/08/mvn-package/"  title="mvn package命令总结">
  <strong>下一篇：</strong><br/> 
- <span>jackson循化加载数据的问题
+ <span>mvn package命令总结
 </span>
 </a>
 </div>
@@ -168,7 +177,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动执行"><span class="toc-number">1.</span> <span class="toc-text">自动执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储程序"><span class="toc-number">2.</span> <span class="toc-text">存储程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反思"><span class="toc-number">3.</span> <span class="toc-text">反思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-number">4.</span> <span class="toc-text">最后</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
