@@ -18,10 +18,13 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2017/07/08/mvn-package/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="maven是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。">
-<meta property="og:updated_time" content="2017-07-08T05:34:37.946Z">
+<meta property="og:image" content="https://gaoliming123.github.io/images/package_error.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/package.png">
+<meta property="og:updated_time" content="2017-07-08T09:14:36.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mvn package命令总结">
 <meta name="twitter:description" content="maven是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/package_error.png">
 
     
     
@@ -97,11 +100,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-question"><span class="toc-number">1.</span> <span class="toc-text">Find question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analysis-question"><span class="toc-number">2.</span> <span class="toc-text">Analysis question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solve-question"><span class="toc-number">3.</span> <span class="toc-text">Solve question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#New-question"><span class="toc-number">4.</span> <span class="toc-text">New question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p><code>maven</code>是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。</p>
+		<p><code>maven</code>是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。<br><a id="more"></a></p>
+<h2 id="Find-question"><a href="#Find-question" class="headerlink" title="Find question"></a>Find question</h2><p>当时我执行<code>mvn package</code>之后就发现测试文件好多都报错了。</p>
+<p><img src="/images/package_error.png" alt=""> </p>
+<p>然后，我们一点儿一点儿着错误就会发现有报错信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A Foreign key refering com.mengyunzhi.measurement.repository.ApplyType from com.mengyunzhi.measurement.repository.WorkflowTypeApplyType has the wrong number of column. should be 3</div></pre></td></tr></table></figure>
+<h2 id="Analysis-question"><a href="#Analysis-question" class="headerlink" title="Analysis question"></a>Analysis question</h2><p>分析这句话就会发现值WorkflowTypeApplyType这张表里的外健约束from ApplyType有问题。</p>
+<p>这个可能是因为我们开发的时候往往是在自己的分支上开发，但是一些简单组件的测试是由开发人员自己做的，我们进行<code>unit test</code>的时候已经编译了改动的文件。但是切到<code>development</code>分支的时候进行<code>mvn package</code>,然后过程如下：<br><img src="/images/package.png" alt=""> </p>
+<p>虽然我们进行了编译，但是可能会留下曾经编译过的字节码文件(.class)。所以我们可以<code>rebuild project</code>, 将所有的编译文件clean然后全部重新编译。</p>
+<h2 id="Solve-question"><a href="#Solve-question" class="headerlink" title="Solve question"></a>Solve question</h2><p>删除数据库，新建数据库。在linux, IDEA开发环境下 <strong>Build -&gt; Rebuild Project</strong>， 然后再执行<code>mvn package</code></p>
+<h2 id="New-question"><a href="#New-question" class="headerlink" title="New question"></a>New question</h2><p>不会报错了之后，当我们进行打包的时候就会发现一个问题。我的电脑总是卡在这句话上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HHH000227: Running hbm2ddl schema export</div></pre></td></tr></table></figure>
+<p>这句话表示<code>hibernate</code>按照持久化类和映射文件自动生成数据库架构, 把DDL脚本输出到标准输出，同时/或者执行DDL语句。</p>
+<p>应为在<code>mvn  package</code>中我们可能会有多次这条语句，然后我们怎么解决这个慢的问题呢？</p>
+<ul>
+<li>设置 spring.jpa.hibernate.ddl-auto=create</li>
+<li><p>随便执行一个单元测试应该也可以,当执行过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">org.hibernate.tool.hbm2ddl.SchemaExport  : HHH000227: Running hbm2ddl schema export</div><div class="line"> 2017-07-07 09:18:35.672  INFO 7652 --- [           main] org.hibernate.tool.hbm2ddl.SchemaExport  : HHH000230: Schema export complete</div></pre></td></tr></table></figure>
+<p>说明数据表已经创建成功, 即可终止单元测试</p>
+</li>
+<li>修改：spring.jpa.hibernate.ddl-auto=none,禁用禁用ddl-auto</li>
+<li>执行mvn test或者mvn package</li>
+</ul>
+<p>然后就会解决这个建立数据库结构慢的问题了。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>陈鋆:  <a href="Maven 各命令执行流程解析和说明">Maven 各命令执行流程解析和说明</a><br><a href="http://www.it165.net/admin/html/201411/4226.html" target="_blank" rel="external">[Nhibernate]SchemaExport工具的使用（一）通过映射文件修改数据表</a> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -164,7 +190,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-question"><span class="toc-number">1.</span> <span class="toc-text">Find question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analysis-question"><span class="toc-number">2.</span> <span class="toc-text">Analysis question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solve-question"><span class="toc-number">3.</span> <span class="toc-text">Solve question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#New-question"><span class="toc-number">4.</span> <span class="toc-text">New question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
@@ -239,7 +265,7 @@
 			
 		
 			
-				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 			
@@ -259,15 +285,15 @@
 			
 		
 			
-				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
 			
 		
 			
