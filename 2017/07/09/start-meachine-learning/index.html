@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
+    <meta name="description" content="最近正在看了看机器学习的公开课，稍微记一下笔记。">
 <meta name="keywords" content="Machine Learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习第一篇">
 <meta property="og:url" content="https://gaoliming123.github.io/2017/07/09/start-meachine-learning/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
-<meta property="og:updated_time" content="2017-07-09T08:17:44.733Z">
+<meta property="og:description" content="最近正在看了看机器学习的公开课，稍微记一下笔记。">
+<meta property="og:updated_time" content="2017-07-09T08:20:29.977Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习第一篇">
-<meta name="twitter:description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
+<meta name="twitter:description" content="最近正在看了看机器学习的公开课，稍微记一下笔记。">
 
     
     
@@ -97,11 +97,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p>最近正在看了看机器学习的公开课，决定写一下总结。</p>
+		<p>最近正在看了看机器学习的公开课，稍微记一下笔记。</p>
 <a id="more"></a>
 <h2 id="起源及定义"><a href="#起源及定义" class="headerlink" title="起源及定义"></a>起源及定义</h2><h3 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h3><p>机器学习的起源来自Arthur Sanuel编写一的西洋棋程序。让西洋棋程序自己跟自己下了上万盘棋。通过观察哪种布局(棋盘位置)会赢,哪种布局会输,久而久之,这西洋棋程序明白了什么是好的布局,什么样是坏的布局。程序通过学习后,玩西洋棋的水平超过了Samuel。</p>
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>由Tom Mitchell提出,来自卡内基梅隆大学,Tom定义的机器学习是,一个好的学习问题定义如下,他说,一个程序被认为能从经验E中学习,解决任务T,达到性能度量值P,当且仅当,有了经验E后,经过P评判,程序在处理T时的性能有所提升。</p>
@@ -111,6 +111,7 @@
 <h4 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h4><p>分类问题主要是处理的是离散的数值。</p>
 <h3 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h3><p>Unsupervised Learning就是告诉我们一堆数据，我们也不知道什么是对什么是错，没有标准答案，也并不知道能分为几个聚集族。但是我们只要分出来那些数据属于一个聚集族就可以了，书上讲的主要是聚类。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>聚类和分类有什么区别呢？这就需要我们看大的分类了。举个最简单的例子，我们要期末考试了，老师说那些内容考，那些内容不考。这就是分类，于是我们把内容分为考和不考。但是我们自己复习的时候又会自己把题聚一下类，因为我们之前并不到可以分为多少类题，也不知道考试题都属于那些类。最后我们可能总结10类或者20类题型，这就是聚类的过程。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>斯坦福大学2014机器学习教程个人笔记</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -165,7 +166,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">4.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
