@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux文件权限 | 山里的坏孩子</title>
+    <title>机器学习第一篇 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
-<meta name="keywords" content="linux">
+    <meta name="description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
+<meta name="keywords" content="Machine Learning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux文件权限">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/07/08/linux-file-authority/index.html">
+<meta property="og:title" content="机器学习第一篇">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/09/start-meachine-learning/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
-<meta property="og:updated_time" content="2017-07-08T06:11:34.439Z">
+<meta property="og:description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
+<meta property="og:updated_time" content="2017-07-09T08:17:44.733Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux文件权限">
-<meta name="twitter:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
+<meta name="twitter:title" content="机器学习第一篇">
+<meta name="twitter:description" content="最近正在看了看机器学习的公开课，决定写一下总结。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/08/linux-file-authority/" title="Linux文件权限" itemprop="url">Linux文件权限</a>
+      <a href="/2017/07/09/start-meachine-learning/" title="机器学习第一篇" itemprop="url">机器学习第一篇</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-07-08T05:40:18.000Z" itemprop="datePublished"> Published 2017-07-08</time>
+    <time datetime="2017-07-09T07:27:32.000Z" itemprop="datePublished"> Published 2017-07-09</time>
     
   </p>
 </header>
@@ -97,32 +97,20 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<p>Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。<br><a id="more"></a></p>
-<h2 id="改变目录的所属用户组"><a href="#改变目录的所属用户组" class="headerlink" title="改变目录的所属用户组"></a>改变目录的所属用户组</h2><p><code>chown -R 用户组:用户 目录 or chown -R 用户 目录</code></p>
-<p>例如我要将属于root用户MeasurementItemFrontEnd目录改为liming这个用户</p>
-<p>sudo chown -R liming MeasurementItemFrontEnd/</p>
-<h2 id="改变文件的权限"><a href="#改变文件的权限" class="headerlink" title="改变文件的权限"></a>改变文件的权限</h2><p><code>chmod</code>命令可以改变文件权限</p>
-<p> 例如 <code>chmod 754  test</code></p>
-<p>  首先让我们说一下这都是什么含义？</p>
-<ul>
-<li>7 = 4 + 2+ 1</li>
-<li>5 = 4 + 1</li>
-<li>4 = 4</li>
-</ul>
-<p><strong>4代表读权限，2代表写权限，1代表执行权限，0 代表没有任何权限</strong></p>
-<p> 所以这段话的意思就是</p>
-<ul>
-<li>所有者拥有可读可写可执行权限</li>
-<li>同组用户有可读，可执行权限</li>
-<li>其它用户有可执行权限</li>
-</ul>
-<p><strong>思考下为什么是4，2，1分别代表读写执行权限,而不是其它数字？</strong><br>我们知道计算机最底层编码都是二进制，即0，1。要表示一个文件读写执行权限，底层只需一个字节，即8位即可。</p>
-<p>约定从右数起第3位为1，代表拥有读权限；第2位为1，代表拥有写权限；第1位为1，代表拥有可执行权限。为0，则没有相应的权限。</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.linuxidc.com/Linux/2014-10/108114.htm" target="_blank" rel="external">Linux文件权限查看及修改命令chmod</a> </p>
+		<p>最近正在看了看机器学习的公开课，决定写一下总结。</p>
+<a id="more"></a>
+<h2 id="起源及定义"><a href="#起源及定义" class="headerlink" title="起源及定义"></a>起源及定义</h2><h3 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h3><p>机器学习的起源来自Arthur Sanuel编写一的西洋棋程序。让西洋棋程序自己跟自己下了上万盘棋。通过观察哪种布局(棋盘位置)会赢,哪种布局会输,久而久之,这西洋棋程序明白了什么是好的布局,什么样是坏的布局。程序通过学习后,玩西洋棋的水平超过了Samuel。</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>由Tom Mitchell提出,来自卡内基梅隆大学,Tom定义的机器学习是,一个好的学习问题定义如下,他说,一个程序被认为能从经验E中学习,解决任务T,达到性能度量值P,当且仅当,有了经验E后,经过P评判,程序在处理T时的性能有所提升。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>从大类上分为监督学习<strong>Supervised Learning</strong>和非监督学习<strong>Unsupervised Learning</strong>。</p>
+<h3 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h3><p>监督学习就是我们有一组<strong>标准的输入输出</strong>，而我们的目的是从标准的输入输出之间找到联系，然后预测新输入的输出结果。Supervised Learning又分为回归问题<strong>(Regression)</strong>和分类问题<strong>(Classification)</strong>。</p>
+<h4 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h4><p>回归问题就是处理一系列连续的属性。</p>
+<h4 id="分类问题"><a href="#分类问题" class="headerlink" title="分类问题"></a>分类问题</h4><p>分类问题主要是处理的是离散的数值。</p>
+<h3 id="无监督学习"><a href="#无监督学习" class="headerlink" title="无监督学习"></a>无监督学习</h3><p>Unsupervised Learning就是告诉我们一堆数据，我们也不知道什么是对什么是错，没有标准答案，也并不知道能分为几个聚集族。但是我们只要分出来那些数据属于一个聚集族就可以了，书上讲的主要是聚类。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>聚类和分类有什么区别呢？这就需要我们看大的分类了。举个最简单的例子，我们要期末考试了，老师说那些内容考，那些内容不考。这就是分类，于是我们把内容分为考和不考。但是我们自己复习的时候又会自己把题聚一下类，因为我们之前并不到可以分为多少类题，也不知道考试题都属于那些类。最后我们可能总结10类或者20类题型，这就是聚类的过程。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -130,13 +118,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a>
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
   </div>
 
 </div>
@@ -145,7 +133,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/07/08/linux-file-authority/" data-title="Linux文件权限 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/09/start-meachine-learning/" data-title="机器学习第一篇 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -158,19 +146,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/09/start-meachine-learning/" title="机器学习第一篇">
-  <strong>上一篇：</strong><br/>
-  <span>
-  机器学习第一篇</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/07/08/mvn-package/"  title="mvn package命令总结">
+<a href="/2017/07/08/linux-file-authority/"  title="Linux文件权限">
  <strong>下一篇：</strong><br/> 
- <span>mvn package命令总结
+ <span>Linux文件权限
 </span>
 </a>
 </div>
@@ -185,7 +165,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源及定义"><span class="toc-number">1.</span> <span class="toc-text">起源及定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#起源"><span class="toc-number">1.1.</span> <span class="toc-text">起源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.2.</span> <span class="toc-text">定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类"><span class="toc-number">2.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回归问题"><span class="toc-number">2.1.1.</span> <span class="toc-text">回归问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类问题"><span class="toc-number">2.1.2.</span> <span class="toc-text">分类问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习"><span class="toc-number">2.2.</span> <span class="toc-text">无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
