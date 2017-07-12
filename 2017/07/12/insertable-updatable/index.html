@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux文件权限 | 山里的坏孩子</title>
+    <title>insertable=false, updatable=false用法 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
-<meta name="keywords" content="linux">
+    <meta name="description" content="如果一个字段用了注解insertable=false, updatable=false,就表示这个字段既不能插入新的值也不能更新现有的值，那么，我们为什么要这么做呢？">
+<meta name="keywords" content="hibernate,jpa">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux文件权限">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/07/08/linux-file-authority/index.html">
+<meta property="og:title" content="insertable=false, updatable=false用法">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/12/insertable-updatable/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
-<meta property="og:updated_time" content="2017-07-08T06:11:34.439Z">
+<meta property="og:description" content="如果一个字段用了注解insertable=false, updatable=false,就表示这个字段既不能插入新的值也不能更新现有的值，那么，我们为什么要这么做呢？">
+<meta property="og:updated_time" content="2017-07-12T06:56:00.440Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux文件权限">
-<meta name="twitter:description" content="Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。">
+<meta name="twitter:title" content="insertable=false, updatable=false用法">
+<meta name="twitter:description" content="如果一个字段用了注解insertable=false, updatable=false,就表示这个字段既不能插入新的值也不能更新现有的值，那么，我们为什么要这么做呢？">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/08/linux-file-authority/" title="Linux文件权限" itemprop="url">Linux文件权限</a>
+      <a href="/2017/07/12/insertable-updatable/" title="insertable=false, updatable=false用法" itemprop="url">insertable=false, updatable=false用法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-07-08T05:40:18.000Z" itemprop="datePublished"> Published 2017-07-08</time>
+    <time datetime="2017-07-12T06:39:48.000Z" itemprop="datePublished"> Published 2017-07-12</time>
     
   </p>
 </header>
@@ -97,32 +97,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-number">1.</span> <span class="toc-text">Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Explanation"><span class="toc-number">2.</span> <span class="toc-text">Explanation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p>Linux中对于权限的要求是非常高的，所以我们有的时候需要改变一些文件的权限才能继续我们的工作。<br><a id="more"></a></p>
-<h2 id="改变目录的所属用户组"><a href="#改变目录的所属用户组" class="headerlink" title="改变目录的所属用户组"></a>改变目录的所属用户组</h2><p><code>chown -R 用户组:用户 目录 or chown -R 用户 目录</code></p>
-<p>例如我要将属于root用户MeasurementItemFrontEnd目录改为liming这个用户</p>
-<p>sudo chown -R liming MeasurementItemFrontEnd/</p>
-<h2 id="改变文件的权限"><a href="#改变文件的权限" class="headerlink" title="改变文件的权限"></a>改变文件的权限</h2><p><code>chmod</code>命令可以改变文件权限</p>
-<p> 例如 <code>chmod 754  test</code></p>
-<p>  首先让我们说一下这都是什么含义？</p>
-<ul>
-<li>7 = 4 + 2+ 1</li>
-<li>5 = 4 + 1</li>
-<li>4 = 4</li>
-</ul>
-<p><strong>4代表读权限，2代表写权限，1代表执行权限，0 代表没有任何权限</strong></p>
-<p> 所以这段话的意思就是</p>
-<ul>
-<li>所有者拥有可读可写可执行权限</li>
-<li>同组用户有可读，可执行权限</li>
-<li>其它用户有可执行权限</li>
-</ul>
-<p><strong>思考下为什么是4，2，1分别代表读写执行权限,而不是其它数字？</strong><br>我们知道计算机最底层编码都是二进制，即0，1。要表示一个文件读写执行权限，底层只需一个字节，即8位即可。</p>
-<p>约定从右数起第3位为1，代表拥有读权限；第2位为1，代表拥有写权限；第1位为1，代表拥有可执行权限。为0，则没有相应的权限。</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.linuxidc.com/Linux/2014-10/108114.htm" target="_blank" rel="external">Linux文件权限查看及修改命令chmod</a> </p>
+		<p>如果一个字段用了注解<code>insertable=false, updatable=false</code>,就表示这个字段既不能插入新的值也不能更新现有的值，那么，我们为什么要这么做呢？</p>
+<a id="more"></a>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p>例如我们有如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Person &#123;</div><div class="line"></div><div class="line">    @Id</div><div class="line">    @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    @OneToMany(mappedBy=&quot;person&quot;, cascade=CascadeType.ALL)</div><div class="line">    private List&lt;Address&gt; addresses;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class Address &#123;</div><div class="line"></div><div class="line">    @Id</div><div class="line">    @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    @ManyToOne</div><div class="line">    @JoinColumn(name=&quot;ADDRESS_FK&quot;)</div><div class="line">    @Column(insertable=false, updatable=false)</div><div class="line">    private Person person;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h2><p>当创建/更新相关实体的责任不在当前实体中时，您将这样做。 例如。 你有一个<code>Person</code>和一个<code>Address</code>。我们会在<code>Person</code>上添加 <code>insertable=false, updatable=false</code>和<code>@OneToMany</code>关系与<code>Address</code>实体相关联。因为我们需要的是添加<code>Person</code>实体的时候关联添加他的<code>Address</code>,而不是在添加<code>Address</code>的时候级联保存/更新<code>Person</code>实体。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://stackoverflow.com/questions/3805584/please-explain-about-insertable-false-updatable-false" target="_blank" rel="external">Please explain about: insertable=false, updatable=false</a>  <code>Stackoverflow</code></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -130,13 +114,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
+  <a class="article-category-link" href="/categories/hibernate/">hibernate</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a>
+  <span></span> <a href="/tags/hibernate/">hibernate</a><a href="/tags/jpa/">jpa</a>
   </div>
 
 </div>
@@ -145,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/07/08/linux-file-authority/" data-title="Linux文件权限 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/12/insertable-updatable/" data-title="insertable=false, updatable=false用法 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -158,19 +142,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/09/start-meachine-learning/" title="机器学习第一篇">
-  <strong>上一篇：</strong><br/>
-  <span>
-  机器学习第一篇</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/07/08/mvn-package/"  title="mvn package命令总结">
+<a href="/2017/07/09/start-meachine-learning/"  title="机器学习第一篇">
  <strong>下一篇：</strong><br/> 
- <span>mvn package命令总结
+ <span>机器学习第一篇
 </span>
 </a>
 </div>
@@ -185,7 +161,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#改变目录的所属用户组"><span class="toc-number">1.</span> <span class="toc-text">改变目录的所属用户组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改变文件的权限"><span class="toc-number">2.</span> <span class="toc-text">改变文件的权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-number">1.</span> <span class="toc-text">Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Explanation"><span class="toc-number">2.</span> <span class="toc-text">Explanation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
