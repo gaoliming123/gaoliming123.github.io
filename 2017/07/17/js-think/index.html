@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | 山里的坏孩子</title>
+    <title>编写前台心得 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+    <meta name="description" content="我这里想说的前台调是的心得并不是指的html和css,而是说的javascript。而且有一定的局限性，主要是在如何更高效的让自己处理数据。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/05/27/hello-world/index.html">
+<meta property="og:title" content="编写前台心得">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/17/js-think/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
-<meta property="og:updated_time" content="2017-05-27T09:02:20.610Z">
+<meta property="og:description" content="我这里想说的前台调是的心得并不是指的html和css,而是说的javascript。而且有一定的局限性，主要是在如何更高效的让自己处理数据。">
+<meta property="og:updated_time" content="2017-07-18T00:09:48.234Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="twitter:title" content="编写前台心得">
+<meta name="twitter:description" content="我这里想说的前台调是的心得并不是指的html和css,而是说的javascript。而且有一定的局限性，主要是在如何更高效的让自己处理数据。">
 
     
     
@@ -80,14 +80,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/27/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2017/07/17/js-think/" title="编写前台心得" itemprop="url">编写前台心得</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-27T09:02:20.610Z" itemprop="datePublished"> Published 2017-05-27</time>
+    <time datetime="2017-07-17T13:37:54.000Z" itemprop="datePublished"> Published 2017-07-17</time>
     
   </p>
 </header>
@@ -96,24 +96,37 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#google-chrome-amp-amp-WebStorm"><span class="toc-number">1.</span> <span class="toc-text">google chrome && WebStorm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ubuntu与webstorm快捷键冲突"><span class="toc-number">1.1.</span> <span class="toc-text">ubuntu与webstorm快捷键冲突</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合理利用console-log"><span class="toc-number">2.</span> <span class="toc-text">合理利用console.log()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#断点"><span class="toc-number">3.</span> <span class="toc-text">断点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出JSON原始格式数据"><span class="toc-number">4.</span> <span class="toc-text">输出JSON原始格式数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
 		</div>
 		
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+		<p>我这里想说的前台调是的心得并不是指的<code>html</code>和<code>css</code>,而是说的<code>javascript</code>。而且有一定的局限性，主要是在如何更高效的让自己处理数据。</p>
 <a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<h2 id="google-chrome-amp-amp-WebStorm"><a href="#google-chrome-amp-amp-WebStorm" class="headerlink" title="google chrome &amp;&amp; WebStorm"></a>google chrome &amp;&amp; WebStorm</h2><p>能够合理利用开发工具会让自己的效率事半功倍。我推荐的使用<code>google chrome</code>，当然我们说<code>firefox</code>也很优秀。对于初学者来时写程序的时候最好用IDE，因为它可以帮我们检查语法错误。所以我推荐初学者不要用<code>sublime or vim</code>而是用<code>WebStorm</code>。而且<code>WebStorm</code>会让我们写的<code>javascript</code>代码走上更规范的道路。</p>
+<h3 id="ubuntu与webstorm快捷键冲突"><a href="#ubuntu与webstorm快捷键冲突" class="headerlink" title="ubuntu与webstorm快捷键冲突"></a>ubuntu与webstorm快捷键冲突</h3><p>由于ubuntu定义的快捷键webstorm的快捷键有较多的冲突，请参考这篇文章:<br><a href="http://hsxiaohe.blog.chinaunix.net/uid-192452-id-5604620.html" target="_blank" rel="external">ubuntu和idea快捷键冲突的解决 </a> </p>
+<h2 id="合理利用console-log"><a href="#合理利用console-log" class="headerlink" title="合理利用console.log()"></a>合理利用console.log()</h2><p>打印到控制台是最常用的查看自己所想看数据的手段之一。但是，最开始的时候我是每次用到的时候都会自己写<code>console.log()</code>，而且经常用刷新页面的方法来重新调用<code>console.log()</code>来查看不同的结果。这种方法显然是很不方便的。</p>
+<p>那么，我们说如何来避免呢？不是很简单的方法就是自己写一个函数。例如，我举的例子是依托于<code>angularJS</code>的。</p>
+<p><code>controller</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$scope.printData = function () &#123;</div><div class="line">            console.log($scope.data);</div><div class="line">        &#125;;</div></pre></td></tr></table></figure>
+<p><code>view</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button ng-click=&quot;printData()&quot;&gt;print&lt;/button&gt;</div></pre></td></tr></table></figure>
+<p>然后我们点击页面的<code>Print</code>按钮控制台就会出现我们想要打印的数据。然后适时的时候清理一下控制台就可以了。</p>
+<h2 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h2><p>一个程序员对程序调试的最基本操作就是打断点，看数据在哪儿与自己的逻辑不符或者数据有问题。对于打断点的技巧我感觉是和自己的经验成正比的。对于基本的讲解，请参考下面文章：<br><a href="http://www.cnblogs.com/mqfblog/p/5397282.html" target="_blank" rel="external">js断点调试心得</a> </p>
+<h2 id="输出JSON原始格式数据"><a href="#输出JSON原始格式数据" class="headerlink" title="输出JSON原始格式数据"></a>输出JSON原始格式数据</h2><p>例如，在angularJS中有的时候我们在V层输出JSON格式的data，这样写往往会让数据打印的很乱，让我们无法看清到底是什么东西。所以我们需要这样子写,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;pre&gt;&#123;&#123;data | json&#125;&#125;&lt;/pre&gt;</div></pre></td></tr></table></figure></p>
+<p>详细请参考下面文章:</p>
+<p><a href="http://www.mengyunzhi.cn/2017/07/17/format-json-data-in-angularjs/" target="_blank" rel="external">在angularJs中进行json数据的格式化</a> </p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://www.mengyunzhi.cn/2017/07/17/format-json-data-in-angularjs/" target="_blank" rel="external">在angularJs中进行json数据的格式化</a> </p>
+<p><a href="http://www.cnblogs.com/mqfblog/p/5397282.html" target="_blank" rel="external">js断点调试心得</a> </p>
+<p><a href="http://hsxiaohe.blog.chinaunix.net/uid-192452-id-5604620.html" target="_blank" rel="external">ubuntu和idea快捷键冲突的解决 </a> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/总结/">总结</a>
+</div>
 
 
 </div>
@@ -122,7 +135,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/05/27/hello-world/" data-title="Hello World | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/17/js-think/" data-title="编写前台心得 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -135,14 +148,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/05/27/Accessing-JPA-Data-with-REST/" title="Accessing JPA Data with REST">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Accessing JPA Data with REST</span>
+
+<div class="next">
+<a href="/2017/07/12/insertable-updatable/"  title="insertable=false, updatable=false用法">
+ <strong>下一篇：</strong><br/> 
+ <span>insertable=false, updatable=false用法
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -154,7 +167,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#google-chrome-amp-amp-WebStorm"><span class="toc-number">1.</span> <span class="toc-text">google chrome && WebStorm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ubuntu与webstorm快捷键冲突"><span class="toc-number">1.1.</span> <span class="toc-text">ubuntu与webstorm快捷键冲突</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合理利用console-log"><span class="toc-number">2.</span> <span class="toc-text">合理利用console.log()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#断点"><span class="toc-number">3.</span> <span class="toc-text">断点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出JSON原始格式数据"><span class="toc-number">4.</span> <span class="toc-text">输出JSON原始格式数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
