@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2017/07/22/start-ubuntu/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="使用了将近一年的Ubuntu，感觉不用windows也可以处理日常的事务。并且我相信只要合理利用Ubuntu，一定可以取代你手中的Windows。我不是说Ubuntu有多么好，只是从一个学做软件的人角度说，我希望有一天我们大家能够真正去买正版软件用，如果买不起的话会知道可以找一些开源免费的软件使用，而不是首先想的是找破解版的软件，甚至以此为荣。下面，就让我们来总结一下在日常中我们会用到ubuntu">
-<meta property="og:updated_time" content="2017-07-23T02:17:18.714Z">
+<meta property="og:updated_time" content="2017-07-23T02:45:34.447Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu日常使用总结">
 <meta name="twitter:description" content="使用了将近一年的Ubuntu，感觉不用windows也可以处理日常的事务。并且我相信只要合理利用Ubuntu，一定可以取代你手中的Windows。我不是说Ubuntu有多么好，只是从一个学做软件的人角度说，我希望有一天我们大家能够真正去买正版软件用，如果买不起的话会知道可以找一些开源免费的软件使用，而不是首先想的是找破解版的软件，甚至以此为荣。下面，就让我们来总结一下在日常中我们会用到ubuntu">
@@ -97,7 +97,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装软件"><span class="toc-number">1.</span> <span class="toc-text">安装软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apt-get"><span class="toc-number">1.1.</span> <span class="toc-text">apt-get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian-软件包"><span class="toc-number">1.2.</span> <span class="toc-text">Debian 软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gz-包"><span class="toc-number">1.3.</span> <span class="toc-text">gz 包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将软件添加到启动器"><span class="toc-number">2.</span> <span class="toc-text">将软件添加到启动器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些简单的命令"><span class="toc-number">3.</span> <span class="toc-text">一些简单的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#熟悉Ubuntu自带的快捷键"><span class="toc-number">4.</span> <span class="toc-text">熟悉Ubuntu自带的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限控制"><span class="toc-number">5.</span> <span class="toc-text">权限控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell脚本"><span class="toc-number">6.</span> <span class="toc-text">Shell脚本</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装软件"><span class="toc-number">1.</span> <span class="toc-text">安装软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apt-get"><span class="toc-number">1.1.</span> <span class="toc-text">apt-get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian-软件包"><span class="toc-number">1.2.</span> <span class="toc-text">Debian 软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gz-包"><span class="toc-number">1.3.</span> <span class="toc-text">gz 包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将软件添加到启动器"><span class="toc-number">2.</span> <span class="toc-text">将软件添加到启动器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些简单的命令"><span class="toc-number">3.</span> <span class="toc-text">一些简单的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#熟悉Ubuntu自带的快捷键"><span class="toc-number">4.</span> <span class="toc-text">熟悉Ubuntu自带的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限控制"><span class="toc-number">5.</span> <span class="toc-text">权限控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell脚本"><span class="toc-number">6.</span> <span class="toc-text">Shell脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Wine"><span class="toc-number">7.</span> <span class="toc-text">使用Wine</span></a></li></ol>
 		
 		</div>
 		
@@ -122,6 +122,7 @@
 <h2 id="熟悉Ubuntu自带的快捷键"><a href="#熟悉Ubuntu自带的快捷键" class="headerlink" title="熟悉Ubuntu自带的快捷键"></a>熟悉Ubuntu自带的快捷键</h2><p>系统-&gt;设置-&gt;键盘-&gt;快捷键</p>
 <h2 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a>权限控制</h2><p>对于文件的权限，我记得第一次遇到这个问题的时候是安装好<code>lampp</code>之后法发现使用<code>Thinkphp</code>之后报了一个错，是因为其中一个php的函数没有读写当前文件的权限。如果你要是遇到这种文件权限的话简单粗暴的方法就是给当前文件<code>777</code>权限。你也可以读一下<a href="https://gaoliming123.github.io/2017/07/08/linux-file-authority/">Linux文件权限</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo chmod 777 file</div></pre></td></tr></table></figure></p>
 <h2 id="Shell脚本"><a href="#Shell脚本" class="headerlink" title="Shell脚本"></a>Shell脚本</h2><p>shell脚本是一个很好用的东西，如果你要是用<code>Linux</code>可以学一下<a href="http://www.runoob.com/linux/linux-shell.html" target="_blank" rel="external">Shell 教程</a> 。你可以用<code>Shell</code>编写一些简单的程序以方便自己使用。</p>
+<h2 id="使用Wine"><a href="#使用Wine" class="headerlink" title="使用Wine"></a>使用Wine</h2><p>对于我们来说<code>QQ</code>是每个电脑上的标配。但是<code>QQ</code>没有<code>Linux</code>版的怎么办？那么我们可以使用<code>wine</code>，Wine 是类UNIX系统下运行微软Windows程序的”兼容层”。在Wine中运行的Windows程序，就如同运行原生Linux程序一样，不会有模拟器那样的性能问题。<br>对于<code>wine</code>的中国化可以参考这篇文章：<a href="https://github.com/hillwoodroc/winetricks-zh" target="_blank" rel="external">A setup wizard for Chinese wine users</a> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -176,7 +177,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装软件"><span class="toc-number">1.</span> <span class="toc-text">安装软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apt-get"><span class="toc-number">1.1.</span> <span class="toc-text">apt-get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian-软件包"><span class="toc-number">1.2.</span> <span class="toc-text">Debian 软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gz-包"><span class="toc-number">1.3.</span> <span class="toc-text">gz 包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将软件添加到启动器"><span class="toc-number">2.</span> <span class="toc-text">将软件添加到启动器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些简单的命令"><span class="toc-number">3.</span> <span class="toc-text">一些简单的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#熟悉Ubuntu自带的快捷键"><span class="toc-number">4.</span> <span class="toc-text">熟悉Ubuntu自带的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限控制"><span class="toc-number">5.</span> <span class="toc-text">权限控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell脚本"><span class="toc-number">6.</span> <span class="toc-text">Shell脚本</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装软件"><span class="toc-number">1.</span> <span class="toc-text">安装软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#apt-get"><span class="toc-number">1.1.</span> <span class="toc-text">apt-get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian-软件包"><span class="toc-number">1.2.</span> <span class="toc-text">Debian 软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gz-包"><span class="toc-number">1.3.</span> <span class="toc-text">gz 包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将软件添加到启动器"><span class="toc-number">2.</span> <span class="toc-text">将软件添加到启动器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些简单的命令"><span class="toc-number">3.</span> <span class="toc-text">一些简单的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#熟悉Ubuntu自带的快捷键"><span class="toc-number">4.</span> <span class="toc-text">熟悉Ubuntu自带的快捷键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限控制"><span class="toc-number">5.</span> <span class="toc-text">权限控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell脚本"><span class="toc-number">6.</span> <span class="toc-text">Shell脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Wine"><span class="toc-number">7.</span> <span class="toc-text">使用Wine</span></a></li></ol>
  
   </div>
 
@@ -223,11 +224,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>4</sup></a></li>
+				<li><a href="/tags/spring/" title="spring">spring<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/spring/" title="spring">spring<sup>4</sup></a></li>
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>4</sup></a></li>
 			
 		
 			
@@ -244,6 +245,14 @@
 		
 			
 				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
 			
 		
 			
@@ -267,15 +276,7 @@
 			
 		
 			
-				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/maven/" title="maven">maven<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
 			
 		
 			
@@ -287,19 +288,19 @@
 			
 		
 			
-				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/hql/" title="hql">hql<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/sql/" title="sql">sql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 			
 		
 		</ul>
