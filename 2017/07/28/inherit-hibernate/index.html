@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Spring Security and Angular JS(TODO) | 山里的坏孩子</title>
+    <title>在面向关系的数据库中如何实现继承(TODO) | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
-<meta name="keywords" content="spring,angularjs,security">
+    <meta name="description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
+<meta name="keywords" content="hibernate">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring Security and Angular JS(TODO)">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/06/02/spring-security/index.html">
+<meta property="og:title" content="在面向关系的数据库中如何实现继承(TODO)">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/28/inherit-hibernate/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
-<meta property="og:updated_time" content="2017-06-17T06:38:06.351Z">
+<meta property="og:description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
+<meta property="og:updated_time" content="2017-07-28T10:54:54.300Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring Security and Angular JS(TODO)">
-<meta name="twitter:description" content="这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。">
+<meta name="twitter:title" content="在面向关系的数据库中如何实现继承(TODO)">
+<meta name="twitter:description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/02/spring-security/" title="Spring Security and Angular JS(TODO)" itemprop="url">Spring Security and Angular JS(TODO)</a>
+      <a href="/2017/07/28/inherit-hibernate/" title="在面向关系的数据库中如何实现继承(TODO)" itemprop="url">在面向关系的数据库中如何实现继承(TODO)</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-02T06:35:16.000Z" itemprop="datePublished"> Published 2017-06-02</time>
+    <time datetime="2017-07-28T03:00:43.000Z" itemprop="datePublished"> Published 2017-07-28</time>
     
   </p>
 </header>
@@ -97,17 +97,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Security"><span class="toc-number">1.</span> <span class="toc-text">Spring Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Web-Security-Java-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Hello Web Security Java Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">2.</span> <span class="toc-text">参考文献</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li></ol>
 		
 		</div>
 		
-		<p>这里，我们将会理解到Spring Security, Spring Boot和AngularJs共同打造一个安全的用户体验。前后台完全分离的情况下如何完成登陆认证的功能。<br><a id="more"></a><br><code>IDE:idea</code>,首先，我们用maven构建一个Spring项目，然后用yemon构建一个Angular JS项目。Spring项目我们依旧会用之前的那个<a href="https://github.com/gaoliming123/blog" target="_blank" rel="external">项目</a>, 当然其中我们也可以着大Angular JS的项目</p>
-<h2 id="Spring-Security"><a href="#Spring-Security" class="headerlink" title="Spring Security"></a>Spring Security</h2><h3 id="Hello-Web-Security-Java-Configuration"><a href="#Hello-Web-Security-Java-Configuration" class="headerlink" title="Hello Web Security Java Configuration"></a>Hello Web Security Java Configuration</h3><p>在项目里使用<code>spring-security</code>推荐的方法时在pox.xml中增加依赖,但是本文讲解的是如何通过配置WebConfig去配置<code>spring-security</code>。<br>首先，创建配置文件。然后创建Servlet Filter。下面我们来讲解一个简单的例子。</p>
-<p><code>pom.xml</code>中增加如下配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.security&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-security-config&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;4.2.2.RELEASE&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
-<p><code>src/java/main/com.mengyunzhi.com/config/WebSecurityConfig.java</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<p>然后我们启动项目，输入url开始</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://projects.spring.io/spring-security/" target="_blank" rel="external">Spring Security</a> <code>Spring Guides</code><br><a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#spring-security-config" target="_blank" rel="external">Hello Web Security Java Configuration</a><code>Spring Security Reference</code></p>
+		<p>在学软件工程的时候没有弄明白<code>ER图</code>和 <code>域模型</code>的关系。后来才渐渐理解了。<code>ER图</code>是基于数据库的数据建模，是面向关系的，是<code>has a</code>的关系（类的组合），而<code>域模型</code>是面向对象的，既是<code>has a</code>又是<code>is a</code>的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？</p>
+<a id="more"></a>
+<h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><p>首先来介绍一下我们在思想上如何实现呢？</p>
+<ul>
+<li>每个子类使用一个表：将<code>is a</code>(继承)关系表示为<code>has a</code>(外键)关系，并且使用 <code>SQL JOIN</code>操作。</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -115,13 +114,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/spring/">spring</a>
+  <a class="article-category-link" href="/categories/hibernate/">hibernate</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/spring/">spring</a><a href="/tags/angularjs/">angularjs</a><a href="/tags/security/">security</a>
+  <span></span> <a href="/tags/hibernate/">hibernate</a>
   </div>
 
 </div>
@@ -130,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/06/02/spring-security/" data-title="Spring Security and Angular JS(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/28/inherit-hibernate/" data-title="在面向关系的数据库中如何实现继承(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -144,18 +143,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/06/06/ManyToMany/" title="Hibernate @ManyToMany总结">
+ <a href="/2017/07/28/jsonView/" title="Spring中用JsonView过滤数据输出">
   <strong>上一篇：</strong><br/>
   <span>
-  Hibernate @ManyToMany总结</span>
+  Spring中用JsonView过滤数据输出</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/05/31/cors/"  title="Spring解决跨域请求">
+<a href="/2017/07/24/HashSet/"  title="对HashSet的一些理解(TODO)">
  <strong>下一篇：</strong><br/> 
- <span>Spring解决跨域请求
+ <span>对HashSet的一些理解(TODO)
 </span>
 </a>
 </div>
@@ -170,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-Security"><span class="toc-number">1.</span> <span class="toc-text">Spring Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-Web-Security-Java-Configuration"><span class="toc-number">1.1.</span> <span class="toc-text">Hello Web Security Java Configuration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">2.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li></ol>
  
   </div>
 

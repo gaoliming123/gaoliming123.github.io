@@ -1,0 +1,564 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Spring中用JsonView过滤数据输出 | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
+    
+
+    
+    <meta name="description" content="这篇文章将会讲述如何使用@JsonView过滤给前台数据的输出在序列化的上下文中，包括集合和单字段。">
+<meta name="keywords" content="spring,jackson">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中用JsonView过滤数据输出">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/07/28/jsonView/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="这篇文章将会讲述如何使用@JsonView过滤给前台数据的输出在序列化的上下文中，包括集合和单字段。">
+<meta property="og:updated_time" content="2017-07-28T12:24:45.130Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring中用JsonView过滤数据输出">
+<meta name="twitter:description" content="这篇文章将会讲述如何使用@JsonView过滤给前台数据的输出在序列化的上下文中，包括集合和单字段。">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/college">大学生活 | College life</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">关于 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/28/jsonView/" title="Spring中用JsonView过滤数据输出" itemprop="url">Spring中用JsonView过滤数据输出</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-28T10:57:44.000Z" itemprop="datePublished"> Published 2017-07-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#翻译原文链接-Latest-Jackson-integration-improvements-in-Spring"><span class="toc-number">1.</span> <span class="toc-text">翻译原文链接 Latest Jackson integration improvements in Spring</span></a></li></ol>
+		
+		</div>
+		
+		<p>这篇文章将会讲述如何使用<code>@JsonView</code>过滤给前台数据的输出在序列化的上下文中，包括集合和单字段。</p>
+<a id="more"></a>
+<h3 id="翻译原文链接-Latest-Jackson-integration-improvements-in-Spring"><a href="#翻译原文链接-Latest-Jackson-integration-improvements-in-Spring" class="headerlink" title="翻译原文链接 Latest Jackson integration improvements in Spring"></a>翻译原文链接 <a href="https://spring.io/blog/2014/12/02/latest-jackson-integration-improvements-in-spring" target="_blank" rel="external">Latest Jackson integration improvements in Spring</a></h3><p>例子</p>
+<p>这个例子中我们将会用”summary” View 来标志被序列化的字段。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">public class View &#123;</div><div class="line">	interface Summary &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class User &#123;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private Long id;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private String firstname;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private String lastname;</div><div class="line"></div><div class="line">	private String email;</div><div class="line">	private String address;</div><div class="line">	private String postalCode;</div><div class="line">	private String city;</div><div class="line">	private String country;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Message &#123;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private Long id;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private LocalDate created;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private String title;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private User author;</div><div class="line"></div><div class="line">	private List&lt;User&gt; recipients;</div><div class="line">  </div><div class="line">	private String body;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>@JsonView</code>这个注解应用非常灵活。这个注解我们可以加在一个Controlelr的方法上，这个方法的返回的类中的字段就会被<code>@JsonView</code>序列化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class MessageController &#123;</div><div class="line"></div><div class="line">	@Autowired</div><div class="line">	private MessageService messageService;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	@RequestMapping(&quot;/&quot;)</div><div class="line">	public List&lt;Message&gt; getAllMessages() &#123;</div><div class="line">		return messageService.getAll();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@RequestMapping(&quot;/&#123;id&#125;&quot;)</div><div class="line">	public Message getMessage(@PathVariable Long id) &#123;</div><div class="line">		return messageService.get(id);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看这段代码我们知道，<code>getAllMessages()</code>方法是<code>retrieved</code>所有的message,但是返回的时侯每个类中只会返回我们加<code>@JsonView</code>注解的字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[ &#123;</div><div class="line">  &quot;id&quot; : 1,</div><div class="line">  &quot;created&quot; : &quot;2014-11-14&quot;,</div><div class="line">  &quot;title&quot; : &quot;Info&quot;,</div><div class="line">  &quot;author&quot; : &#123;</div><div class="line">    &quot;id&quot; : 1,</div><div class="line">    &quot;firstname&quot; : &quot;Brian&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Clozel&quot;</div><div class="line">  &#125;</div><div class="line">&#125;, &#123;</div><div class="line">  &quot;id&quot; : 2,</div><div class="line">  &quot;created&quot; : &quot;2014-11-14&quot;,</div><div class="line">  &quot;title&quot; : &quot;Warning&quot;,</div><div class="line">  &quot;author&quot; : &#123;</div><div class="line">    &quot;id&quot; : 2,</div><div class="line">    &quot;firstname&quot; : &quot;Stéphane&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Nicoll&quot;</div><div class="line">  &#125;</div><div class="line">&#125;, &#123;</div><div class="line">  &quot;id&quot; : 3,</div><div class="line">  &quot;created&quot; : &quot;2014-11-14&quot;,</div><div class="line">  &quot;title&quot; : &quot;Alert&quot;,</div><div class="line">  &quot;author&quot; : &#123;</div><div class="line">    &quot;id&quot; : 3,</div><div class="line">    &quot;firstname&quot; : &quot;Rossen&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Stoyanchev&quot;</div><div class="line">  &#125;</div><div class="line">&#125; ]</div></pre></td></tr></table></figure>
+<p>在Spring MVC的default configuration，<code>MapperFeature.DEFAULT_VIEW_INCLUSION</code>是为<code>false</code>，这意味着，当我们使用JSON View的时候，没有被注解的fields or properties <code>body</code> <code>recipients</code>将不会被序列化。</p>
+<p>当然，当我们使用<code>getMessage()</code>retrieved一个明确的<code>message</code>的时候，因为方法中没有使用JSON View,所以所有的字段将被序列化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;id&quot; : 1,</div><div class="line">  &quot;created&quot; : &quot;2014-11-14&quot;,</div><div class="line">  &quot;title&quot; : &quot;Info&quot;,</div><div class="line">  &quot;body&quot; : &quot;This is an information message&quot;,</div><div class="line">  &quot;author&quot; : &#123;</div><div class="line">    &quot;id&quot; : 1,</div><div class="line">    &quot;firstname&quot; : &quot;Brian&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Clozel&quot;,</div><div class="line">    &quot;email&quot; : &quot;bclozel@pivotal.io&quot;,</div><div class="line">    &quot;address&quot; : &quot;1 Jaures street&quot;,</div><div class="line">    &quot;postalCode&quot; : &quot;69003&quot;,</div><div class="line">    &quot;city&quot; : &quot;Lyon&quot;,</div><div class="line">    &quot;country&quot; : &quot;France&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;recipients&quot; : [ &#123;</div><div class="line">    &quot;id&quot; : 2,</div><div class="line">    &quot;firstname&quot; : &quot;Stéphane&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Nicoll&quot;,</div><div class="line">    &quot;email&quot; : &quot;snicoll@pivotal.io&quot;,</div><div class="line">    &quot;address&quot; : &quot;42 Obama street&quot;,</div><div class="line">    &quot;postalCode&quot; : &quot;1000&quot;,</div><div class="line">    &quot;city&quot; : &quot;Brussel&quot;,</div><div class="line">    &quot;country&quot; : &quot;Belgium&quot;</div><div class="line">  &#125;, &#123;</div><div class="line">    &quot;id&quot; : 3,</div><div class="line">    &quot;firstname&quot; : &quot;Rossen&quot;,</div><div class="line">    &quot;lastname&quot; : &quot;Stoyanchev&quot;,</div><div class="line">    &quot;email&quot; : &quot;rstoyanchev@pivotal.io&quot;,</div><div class="line">    &quot;address&quot; : &quot;3 Warren street&quot;,</div><div class="line">    &quot;postalCode&quot; : &quot;10011&quot;,</div><div class="line">    &quot;city&quot; : &quot;New York&quot;,</div><div class="line">    &quot;country&quot; : &quot;USA&quot;</div><div class="line">  &#125; ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>一个</strong>类或接口可以使用<code>@JsonView</code>，但是有的时候我们会经常遇到<code>@OneToMany</code> or     <code>@ManyToMany</code>，但是我么可以用继承来解决集合或List的问题。例如，在这个例子中我们会看到<code>private List&lt;User&gt; recipients;</code>，我们用的注解不是<code>@JsonView(View.Summary.class)</code>而是继承他的注解<code>@JsonView(View.SummaryWithRecipients.class)</code>来完成，在下面的这个方法中的字段将会被<code>@JsonView(View.Summary.class)</code> <strong>和</strong> <code>@JsonView(View.SummaryWithRecipients.class)</code> 共同序列化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public class View &#123;</div><div class="line">	interface Summary &#123;&#125;</div><div class="line">	interface SummaryWithRecipients extends Summary &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Message &#123;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private Long id;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private LocalDate created;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private String title;</div><div class="line"></div><div class="line">	@JsonView(View.Summary.class)</div><div class="line">	private User author;</div><div class="line"></div><div class="line">	@JsonView(View.SummaryWithRecipients.class)</div><div class="line">	private List&lt;User&gt; recipients;</div><div class="line">  </div><div class="line">	private String body;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@RestController</div><div class="line">public class MessageController &#123;</div><div class="line"></div><div class="line">	@Autowired</div><div class="line">	private MessageService messageService;</div><div class="line"></div><div class="line">	@JsonView(View.SummaryWithRecipients.class)</div><div class="line">	@RequestMapping(&quot;/with-recipients&quot;)</div><div class="line">	public List&lt;Message&gt; getAllMessagesWithRecipients() &#123;</div><div class="line">		return messageService.getAll();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/spring/">spring</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/spring/">spring</a><a href="/tags/jackson/">jackson</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2017/07/28/jsonView/" data-title="Spring中用JsonView过滤数据输出 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/07/28/inherit-hibernate/"  title="在面向关系的数据库中如何实现继承(TODO)">
+ <strong>下一篇：</strong><br/> 
+ <span>在面向关系的数据库中如何实现继承(TODO)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#翻译原文链接-Latest-Jackson-integration-improvements-in-Spring"><span class="toc-number">1.</span> <span class="toc-text">翻译原文链接 Latest Jackson integration improvements in Spring</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/java/" title="java">java<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/maven/" title="maven">maven<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/总结/" title="总结">总结<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/maven/" title="maven">maven<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hql/" title="hql">hql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/sql/" title="sql">sql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angularjs/" title="angularjs">angularjs<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming in 河北工业大学 <br/>
+			Thanks to all those who bring me knowledge and accompany me, especially my parents and teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学梦云智软件开发团队成员)">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
