@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>在面向关系的数据库中如何实现继承(TODO) | 山里的坏孩子</title>
+    <title>在面向关系的数据库中如何实现继承 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
@@ -14,14 +14,17 @@
     <meta name="description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
 <meta name="keywords" content="hibernate">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在面向关系的数据库中如何实现继承(TODO)">
+<meta property="og:title" content="在面向关系的数据库中如何实现继承">
 <meta property="og:url" content="https://gaoliming123.github.io/2017/07/28/inherit-hibernate/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
-<meta property="og:updated_time" content="2017-07-28T10:54:54.300Z">
+<meta property="og:image" content="https://gaoliming123.github.io/images/inherience.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/table.png">
+<meta property="og:updated_time" content="2017-07-28T13:58:25.444Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在面向关系的数据库中如何实现继承(TODO)">
+<meta name="twitter:title" content="在面向关系的数据库中如何实现继承">
 <meta name="twitter:description" content="在学软件工程的时候没有弄明白ER图和 域模型的关系。后来才渐渐理解了。ER图是基于数据库的数据建模，是面向关系的，是has a的关系（类的组合），而域模型是面向对象的，既是has a又是is a的关系（类的继承）。弄明白了这些之后我们知道在面向关系和对象的世界里继承是一种结构上的不匹配。但是我们如何才能完成继承关系在数据库中的映射呢？">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/inherience.png">
 
     
     
@@ -81,7 +84,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/28/inherit-hibernate/" title="在面向关系的数据库中如何实现继承(TODO)" itemprop="url">在面向关系的数据库中如何实现继承(TODO)</a>
+      <a href="/2017/07/28/inherit-hibernate/" title="在面向关系的数据库中如何实现继承" itemprop="url">在面向关系的数据库中如何实现继承</a>
   </h1>
   <p class="article-author">By
        
@@ -97,7 +100,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#每个类层次结构使用一个表"><span class="toc-number">2.</span> <span class="toc-text">每个类层次结构使用一个表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#域模型"><span class="toc-number">2.1.</span> <span class="toc-text">域模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#父类"><span class="toc-number">2.2.</span> <span class="toc-text">父类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BankAccount子类"><span class="toc-number">2.3.</span> <span class="toc-text">BankAccount子类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CreditCard子类"><span class="toc-number">2.4.</span> <span class="toc-text">CreditCard子类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表的结构"><span class="toc-number">2.5.</span> <span class="toc-text">表的结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL查询"><span class="toc-number">3.</span> <span class="toc-text">SQL查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hql"><span class="toc-number">3.1.</span> <span class="toc-text">hql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql"><span class="toc-number">3.2.</span> <span class="toc-text">sql</span></a></li></ol></li></ol>
 		
 		</div>
 		
@@ -106,8 +109,17 @@
 <h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><p>首先来介绍一下我们在思想上如何实现呢？</p>
 <ul>
 <li>每个子类使用一个表：将<code>is a</code>(继承)关系表示为<code>has a</code>(外键)关系，并且使用 <code>SQL JOIN</code>操作。</li>
+<li>每个类层次结构使用一个表。</li>
 </ul>
-  
+<h2 id="每个类层次结构使用一个表"><a href="#每个类层次结构使用一个表" class="headerlink" title="每个类层次结构使用一个表"></a>每个类层次结构使用一个表</h2><p>我们说这种方法是最简单的映射关系了。<strong>在这个类层次映射的到的数据表中乎有一个额外的类型识别器或公式的值会标识出特定行所表示的具体子类。</strong></p>
+<h3 id="域模型"><a href="#域模型" class="headerlink" title="域模型"></a>域模型</h3><p><img src="/images/inherience.png" alt=""> </p>
+<h3 id="父类"><a href="#父类" class="headerlink" title="父类"></a>父类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">@DiscriminatorColumn(name = &quot;table_type&quot;)		//区分子类的标识符</div><div class="line">public class BillingDetails &#123;</div><div class="line">    @Id</div><div class="line">    @GeneratedValue(strategy = GenerationType.AUTO)</div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    @NotNull</div><div class="line">    @Column(nullable = false)</div><div class="line">    private String owner;</div><div class="line">    </div><div class="line">    //getter and setter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="BankAccount子类"><a href="#BankAccount子类" class="headerlink" title="BankAccount子类"></a>BankAccount子类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">@DiscriminatorValue(&quot;CreditCard&quot;)           //table_type字段为CreditCard时表示CreditCard类</div><div class="line">public class CreditCard extends BillingDetails &#123;</div><div class="line">    protected String cardNumber;</div><div class="line">    protected String expMonth;</div><div class="line"></div><div class="line">    //gettter and setter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="CreditCard子类"><a href="#CreditCard子类" class="headerlink" title="CreditCard子类"></a>CreditCard子类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">@DiscriminatorValue(&quot;CreditCard&quot;)</div><div class="line">public class CreditCard extends BillingDetails &#123;</div><div class="line">    protected String account;</div><div class="line">    protected String bankName;</div><div class="line"></div><div class="line">   //getter and setter</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="表的结构"><a href="#表的结构" class="headerlink" title="表的结构"></a>表的结构</h3><p><img src="/images/table.png" alt=""> </p>
+<h2 id="SQL查询"><a href="#SQL查询" class="headerlink" title="SQL查询"></a>SQL查询</h2><p>以<code>BankAccount</code>为例</p>
+<h3 id="hql"><a href="#hql" class="headerlink" title="hql"></a>hql</h3><p>当我们用<code>hql</code>查询的时候没有什么改动，因为<code>Hinernate</code>已经为我们自动处理<code>table_type</code>这个字段来标示不同的子类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select bankAccount from BankAccount as bankAccount</div></pre></td></tr></table></figure></p>
+<h3 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">select</div><div class="line">    	ID, OWNER, CARDNUMBER, EXPMONTH</div><div class="line">from</div><div class="line">	BILLINGDETAILS</div><div class="line">where</div><div class="line">	TABLE_TYPE=&apos;BANKACCOUNT&apos;</div></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -129,7 +141,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/07/28/inherit-hibernate/" data-title="在面向关系的数据库中如何实现继承(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/07/28/inherit-hibernate/" data-title="在面向关系的数据库中如何实现继承 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -169,7 +181,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#每个类层次结构使用一个表"><span class="toc-number">2.</span> <span class="toc-text">每个类层次结构使用一个表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#域模型"><span class="toc-number">2.1.</span> <span class="toc-text">域模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#父类"><span class="toc-number">2.2.</span> <span class="toc-text">父类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BankAccount子类"><span class="toc-number">2.3.</span> <span class="toc-text">BankAccount子类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CreditCard子类"><span class="toc-number">2.4.</span> <span class="toc-text">CreditCard子类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表的结构"><span class="toc-number">2.5.</span> <span class="toc-text">表的结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL查询"><span class="toc-number">3.</span> <span class="toc-text">SQL查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hql"><span class="toc-number">3.1.</span> <span class="toc-text">hql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql"><span class="toc-number">3.2.</span> <span class="toc-text">sql</span></a></li></ol></li></ol>
  
   </div>
 
