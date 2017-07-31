@@ -50,7 +50,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -68,7 +68,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -91,14 +91,14 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-28T03:32:57.000Z" itemprop="datePublished"> Published 2017-05-28</time>
+    <time datetime="2017-05-28T03:32:57.000Z" itemprop="datePublished"> 发表于 2017-05-28</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CrudRepository"><span class="toc-number">1.</span> <span class="toc-text">CrudRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-creation"><span class="toc-number">2.</span> <span class="toc-text">Query creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Entity-and-declare-interface-Repository"><span class="toc-number">2.1.</span> <span class="toc-text">create Entity and declare interface Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-creation-1"><span class="toc-number">2.2.</span> <span class="toc-text">Query creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#test-the-Query"><span class="toc-number">3.</span> <span class="toc-text">test the Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#保存实体"><span class="toc-number">3.1.</span> <span class="toc-text">保存实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改PersonRepository"><span class="toc-number">3.2.</span> <span class="toc-text">修改PersonRepository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test-continue"><span class="toc-number">3.3.</span> <span class="toc-text">test continue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-download"><span class="toc-number">4.</span> <span class="toc-text">Code download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Download-ZIP"><span class="toc-number">4.1.</span> <span class="toc-text">Download ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
 		
@@ -185,22 +185,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CrudRepository"><span class="toc-number">1.</span> <span class="toc-text">CrudRepository</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-creation"><span class="toc-number">2.</span> <span class="toc-text">Query creation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#create-Entity-and-declare-interface-Repository"><span class="toc-number">2.1.</span> <span class="toc-text">create Entity and declare interface Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-creation-1"><span class="toc-number">2.2.</span> <span class="toc-text">Query creation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#test-the-Query"><span class="toc-number">3.</span> <span class="toc-text">test the Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#保存实体"><span class="toc-number">3.1.</span> <span class="toc-text">保存实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改PersonRepository"><span class="toc-number">3.2.</span> <span class="toc-text">修改PersonRepository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test-continue"><span class="toc-number">3.3.</span> <span class="toc-text">test continue</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-download"><span class="toc-number">4.</span> <span class="toc-text">Code download</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Download-ZIP"><span class="toc-number">4.1.</span> <span class="toc-text">Download ZIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">5.</span> <span class="toc-text">参考文章</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -241,7 +241,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -261,6 +261,10 @@
 			
 		
 			
+				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
 			
 		
@@ -273,15 +277,11 @@
 			
 		
 			
-				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
 			
 		
 			
@@ -305,7 +305,7 @@
 			
 		
 			
-				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
 			
 		
 			
@@ -329,7 +329,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -571,7 +571,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
