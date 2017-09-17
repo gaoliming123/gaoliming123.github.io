@@ -12,7 +12,7 @@
 
     
     <meta name="description" content="我们说sublime和xdebug调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用var_dump又太浪费时间（可能是因为本人技术水平不佳）。">
-<meta name="keywords" content="linux,php">
+<meta name="keywords" content="php,linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu16.04中php + xdebug + phpstrom环境配置">
 <meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/php-xdebug-phpstrom/index.html">
@@ -22,7 +22,8 @@
 <meta property="og:image" content="https://gaoliming123.github.io/images/xdebug.png">
 <meta property="og:image" content="https://gaoliming123.github.io/images/xdebug_helper.png">
 <meta property="og:image" content="https://gaoliming123.github.io/images/xdebug_start.gif">
-<meta property="og:updated_time" content="2017-09-17T11:12:33.792Z">
+<meta property="og:image" content="https://gaoliming123.github.io/images/break_point.png">
+<meta property="og:updated_time" content="2017-09-17T11:44:44.099Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ubuntu16.04中php + xdebug + phpstrom环境配置">
 <meta name="twitter:description" content="我们说sublime和xdebug调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用var_dump又太浪费时间（可能是因为本人技术水平不佳）。">
@@ -52,7 +53,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -70,7 +71,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -93,14 +94,14 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T07:52:46.000Z" itemprop="datePublished"> Published 2017-09-17</time>
+    <time datetime="2017-09-17T07:52:46.000Z" itemprop="datePublished"> 发表于 2017-09-17</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#download-xdebug"><span class="toc-number">1.</span> <span class="toc-text">download xdebug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-xdebug"><span class="toc-number">2.</span> <span class="toc-text">install xdebug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解压文件"><span class="toc-number">2.1.</span> <span class="toc-text">解压文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#install-php7-0-dev"><span class="toc-number">2.2.</span> <span class="toc-text">install php7.0-dev</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑php-ini"><span class="toc-number">2.3.</span> <span class="toc-text">编辑php.ini</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重启服务"><span class="toc-number">2.4.</span> <span class="toc-text">重启服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Xdebug-extension-helper"><span class="toc-number">3.</span> <span class="toc-text">install Xdebug extension helper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-number">3.1.</span> <span class="toc-text">google chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDEKey"><span class="toc-number">3.2.</span> <span class="toc-text">IDEKey</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置PhpStorm"><span class="toc-number">4.</span> <span class="toc-text">配置PhpStorm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
 		
@@ -128,7 +129,7 @@
 <p>因为<code>google</code>被墙了，如果想要安装所以请自行在<code>github</code> or <code>老D</code>上下载<code>hosts</code>。</p>
 <h3 id="IDEKey"><a href="#IDEKey" class="headerlink" title="IDEKey"></a>IDEKey</h3><p>在<code>Xdebug extension helper</code>的<code>选项</code> 中 <code>IDE key</code>   中选择<code>phpStorm</code>。<br><img src="/images/xdebug_helper.png" alt=""> </p>
 <p>开启<code>Xdebug extension helper</code>调试模式<br><img src="/images/xdebug_start.gif" alt=""> </p>
-<h2 id="配置PhpStorm"><a href="#配置PhpStorm" class="headerlink" title="配置PhpStorm"></a>配置PhpStorm</h2><p>然后我们打开phpStorm中<code>Run</code> , <code>Start Listening for PHP Debug Connections.</code></p>
+<h2 id="配置PhpStorm"><a href="#配置PhpStorm" class="headerlink" title="配置PhpStorm"></a>配置PhpStorm</h2><p>然后我们打开phpStorm中<code>Run</code> , <code>Start Listening for PHP Debug Connections.</code><br>然后我们就可以调试了:<br><img src="/images/break_point.png" alt=""> </p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://blog.csdn.net/dm_vincent/article/details/44678347" target="_blank" rel="external">[PHP+xdebug] 在Ubuntu 14.04下的PhpStorm中配置xdebug调试环境</a><br><a href="https://confluence.jetbrains.com/display/PhpStorm/Zero-configuration+Web+Application+Debugging+with+Xdebug+and+PhpStorm" target="_blank" rel="external">Zero-configuration Web Application Debugging with Xdebug and PhpStorm</a> </p>
   
 	</div>
@@ -143,7 +144,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/php/">php</a>
+  <span></span> <a href="/tags/php/">php</a><a href="/tags/linux/">linux</a>
   </div>
 
 </div>
@@ -165,6 +166,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017/09/17/apache-virtual-host/" title="apache配置虚拟主机">
+  <strong>上一篇：</strong><br/>
+  <span>
+  apache配置虚拟主机</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2017/09/17/boot/"  title="ubuntu如何设置开机自启动">
@@ -179,22 +188,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#download-xdebug"><span class="toc-number">1.</span> <span class="toc-text">download xdebug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-xdebug"><span class="toc-number">2.</span> <span class="toc-text">install xdebug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解压文件"><span class="toc-number">2.1.</span> <span class="toc-text">解压文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#install-php7-0-dev"><span class="toc-number">2.2.</span> <span class="toc-text">install php7.0-dev</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑php-ini"><span class="toc-number">2.3.</span> <span class="toc-text">编辑php.ini</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重启服务"><span class="toc-number">2.4.</span> <span class="toc-text">重启服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Xdebug-extension-helper"><span class="toc-number">3.</span> <span class="toc-text">install Xdebug extension helper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-number">3.1.</span> <span class="toc-text">google chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDEKey"><span class="toc-number">3.2.</span> <span class="toc-text">IDEKey</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置PhpStorm"><span class="toc-number">4.</span> <span class="toc-text">配置PhpStorm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -214,7 +223,7 @@
 		  
 		
 		  
-			<li><a href="/categories/linux/" title="linux">linux<sup>4</sup></a></li>
+			<li><a href="/categories/linux/" title="linux">linux<sup>5</sup></a></li>
 		  
 		
 		  
@@ -239,7 +248,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -251,19 +260,11 @@
 			
 		
 			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/java/" title="java">java<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/linux/" title="linux">linux<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/node/" title="node">node<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
 			
 		
 			
@@ -275,15 +276,19 @@
 			
 		
 			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/php/" title="php">php<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/maven/" title="maven">maven<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
 			
 		
 			
@@ -295,7 +300,19 @@
 			
 		
 			
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/thinkphp/" title="thinkphp">thinkphp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
 			
 		
 			
@@ -307,15 +324,7 @@
 			
 		
 			
-				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/php/" title="php">php<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/jpa/" title="jpa">jpa<sup>1</sup></a></li>
+				<li><a href="/tags/maven/" title="maven">maven<sup>1</sup></a></li>
 			
 		
 			
@@ -327,7 +336,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -569,7 +578,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

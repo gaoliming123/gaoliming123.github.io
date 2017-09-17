@@ -4,27 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>mvn package命令总结 | 山里的坏孩子</title>
+    <title>apache配置虚拟主机 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="maven是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。">
-<meta name="keywords" content="java,maven">
+    <meta name="description" content="分享知识的同时你会获得更多">
+<meta name="keywords" content="php,linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mvn package命令总结">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/07/08/mvn-package/index.html">
+<meta property="og:title" content="apache配置虚拟主机">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/apache-virtual-host/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="maven是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。">
-<meta property="og:image" content="https://gaoliming123.github.io/images/package_error.png">
-<meta property="og:image" content="https://gaoliming123.github.io/images/package.png">
-<meta property="og:updated_time" content="2017-07-08T09:22:59.770Z">
+<meta property="og:description" content="分享知识的同时你会获得更多">
+<meta property="og:updated_time" content="2017-09-17T11:24:32.093Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mvn package命令总结">
-<meta name="twitter:description" content="maven是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。">
-<meta name="twitter:image" content="https://gaoliming123.github.io/images/package_error.png">
+<meta name="twitter:title" content="apache配置虚拟主机">
+<meta name="twitter:description" content="分享知识的同时你会获得更多">
 
     
     
@@ -84,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/08/mvn-package/" title="mvn package命令总结" itemprop="url">mvn package命令总结</a>
+      <a href="/2017/09/17/apache-virtual-host/" title="apache配置虚拟主机" itemprop="url">apache配置虚拟主机</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-07-08T01:27:24.000Z" itemprop="datePublished"> 发表于 2017-07-08</time>
+    <time datetime="2017-09-17T11:22:56.000Z" itemprop="datePublished"> 发表于 2017-09-17</time>
     
   </p>
 </header>
@@ -100,49 +97,24 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-question"><span class="toc-number">1.</span> <span class="toc-text">Find question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analysis-question"><span class="toc-number">2.</span> <span class="toc-text">Analysis question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solve-question"><span class="toc-number">3.</span> <span class="toc-text">Solve question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#New-question"><span class="toc-number">4.</span> <span class="toc-text">New question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p><code>maven</code>是托管java项目的一个很好用的工具。但是对于初学java的我来说，也踩到了许多坑。简单说一下我在打包的时候遇到的问题。<br><a id="more"></a></p>
-<h2 id="Find-question"><a href="#Find-question" class="headerlink" title="Find question"></a>Find question</h2><p>当时我执行<code>mvn package</code>之后就发现测试文件好多都报错了。</p>
-<p><img src="/images/package_error.png" alt=""> </p>
-<p>然后，我们一点儿一点儿着错误就会发现有报错信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A Foreign key refering com.mengyunzhi.measurement.repository.ApplyType from com.mengyunzhi.measurement.repository.WorkflowTypeApplyType has the wrong number of column. should be 3</div></pre></td></tr></table></figure>
-<h2 id="Analysis-question"><a href="#Analysis-question" class="headerlink" title="Analysis question"></a>Analysis question</h2><p>分析这句话就会发现值WorkflowTypeApplyType这张表里的外健约束from ApplyType有问题。</p>
-<p>这个可能是因为我们开发的时候往往是在自己的分支上开发，但是一些简单组件的测试是由开发人员自己做的，我们进行<code>unit test</code>的时候已经编译了改动的文件。但是切到<code>development</code>分支的时候进行<code>mvn package</code>,然后过程如下：<br><img src="/images/package.png" alt=""> </p>
-<p>虽然我们进行了编译，但是可能会留下曾经编译过的字节码文件(.class)。所以我们可以<code>rebuild project</code>, 将所有的编译文件clean然后全部重新编译。</p>
-<h2 id="Solve-question"><a href="#Solve-question" class="headerlink" title="Solve question"></a>Solve question</h2><p>删除数据库，新建数据库。在linux, IDEA开发环境下 <strong>Build -&gt; Rebuild Project</strong>， 然后再执行<code>mvn package</code></p>
-<h2 id="New-question"><a href="#New-question" class="headerlink" title="New question"></a>New question</h2><p>不会报错了之后，当我们进行打包的时候就会发现一个问题。我的电脑总是卡在这句话上</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HHH000227: Running hbm2ddl schema export</div></pre></td></tr></table></figure>
-<p>这句话表示<code>hibernate</code>按照持久化类和映射文件自动生成数据库架构, 把DDL脚本输出到标准输出，同时/或者执行DDL语句。</p>
-<p>应为在<code>mvn  package</code>中我们可能会有多次这条语句，然后我们怎么解决这个慢的问题呢？</p>
-<ul>
-<li>设置 spring.jpa.hibernate.ddl-auto=create</li>
-<li><p>随便执行一个单元测试应该也可以,当执行过</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">org.hibernate.tool.hbm2ddl.SchemaExport  : HHH000227: Running hbm2ddl schema export</div><div class="line"> 2017-07-07 09:18:35.672  INFO 7652 --- [           main] org.hibernate.tool.hbm2ddl.SchemaExport  : HHH000230: Schema export complete</div></pre></td></tr></table></figure>
-<p>说明数据表已经创建成功, 即可终止单元测试</p>
-</li>
-<li>修改：spring.jpa.hibernate.ddl-auto=none,禁用禁用ddl-auto</li>
-<li>执行mvn test或者mvn package</li>
-</ul>
-<p>然后就会解决这个建立数据库结构慢的问题了。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们总会遇到各种各样的问题，当我们有了一定的知识积累之后，我们就需要对遇到的问题一点点儿分析。不怕慢，就怕我们自己对未知事务的恐惧会阻挡我们前进。当然了，对于问题，我们最好先猜测一个原因再去百度问题的解决方法，因为过多的依赖百度会让我们停止对问题的思考。</p>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p>陈鋆:  <a href="Maven 各命令执行流程解析和说明">Maven 各命令执行流程解析和说明</a><br><a href="http://www.it165.net/admin/html/201411/4226.html" target="_blank" rel="external">[Nhibernate]SchemaExport工具的使用（一）通过映射文件修改数据表</a> </p>
-  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/maven/">maven</a>
+  <a class="article-category-link" href="/categories/linux/">linux</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/maven/">maven</a>
+  <span></span> <a href="/tags/php/">php</a><a href="/tags/linux/">linux</a>
   </div>
 
 </div>
@@ -151,7 +123,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/07/08/mvn-package/" data-title="mvn package命令总结 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/09/17/apache-virtual-host/" data-title="apache配置虚拟主机 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -164,19 +136,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/08/linux-file-authority/" title="Linux文件权限">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux文件权限</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/06/17/computer-composition/"  title="存储程序,程序控制">
+<a href="/2017/09/17/php-xdebug-phpstrom/"  title="Ubuntu16.04中php + xdebug + phpstrom环境配置">
  <strong>下一篇：</strong><br/> 
- <span>存储程序,程序控制
+ <span>Ubuntu16.04中php + xdebug + phpstrom环境配置
 </span>
 </a>
 </div>
@@ -191,7 +155,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-question"><span class="toc-number">1.</span> <span class="toc-text">Find question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analysis-question"><span class="toc-number">2.</span> <span class="toc-text">Analysis question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solve-question"><span class="toc-number">3.</span> <span class="toc-text">Solve question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#New-question"><span class="toc-number">4.</span> <span class="toc-text">New question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">6.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ 
  
   </div>
 
