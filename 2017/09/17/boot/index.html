@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Ubuntu 16.04 LTS通过包管理工具安装node.js | 山里的坏孩子</title>
+    <title>ubuntu如何设置开机自启动 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="重新装了一次系统，所有的东西都需要重新来过，才发现所有的都需要凭着自己的记忆安装，假如有一份笔记就太好了。">
-<meta name="keywords" content="node">
+    <meta name="description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
+<meta name="keywords" content="boot">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu 16.04 LTS通过包管理工具安装node.js">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/09/02/install-node/index.html">
+<meta property="og:title" content="ubuntu如何设置开机自启动">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/boot/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="重新装了一次系统，所有的东西都需要重新来过，才发现所有的都需要凭着自己的记忆安装，假如有一份笔记就太好了。">
-<meta property="og:updated_time" content="2017-09-02T00:41:53.981Z">
+<meta property="og:description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
+<meta property="og:updated_time" content="2017-09-17T07:46:36.927Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu 16.04 LTS通过包管理工具安装node.js">
-<meta name="twitter:description" content="重新装了一次系统，所有的东西都需要重新来过，才发现所有的都需要凭着自己的记忆安装，假如有一份笔记就太好了。">
+<meta name="twitter:title" content="ubuntu如何设置开机自启动">
+<meta name="twitter:description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/02/install-node/" title="Ubuntu 16.04 LTS通过包管理工具安装node.js" itemprop="url">Ubuntu 16.04 LTS通过包管理工具安装node.js</a>
+      <a href="/2017/09/17/boot/" title="ubuntu如何设置开机自启动" itemprop="url">ubuntu如何设置开机自启动</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-02T00:17:46.000Z" itemprop="datePublished"> Published 2017-09-02</time>
+    <time datetime="2017-09-17T03:46:15.000Z" itemprop="datePublished"> Published 2017-09-17</time>
     
   </p>
 </header>
@@ -97,17 +97,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ubuntu-or-Debian"><span class="toc-number">1.</span> <span class="toc-text">Ubuntu or Debian</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-x版本的node-js"><span class="toc-number">1.1.</span> <span class="toc-text">6.x版本的node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-x版本的node-js"><span class="toc-number">1.2.</span> <span class="toc-text">8.x版本的node.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">2.</span> <span class="toc-text">参考文章</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件"><span class="toc-number">1.</span> <span class="toc-text">文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li></ol>
 		
 		</div>
 		
-		<p>重新装了一次系统，所有的东西都需要重新来过，才发现所有的都需要凭着自己的记忆安装，假如有一份笔记就太好了。</p>
+		<p>ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。</p>
 <a id="more"></a>
-<h2 id="Ubuntu-or-Debian"><a href="#Ubuntu-or-Debian" class="headerlink" title="Ubuntu or Debian"></a>Ubuntu or Debian</h2><h3 id="6-x版本的node-js"><a href="#6-x版本的node-js" class="headerlink" title="6.x版本的node.js"></a>6.x版本的node.js</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -</div><div class="line">sudo apt-get install -y nodejs</div></pre></td></tr></table></figure>
-<h3 id="8-x版本的node-js"><a href="#8-x版本的node-js" class="headerlink" title="8.x版本的node.js"></a>8.x版本的node.js</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -</div><div class="line">sudo apt-get install -y nodejs</div></pre></td></tr></table></figure>
-<p><strong>编译和安装本地插件”你可能还需要安装编译工具</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install -y build-essential</div></pre></td></tr></table></figure>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://nodejs.org/en/download/package-manager/" target="_blank" rel="external">Installing Node.js via package manager</a> </p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>首先我们先要知道开机自启动的文件都在哪儿？<code>cd  /etc/xdg/autostart &amp;&amp; ls</code>就会发现这里面存着好多的<code>.desktop</code>文件。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>然后我们只要将自己想要开机自启动的程序都放到里面里面就好了。<br>比如我们想让<code>google chrome</code>开机自启动:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /usr/share/applications &amp;&amp; ls</div></pre></td></tr></table></figure></p>
+<p>然后我们会发现众多的<code>.desktop</code>文件中有一个<code>google-chrome.desktop</code>,然后我们执行下面代码来创建一个软链接:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -s /usr/share/applications/google-chrome.desktop /etc/xdg/autostart/</div></pre></td></tr></table></figure></p>
+<p>然后重启计算机就会发现<code>google chrome</code>已经开机自启动了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -115,13 +114,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  <a class="article-category-link" href="/categories/linux/">linux</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/node/">node</a>
+  <span></span> <a href="/tags/boot/">boot</a>
   </div>
 
 </div>
@@ -130,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/09/02/install-node/" data-title="Ubuntu 16.04 LTS通过包管理工具安装node.js | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/09/17/boot/" data-title="ubuntu如何设置开机自启动 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -143,19 +142,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/09/10/climb-stairs/" title="爬楼梯">
-  <strong>上一篇：</strong><br/>
-  <span>
-  爬楼梯</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/09/01/thinkphp-common/"  title="Thinkphp中定义路径的全局变量">
+<a href="/2017/09/10/climb-stairs/"  title="爬楼梯">
  <strong>下一篇：</strong><br/> 
- <span>Thinkphp中定义路径的全局变量
+ <span>爬楼梯
 </span>
 </a>
 </div>
@@ -170,7 +161,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ubuntu-or-Debian"><span class="toc-number">1.</span> <span class="toc-text">Ubuntu or Debian</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-x版本的node-js"><span class="toc-number">1.1.</span> <span class="toc-text">6.x版本的node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-x版本的node-js"><span class="toc-number">1.2.</span> <span class="toc-text">8.x版本的node.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">2.</span> <span class="toc-text">参考文章</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件"><span class="toc-number">1.</span> <span class="toc-text">文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li></ol>
  
   </div>
 
