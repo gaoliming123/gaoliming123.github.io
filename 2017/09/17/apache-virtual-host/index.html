@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="分享知识的同时你会获得更多">
+    <meta name="description" content="我们项目开发好了之后需要真实的环境测试，此时我们就需要配置apache虚拟主机。">
 <meta name="keywords" content="php,linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="apache配置虚拟主机">
 <meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/apache-virtual-host/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="分享知识的同时你会获得更多">
-<meta property="og:updated_time" content="2017-09-17T11:24:32.093Z">
+<meta property="og:description" content="我们项目开发好了之后需要真实的环境测试，此时我们就需要配置apache虚拟主机。">
+<meta property="og:updated_time" content="2017-09-19T03:31:18.256Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="apache配置虚拟主机">
-<meta name="twitter:description" content="分享知识的同时你会获得更多">
+<meta name="twitter:description" content="我们项目开发好了之后需要真实的环境测试，此时我们就需要配置apache虚拟主机。">
 
     
     
@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:gaoliming123.github.io">
 					</form>
 					
@@ -88,20 +88,43 @@
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T11:22:56.000Z" itemprop="datePublished"> 发表于 2017-09-17</time>
+    <time datetime="2017-09-17T11:22:56.000Z" itemprop="datePublished"> Published 2017-09-17</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#httpd-conf"><span class="toc-number">1.</span> <span class="toc-text">httpd.conf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hosts"><span class="toc-number">2.</span> <span class="toc-text">hosts</span></a></li></ol>
 		
 		</div>
 		
-		  
+		<p>我们项目开发好了之后需要真实的环境测试，此时我们就需要配置apache虚拟主机。</p>
+<a id="more"></a>
+<p><strong>环境</strong>: ubuntu16.04, lampp</p>
+<h2 id="httpd-conf"><a href="#httpd-conf" class="headerlink" title="httpd.conf"></a>httpd.conf</h2><p><code>httpd.conf</code>是apache主配置信息。然后我们打开文件的目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/lampp/apache2/conf</div></pre></td></tr></table></figure>
+<p>然后我们看一下httpd.conf中的主要信息是什么?<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Alias /bitnami/ &quot;/opt/lampp/apache2/htdocs/&quot;</div><div class="line">Alias /bitnami &quot;/opt/lampp/apache2/htdocs&quot;</div><div class="line"></div><div class="line">&lt;Directory &quot;/opt/lampp/apache2/htdocs&quot;&gt;</div><div class="line">    Options Indexes FollowSymLinks</div><div class="line">    AllowOverride All</div><div class="line">    Order allow,deny</div><div class="line">    Allow from all</div><div class="line">&lt;/Directory&gt;</div></pre></td></tr></table></figure></p>
+<p>然后就让我们在文件的末尾增加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:80&gt;</div><div class="line">ServerName www.liming.com</div><div class="line">ServerAdmin liming@qq.com</div><div class="line">DocumentRoot &quot;/opt/lampp/htdocs/beautifulArtical/thinkphp/public&quot;</div><div class="line">ErrorLog &quot;/opt/lampp/www.liming.com_errors.log&quot;</div><div class="line">CustomLog &quot;/opt/lampp/logs/www.liming.com_accesses.log&quot; common</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>&lt;VirtualHost *:80&gt; 和 &lt;/VirtualHost&gt;</code>：表示在其中的是一个虚拟主机的配置。80指定了端口号。</li>
+<li><code>ServerName</code>：设置虚拟主机的域名，www.liming.com可以是你注册的任何域名</li>
+<li><code>ServerAdmin</code>：设置该虚拟主机网管员的邮件</li>
+<li>：设置该虚拟主机的主目录路径</li>
+<li><code>ErrorLog</code>：设置该虚拟主机的出错信息</li>
+<li><code>CustomLog</code>：设置该虚拟主机的访问信息</li>
+</ul>
+<h2 id="hosts"><a href="#hosts" class="headerlink" title="hosts"></a>hosts</h2><p>修改hosts，当你配置好相关的信息之后我们现在要做的任务就是将<code>127.0.0.1</code>指向<code>www.liming.com</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /etc/hosts</div></pre></td></tr></table></figure>
+<p>然后在文件中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">127.0.0.1	www.liming.com</div></pre></td></tr></table></figure></p>
+<p>然后我们测试一下，打开终端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ping www.liming.com</div></pre></td></tr></table></figure>
+<p>发现没有问题。</p>
+<p>然后我们重启apache服务。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -150,22 +173,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#httpd-conf"><span class="toc-number">1.</span> <span class="toc-text">httpd.conf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hosts"><span class="toc-number">2.</span> <span class="toc-text">hosts</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -210,7 +233,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -298,7 +321,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -540,7 +563,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
