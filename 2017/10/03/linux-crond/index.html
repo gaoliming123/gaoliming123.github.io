@@ -4,30 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Ubuntu16.04中php + xdebug + phpstrom环境配置 | 山里的坏孩子</title>
+    <title>Ubuntu中如何完成周期性弹窗提醒(TODO) | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="我们说sublime和xdebug调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用var_dump又太浪费时间（可能是因为本人技术水平不佳）。">
-<meta name="keywords" content="php,linux">
+    <meta name="description" content="事情的起因是因为错过了毛概的选课时间然后毁了我整个十一假期的心情，所以决定每天都要把最重要的事情一直提醒才可以，最终这项任务当然要落在我每天都要打开的电脑上了。于是乎就有了这篇博客。">
+<meta name="keywords" content="linux,crond">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ubuntu16.04中php + xdebug + phpstrom环境配置">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/php-xdebug-phpstrom/index.html">
+<meta property="og:title" content="Ubuntu中如何完成周期性弹窗提醒(TODO)">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/10/03/linux-crond/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="我们说sublime和xdebug调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用var_dump又太浪费时间（可能是因为本人技术水平不佳）。">
-<meta property="og:image" content="https://gaoliming123.github.io/images/phpinfo.png">
-<meta property="og:image" content="https://gaoliming123.github.io/images/xdebug.png">
-<meta property="og:image" content="https://gaoliming123.github.io/images/xdebug_helper.png">
-<meta property="og:image" content="https://gaoliming123.github.io/images/xdebug_start.gif">
-<meta property="og:image" content="https://gaoliming123.github.io/images/break_point.png">
-<meta property="og:updated_time" content="2017-09-17T11:47:19.018Z">
+<meta property="og:description" content="事情的起因是因为错过了毛概的选课时间然后毁了我整个十一假期的心情，所以决定每天都要把最重要的事情一直提醒才可以，最终这项任务当然要落在我每天都要打开的电脑上了。于是乎就有了这篇博客。">
+<meta property="og:updated_time" content="2017-10-21T09:33:52.979Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ubuntu16.04中php + xdebug + phpstrom环境配置">
-<meta name="twitter:description" content="我们说sublime和xdebug调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用var_dump又太浪费时间（可能是因为本人技术水平不佳）。">
-<meta name="twitter:image" content="https://gaoliming123.github.io/images/phpinfo.png">
+<meta name="twitter:title" content="Ubuntu中如何完成周期性弹窗提醒(TODO)">
+<meta name="twitter:description" content="事情的起因是因为错过了毛概的选课时间然后毁了我整个十一假期的心情，所以决定每天都要把最重要的事情一直提醒才可以，最终这项任务当然要落在我每天都要打开的电脑上了。于是乎就有了这篇博客。">
 
     
     
@@ -87,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/17/php-xdebug-phpstrom/" title="Ubuntu16.04中php + xdebug + phpstrom环境配置" itemprop="url">Ubuntu16.04中php + xdebug + phpstrom环境配置</a>
+      <a href="/2017/10/03/linux-crond/" title="Ubuntu中如何完成周期性弹窗提醒(TODO)" itemprop="url">Ubuntu中如何完成周期性弹窗提醒(TODO)</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T07:52:46.000Z" itemprop="datePublished"> Published 2017-09-17</time>
+    <time datetime="2017-10-03T12:27:10.000Z" itemprop="datePublished"> Published 2017-10-03</time>
     
   </p>
 </header>
@@ -103,34 +97,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#download-xdebug"><span class="toc-number">1.</span> <span class="toc-text">download xdebug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-xdebug"><span class="toc-number">2.</span> <span class="toc-text">install xdebug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解压文件"><span class="toc-number">2.1.</span> <span class="toc-text">解压文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#install-php7-0-dev"><span class="toc-number">2.2.</span> <span class="toc-text">install php7.0-dev</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑php-ini"><span class="toc-number">2.3.</span> <span class="toc-text">编辑php.ini</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重启服务"><span class="toc-number">2.4.</span> <span class="toc-text">重启服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Xdebug-extension-helper"><span class="toc-number">3.</span> <span class="toc-text">install Xdebug extension helper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-number">3.1.</span> <span class="toc-text">google chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDEKey"><span class="toc-number">3.2.</span> <span class="toc-text">IDEKey</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置PhpStorm"><span class="toc-number">4.</span> <span class="toc-text">配置PhpStorm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#notify-send"><span class="toc-number">1.</span> <span class="toc-text">notify-send</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cron"><span class="toc-number">2.</span> <span class="toc-text">cron</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
 		
 		</div>
 		
-		<p>我们说<code>sublime</code>和<code>xdebug</code>调试php程序的时候数组变量有的时候不能显示完全，所以就给我们调试程序带来了不方便，如果使用<code>var_dump</code>又太浪费时间（可能是因为本人技术水平不佳）。</p>
+		<p>事情的起因是因为错过了毛概的选课时间然后毁了我整个十一假期的心情，所以决定每天都要把最重要的事情一直提醒才可以，最终这项任务当然要落在我每天都要打开的电脑上了。于是乎就有了这篇博客。</p>
 <a id="more"></a>
-<p><strong>环境</strong>: Ubuntu16.04, lampp, phpStorm</p>
-<h2 id="download-xdebug"><a href="#download-xdebug" class="headerlink" title="download xdebug"></a>download xdebug</h2><p>我们可以新建一个php文件，然后写上:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phpinfo();</div></pre></td></tr></table></figure></p>
-<p>来查看自己安装php的具体信息，以方便我们找到合适自己的<code>xdebug</code><br><img src="/images/phpinfo.png" alt=""> </p>
-<p>然后我们打开网址<a href="https://xdebug.org/wizard.php" target="_blank" rel="external">https://xdebug.org/wizard.php</a> <code>Ctrl + A</code>全选将自己的php信息输入到空白页面。<br>点击<strong>Analyse my phpinfo() output</strong></p>
-<p>然后<code>xdebug</code>官网就会推荐合适xdebug版本而且给出详尽的安装步骤。</p>
-<h2 id="install-xdebug"><a href="#install-xdebug" class="headerlink" title="install xdebug"></a>install xdebug</h2><p>下面的步骤因为个人安装路径的不同而不同，不用担心，因为<code>xdebug</code>官网分析的已经非常到位了，只要能简单读懂英语相信都可以安装成功。</p>
-<h3 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo tar -xvzf xdebug-2.5.4.tgz</div><div class="line">cd xdebug-2.5.4/</div><div class="line">phpize</div></pre></td></tr></table></figure>
-<p>然后我们会发现提示以下错误:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">程序“phpize”尚未安装。 您可以使用以下命令安装：</div><div class="line">sudo apt install php7.0-dev</div></pre></td></tr></table></figure>
-<h3 id="install-php7-0-dev"><a href="#install-php7-0-dev" class="headerlink" title="install php7.0-dev"></a>install php7.0-dev</h3><p>我们安装提示继续进行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt install php7.0-dev</div><div class="line">sudo phpize</div><div class="line">sudo ./configure</div><div class="line">sudo make</div><div class="line">sudo cp modules/xdebug.so /opt/lampp/lib/php/extensions/no-debug-non-zts-20151012</div></pre></td></tr></table></figure>
-<h3 id="编辑php-ini"><a href="#编辑php-ini" class="headerlink" title="编辑php.ini"></a>编辑php.ini</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo gedit /opt/lampp/etc/php.ini</div></pre></td></tr></table></figure>
-<p>最后一行添加:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">zend_extension = /opt/lampp/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so</div><div class="line">//调试信息代码使用</div><div class="line">xdebug.remote_host = 127.0.0.1</div><div class="line">xdebug.remote_enable = 1</div><div class="line">xdebug.remote_port = 9000</div><div class="line">xdebug.remote_handler = dbgp</div><div class="line">xdebug.remote_mode = req</div></pre></td></tr></table></figure>
-<h3 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /opt/lampp/lampp restart</div></pre></td></tr></table></figure>
-<p>然后我们重复第一步查看自己的php信息发现<code>xdebug</code>安装成功<br><img src="/images/xdebug.png" alt=""> </p>
-<h2 id="install-Xdebug-extension-helper"><a href="#install-Xdebug-extension-helper" class="headerlink" title="install Xdebug extension helper"></a>install Xdebug extension helper</h2><h3 id="google-chrome"><a href="#google-chrome" class="headerlink" title="google chrome"></a>google chrome</h3><p>插件安装地址<br><a href="https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en" target="_blank" rel="external">https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc?hl=en </a> </p>
-<p>因为<code>google</code>被墙了，如果想要安装所以请自行在<code>github</code> or <code>老D</code>上下载<code>hosts</code>。</p>
-<h3 id="IDEKey"><a href="#IDEKey" class="headerlink" title="IDEKey"></a>IDEKey</h3><p>在<code>Xdebug extension helper</code>的<code>选项</code> 中 <code>IDE key</code>   中选择<code>phpStorm</code>。<br><img src="/images/xdebug_helper.png" alt=""> </p>
-<p>开启<code>Xdebug extension helper</code>调试模式<br><img src="/images/xdebug_start.gif" alt=""> </p>
-<h2 id="配置PhpStorm"><a href="#配置PhpStorm" class="headerlink" title="配置PhpStorm"></a>配置PhpStorm</h2><p>然后我们打开phpStorm中<code>Run</code> , <code>Start Listening for PHP Debug Connections.</code><br>然后我们就可以调试了:<br><img src="/images/break_point.png" alt=""> </p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://blog.csdn.net/dm_vincent/article/details/44678347" target="_blank" rel="external">[PHP+xdebug] 在Ubuntu 14.04下的PhpStorm中配置xdebug调试环境</a><br><a href="https://confluence.jetbrains.com/display/PhpStorm/Zero-configuration+Web+Application+Debugging+with+Xdebug+and+PhpStorm" target="_blank" rel="external">Zero-configuration Web Application Debugging with Xdebug and PhpStorm</a> </p>
+<p><strong>环境: Ubuntu</strong></p>
+<h2 id="notify-send"><a href="#notify-send" class="headerlink" title="notify-send"></a>notify-send</h2><p><code>notify-send</code>是Ubunutu中向桌面发送通知的命令，然我们做一个最简单的实例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">notify-send &apos;Linuxide Notification&apos; &apos;Ubuntu Tips&apos;</div></pre></td></tr></table></figure></p>
+<h2 id="cron"><a href="#cron" class="headerlink" title="cron"></a>cron</h2><p>crond是linux下用来周期性的执行某种任务或等待处理某些事件的一个守护进程。在Ubuntu中当开机的时候是自动启动cron服务的，我们可以用<code>pgrep cron</code>来查看是否开启了服务。通过crontab 命令，我们可以在固定的间隔时间执行指定的系统指令或 shell script脚本。时间间隔的单位可以是分钟、小时、日、月、周及以上的任意组合。这个命令非常设合周期性的日志分析或数据备份等工作。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://linoxide.com/ubuntu-how-to/notify-send-command-notifications/" target="_blank" rel="external">Use notify-send Command in Ubuntu to Send Desktop Notifications</a><br><a href="http://www.jb51.net/article/94250.htm" target="_blank" rel="external">ubuntu中实现定时弹窗的提醒脚本</a><br><a href="http://www.cnblogs.com/peida/archive/2013/01/08/2850483.html" target="_blank" rel="external">每天一个linux命令（50）：crontab命令</a> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -138,13 +114,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/php/">php</a>
+  <a class="article-category-link" href="/categories/linux/">linux</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/php/">php</a><a href="/tags/linux/">linux</a>
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/crond/">crond</a>
   </div>
 
 </div>
@@ -153,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/09/17/php-xdebug-phpstrom/" data-title="Ubuntu16.04中php + xdebug + phpstrom环境配置 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/10/03/linux-crond/" data-title="Ubuntu中如何完成周期性弹窗提醒(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -167,18 +143,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/09/17/apache-virtual-host/" title="apache配置虚拟主机">
+ <a href="/2017/10/21/angular-ng-include-watch/" title="angular中使用ng-include后controller中$watch失去作用">
   <strong>上一篇：</strong><br/>
   <span>
-  apache配置虚拟主机</span>
+  angular中使用ng-include后controller中$watch失去作用</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/09/17/boot/"  title="ubuntu如何设置开机自启动">
+<a href="/2017/09/23/thinkphp-SqlFileObject/"  title="thinkphp中failed to open stream">
  <strong>下一篇：</strong><br/> 
- <span>ubuntu如何设置开机自启动
+ <span>thinkphp中failed to open stream
 </span>
 </a>
 </div>
@@ -193,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#download-xdebug"><span class="toc-number">1.</span> <span class="toc-text">download xdebug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-xdebug"><span class="toc-number">2.</span> <span class="toc-text">install xdebug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解压文件"><span class="toc-number">2.1.</span> <span class="toc-text">解压文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#install-php7-0-dev"><span class="toc-number">2.2.</span> <span class="toc-text">install php7.0-dev</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编辑php-ini"><span class="toc-number">2.3.</span> <span class="toc-text">编辑php.ini</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重启服务"><span class="toc-number">2.4.</span> <span class="toc-text">重启服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Xdebug-extension-helper"><span class="toc-number">3.</span> <span class="toc-text">install Xdebug extension helper</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-number">3.1.</span> <span class="toc-text">google chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDEKey"><span class="toc-number">3.2.</span> <span class="toc-text">IDEKey</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置PhpStorm"><span class="toc-number">4.</span> <span class="toc-text">配置PhpStorm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#notify-send"><span class="toc-number">1.</span> <span class="toc-text">notify-send</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cron"><span class="toc-number">2.</span> <span class="toc-text">cron</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
  
   </div>
 
