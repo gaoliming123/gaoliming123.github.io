@@ -4,24 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>angular中使用ng-include后controller中$watch失去作用 | 山里的坏孩子</title>
+    <title>面向对象编程感悟 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
-<meta name="keywords" content="angular">
+    <meta name="description" content="面向对象是一种思想，更有利于代码复用和重构。但是不知道为什么我们编程的时候就会不知不觉的走上面向过程道路上。写一下我自己对面向对象的感悟。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular中使用ng-include后controller中$watch失去作用">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/10/21/angular-ng-include-watch/index.html">
+<meta property="og:title" content="面向对象编程感悟">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/11/14/oop/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
-<meta property="og:updated_time" content="2017-10-21T10:42:57.394Z">
+<meta property="og:description" content="面向对象是一种思想，更有利于代码复用和重构。但是不知道为什么我们编程的时候就会不知不觉的走上面向过程道路上。写一下我自己对面向对象的感悟。">
+<meta property="og:image" content="https://gaoliming123.github.io/images/oob_0.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/oob_1.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/oob_2png.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/oob_3.png">
+<meta property="og:image" content="https://gaoliming123.github.io/images/oob_4.png">
+<meta property="og:updated_time" content="2017-11-16T06:24:53.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular中使用ng-include后controller中$watch失去作用">
-<meta name="twitter:description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
+<meta name="twitter:title" content="面向对象编程感悟">
+<meta name="twitter:description" content="面向对象是一种思想，更有利于代码复用和重构。但是不知道为什么我们编程的时候就会不知不觉的走上面向过程道路上。写一下我自己对面向对象的感悟。">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/oob_0.png">
 
     
     
@@ -81,14 +86,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/21/angular-ng-include-watch/" title="angular中使用ng-include后controller中$watch失去作用" itemprop="url">angular中使用ng-include后controller中$watch失去作用</a>
+      <a href="/2017/11/14/oop/" title="面向对象编程感悟" itemprop="url">面向对象编程感悟</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-10-21T09:34:20.000Z" itemprop="datePublished"> Published 2017-10-21</time>
+    <time datetime="2017-11-14T12:48:54.000Z" itemprop="datePublished"> Published 2017-11-14</time>
     
   </p>
 </header>
@@ -97,22 +102,27 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题简化"><span class="toc-number">1.</span> <span class="toc-text">问题简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-number">3.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重构代码"><span class="toc-number">2.</span> <span class="toc-text">重构代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<p>有的时候为了实现代码复用，我们会使用<code>ng-include</code>复用部分代码。</p>
+		<p>面向对象是一种思想，更有利于代码复用和重构。但是不知道为什么我们编程的时候就会不知不觉的走上面向过程道路上。写一下我自己对面向对象的感悟。</p>
 <a id="more"></a>
-<h2 id="问题简化"><a href="#问题简化" class="headerlink" title="问题简化"></a>问题简化</h2><p><code>about.js</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">angular.module(&apos;angularTestApp&apos;)</div><div class="line">  .controller(&apos;AboutCtrl&apos;, function ($scope) &#123;</div><div class="line">      $scope.num = 0;</div><div class="line">      $scope.$watch(&quot;num&quot;, function () &#123;</div><div class="line">          console.log($scope.num);</div><div class="line">      &#125;);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<p><code>about.html</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;This is the about view.&lt;/p&gt;</div><div class="line">&lt;div ng-include=&quot;&apos;views/include.html&apos;&quot;&gt;&lt;/div&gt;</div><div class="line">&#123;&#123;num&#125;&#125;</div></pre></td></tr></table></figure></p>
-<p><code>include.html</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  &lt;input type=&quot;text&quot; ng-model=&quot;num&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; num &#125;&#125;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p>如果我们运行这段代码就会发现一个问题，当我们改变<code>num</code>的值的时候控制台并没有打印<code>num</code>的值。</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为我们使用<code>ng-include</code>的时候会会创建一个<code>child scope</code>。然后两个<code>scope</code>的作用域是相互隔离的，所以<code>include.html</code>中的<code>ng-model</code>绑定的是自己的<code>scope</code>, 所以<code>about.js</code>中的<code>num</code>不会发生改变。</p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>将<code>include.html</code>做如下修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  &lt;input type=&quot;text&quot; ng-model=&quot;$parent.num&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; num &#125;&#125;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://stackoverflow.com/questions/32775461/ng-model-not-working-inside-ng-include" target="_blank" rel="external">ng-model not working inside ng-include</a> </p>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>我们举一个简单的例子，这个例子就是我们有部门和部门类型。部门类型有技术机构，器具用户，管理部门，生产企业四个类型。然后部门信息这个实体。我们看<code>ER图</code>:<br><img src="/images/oob_0.png" alt=""> </p>
+<p>当天我们写代码的的时候部门类型和部门之间完全可以使用继承的关系。下面我们对实体进行相关的添加。<br>由于不同的部门类型保存的时候相关部门的实体信息是不同的。我们先看一下界面：</p>
+<p><strong>管理部门的实体字段</strong></p>
+<p>管理部门的添加界面：<br><img src="/images/oob_1.png" alt=""> </p>
+<p>技术机构的添加界面：<br><img src="/images/oob_2png.png" alt=""> </p>
+<p>然后我们看到两个部门的字段信息是不一样的，然后我们怎么设计呢？开始的时候我是这样写的代码。</p>
+<p><strong>增加按钮对应的路由</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">state(&apos;department.departmentAdd&apos;, &#123;</div><div class="line">            // 路由值, 表示该值继承于department</div><div class="line">            url: &quot;/add&quot;,</div><div class="line">            templateUrl: &quot;views/department/add.html&quot;,</div><div class="line">            data: &#123;</div><div class="line">                pageTitle: &apos;器具用户&apos;,</div><div class="line">                pageDesc: &apos;用户管理--器具用户增加&apos;</div><div class="line">            &#125;,</div><div class="line">            params: &#123;</div><div class="line">                type: &#123;</div><div class="line">                    value: &apos;qijuyonghu&apos;</div><div class="line">                &#125;,</div><div class="line">            &#125;,</div><div class="line">            controller: &apos;DepartmentAddCtrl&apos;</div><div class="line">        &#125;)</div></pre></td></tr></table></figure>
+<p>可以看出这四个界面都是用的一个增加按钮，然后我们在路由上用<code>type</code>这个变量去区分技术机构还是管理部门的增加。在一个<code>DepartmentAddCtrl</code>中我们接受<code>type</code>这个变量，然后在这个<code>controller</code>中我们根据<code>type</code>去隐藏或者显示同的字段来显示不同部门对应的不同字段。然我们用图来理解一下：</p>
+<p><img src="/images/oob_3.png" alt=""> </p>
+<p>这样很很简单的我们就实现了对于不同字段的显示，但是我们此时编程思想却不是面向对象的。因为我们感觉传递一个参数去这样就可以在一个方法中用这个参数去区分不同的状态了这是很简单的做法。但是试想<strong>假如我们需要好多种状态，那么我们就需要用很多个参数去区分这些状态，显然这是不可能的</strong>。</p>
+<h2 id="重构代码"><a href="#重构代码" class="headerlink" title="重构代码"></a>重构代码</h2><p>那么此时我们就需要来重构代码了。</p>
+<p>当然。这是我们就不能用一个<code>controller</code>了，我们需要建立三个<code>controller</code>用来继承来解决重构问题。先让我们来看一下重构完之后的关系。<br><img src="/images/oob_4.png" alt=""> </p>
+<p>然后我们把统一的字段放在<code>addview</code>中，各自的字段放在自己的<code>view</code>中就可以了。这样我们又新建了三四个文件，但是此时代码会更容易维护。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天才发现我自以为自己有了面向对象的思想，但是回过头看自己写的代码才发现自己一直在用别人的面向对象的思想，因为我一直使用成型的框架，组件。等到自己编程的时候发现自己还是总在面向过程的老路上。自己的代码离面向对象还有很大的差距。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -120,14 +130,9 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  <a class="article-category-link" href="/categories/总结/">总结</a>
 </div>
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/angular/">angular</a>
-  </div>
 
 </div>
 
@@ -135,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/10/21/angular-ng-include-watch/" data-title="angular中使用ng-include后controller中$watch失去作用 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/11/14/oop/" data-title="面向对象编程感悟 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -148,19 +153,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/11/14/oop/" title="面向对象编程感悟">
-  <strong>上一篇：</strong><br/>
-  <span>
-  面向对象编程感悟</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/09/23/thinkphp-SqlFileObject/"  title="thinkphp中failed to open stream">
+<a href="/2017/10/21/angular-ng-include-watch/"  title="angular中使用ng-include后controller中$watch失去作用">
  <strong>下一篇：</strong><br/> 
- <span>thinkphp中failed to open stream
+ <span>angular中使用ng-include后controller中$watch失去作用
 </span>
 </a>
 </div>
@@ -175,7 +172,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题简化"><span class="toc-number">1.</span> <span class="toc-text">问题简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-number">3.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重构代码"><span class="toc-number">2.</span> <span class="toc-text">重构代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
