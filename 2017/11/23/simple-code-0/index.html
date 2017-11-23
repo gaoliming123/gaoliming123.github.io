@@ -4,24 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>安装lampp后如何使用mysql命令行 | 山里的坏孩子</title>
+    <title>代码简洁日记之try-catch与while循环 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="在lampp开启mysql服务后，当我们输入命令行之后就会发现mysql的命令并不能够全局使用。">
-<meta name="keywords" content="lampp,mysql">
+    <meta name="description" content="同样的功能有不同的算法我们可以去实现。这里我感觉我还没有能力总结这些。这里仅记录一些如何可以让代码看上去更简洁一写的方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="安装lampp后如何使用mysql命令行">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/08/31/lampp-mysql/index.html">
+<meta property="og:title" content="代码简洁日记之try-catch与while循环">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/11/23/simple-code-0/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="在lampp开启mysql服务后，当我们输入命令行之后就会发现mysql的命令并不能够全局使用。">
-<meta property="og:updated_time" content="2017-09-17T03:44:34.925Z">
+<meta property="og:description" content="同样的功能有不同的算法我们可以去实现。这里我感觉我还没有能力总结这些。这里仅记录一些如何可以让代码看上去更简洁一写的方法。">
+<meta property="og:updated_time" content="2017-11-23T13:19:45.803Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安装lampp后如何使用mysql命令行">
-<meta name="twitter:description" content="在lampp开启mysql服务后，当我们输入命令行之后就会发现mysql的命令并不能够全局使用。">
+<meta name="twitter:title" content="代码简洁日记之try-catch与while循环">
+<meta name="twitter:description" content="同样的功能有不同的算法我们可以去实现。这里我感觉我还没有能力总结这些。这里仅记录一些如何可以让代码看上去更简洁一写的方法。">
 
     
     
@@ -81,14 +80,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/08/31/lampp-mysql/" title="安装lampp后如何使用mysql命令行" itemprop="url">安装lampp后如何使用mysql命令行</a>
+      <a href="/2017/11/23/simple-code-0/" title="代码简洁日记之try-catch与while循环" itemprop="url">代码简洁日记之try-catch与while循环</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-08-31T06:13:46.000Z" itemprop="datePublished"> Published 2017-08-31</time>
+    <time datetime="2017-11-23T12:52:11.000Z" itemprop="datePublished"> Published 2017-11-23</time>
     
   </p>
 </header>
@@ -97,28 +96,28 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql"><span class="toc-number">1.</span> <span class="toc-text">mysql</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#one"><span class="toc-number">1.</span> <span class="toc-text">one</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two"><span class="toc-number">2.</span> <span class="toc-text">two</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<p>在<code>lampp</code>开启<code>mysql</code>服务后，当我们输入命令行之后就会发现<code>mysql</code>的命令并不能够全局使用。</p>
+		<p>同样的功能有不同的算法我们可以去实现。这里我感觉我还没有能力总结这些。这里仅记录一些如何可以让代码看上去更简洁一写的方法。</p>
 <a id="more"></a>
-<h2 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h2><p>因为大部分的集成环境的命令行都是局部变量，如果我们想能够使用的话是需要加入将命令行文件创建一个软链接到<code>/usr/bin</code>目录下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -s /opt/lampp/bin/mysql /usr/bin/mysql</div></pre></td></tr></table></figure>  
+<h2 id="one"><a href="#one" class="headerlink" title="one"></a>one</h2><p>当try-catch遇到while循环的时候，我们想在抛出异常的时候接续循环，我看到书上的写法是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">FileInputStream fin = new FileInputStream(intFilePath);</div><div class="line">DataInputStream din = new DataInputStream(fin);</div><div class="line">System.out.println(&quot;输入的整数是: &quot;);</div><div class="line"></div><div class="line">while (true) &#123;</div><div class="line">    try &#123;</div><div class="line">        System.out.println(din.readInt());</div><div class="line">    &#125; catch (EOFException e) &#123;</div><div class="line">        break;		//当捕获到文件结束的异常的时候循环将会停止</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">din.close();</div><div class="line">fin.close();</div></pre></td></tr></table></figure>
+<p>这种写法没有什么问题，但是在网上看到了更好的一张写法，使代码显得很简洁。</p>
+<h2 id="two"><a href="#two" class="headerlink" title="two"></a>two</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">try &#123;</div><div class="line">    while (true)</div><div class="line">        System.out.println(din.readInt() + &quot; &quot;);</div><div class="line">&#125; catch (EOFException e) &#123;&#125;                     //当捕获到文件结束的异常的时候循环将会停止</div></pre></td></tr></table></figure>
+<p>相比起上面一张方法我们看到将try-catch方法while循环外面则显得代码变简洁了不少，而且功能也没有改变</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果我一个人闷头做实验，可能我只会复制书上的代码，但是书上的代码不一定是最好的，所有我们要多和别人交流，多看大牛的代码。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
+  <a class="article-category-link" href="/categories/总结/">总结</a>
 </div>
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/lampp/">lampp</a><a href="/tags/mysql/">mysql</a>
-  </div>
 
 </div>
 
@@ -126,7 +125,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/08/31/lampp-mysql/" data-title="安装lampp后如何使用mysql命令行 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/11/23/simple-code-0/" data-title="代码简洁日记之try-catch与while循环 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -139,19 +138,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/08/31/index/" title="检索">
-  <strong>上一篇：</strong><br/>
-  <span>
-  检索</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/08/31/hello-world/"  title="Hello World">
+<a href="/2017/11/14/oop/"  title="面向对象编程感悟">
  <strong>下一篇：</strong><br/> 
- <span>Hello World
+ <span>面向对象编程感悟
 </span>
 </a>
 </div>
@@ -166,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql"><span class="toc-number">1.</span> <span class="toc-text">mysql</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#one"><span class="toc-number">1.</span> <span class="toc-text">one</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#two"><span class="toc-number">2.</span> <span class="toc-text">two</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
