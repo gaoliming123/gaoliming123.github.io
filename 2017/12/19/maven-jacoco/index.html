@@ -1,0 +1,591 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>maven配置JaCoCo以及Test Report的一些说明 | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
+    
+
+    
+    <meta name="description" content="由于软件测试实验的需要所以配置了一下jacoco来查看测试代码覆盖率并学习了一下jacoco，记了一下笔记留给将来的自己。">
+<meta name="keywords" content="maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="maven配置JaCoCo以及Test Report的一些说明">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/12/19/maven-jacoco/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="由于软件测试实验的需要所以配置了一下jacoco来查看测试代码覆盖率并学习了一下jacoco，记了一下笔记留给将来的自己。">
+<meta property="og:image" content="https://gaoliming123.github.io/images/maven_jacoco_0.png">
+<meta property="og:updated_time" content="2017-12-19T09:31:50.982Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="maven配置JaCoCo以及Test Report的一些说明">
+<meta name="twitter:description" content="由于软件测试实验的需要所以配置了一下jacoco来查看测试代码覆盖率并学习了一下jacoco，记了一下笔记留给将来的自己。">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/maven_jacoco_0.png">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/college">大学生活 | College life</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">关于 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/12/19/maven-jacoco/" title="maven配置JaCoCo以及Test Report的一些说明" itemprop="url">maven配置JaCoCo以及Test Report的一些说明</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-19T06:49:06.000Z" itemprop="datePublished"> Published 2017-12-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Jacoco-Maven-Plugin"><span class="toc-number">1.</span> <span class="toc-text">配置Jacoco Maven Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目的"><span class="toc-number">1.1.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JaCoCo-Maven-plugin"><span class="toc-number">1.2.</span> <span class="toc-text">JaCoCo Maven plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Test-Report文件位置"><span class="toc-number">1.3.</span> <span class="toc-text">Test Report文件位置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jacoco-Report-说明"><span class="toc-number">2.</span> <span class="toc-text">Jacoco Report 说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Branches-分支语句"><span class="toc-number">2.1.</span> <span class="toc-text">Branches(分支语句)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lines"><span class="toc-number">2.2.</span> <span class="toc-text">Lines</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cyclomatic-Complexity-环路复杂度"><span class="toc-number">2.3.</span> <span class="toc-text">Cyclomatic Complexity(环路复杂度)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
+		
+		</div>
+		
+		<p>由于软件测试实验的需要所以配置了一下<code>jacoco</code>来查看测试代码覆盖率并学习了一下jacoco，记了一下笔记留给将来的自己。</p>
+<a id="more"></a>
+<h2 id="配置Jacoco-Maven-Plugin"><a href="#配置Jacoco-Maven-Plugin" class="headerlink" title="配置Jacoco Maven Plugin"></a>配置Jacoco Maven Plugin</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>我们用<code>Jacoco</code>的两个目的</p>
+<ul>
+<li>它使我们能够访问记录执行覆盖数据的<a href="http://www.eclemma.org/jacoco/trunk/doc/agent.html" target="_blank" rel="external">JaCoCo runtime agent </a> </li>
+<li>它能够生成代码覆盖率报告通过JaCoCo runtime agent</li>
+</ul>
+<h3 id="JaCoCo-Maven-plugin"><a href="#JaCoCo-Maven-plugin" class="headerlink" title="JaCoCo Maven plugin"></a>JaCoCo Maven plugin</h3><p>我们可以在pox.xml中引入JaCoCo Maven plugin插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt; </div><div class="line">    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; </div><div class="line">    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt; </div><div class="line">  </div><div class="line">    &lt;!-- Sonar --&gt; </div><div class="line">    &lt;sonar.java.coveragePlugin&gt;jacoco&lt;/sonar.java.coveragePlugin&gt; </div><div class="line">    &lt;sonar.dynamicAnalysis&gt;reuseReports&lt;/sonar.dynamicAnalysis&gt; </div><div class="line">    &lt;!-- The destination file for the code coverage report has to be set to the same value  </div><div class="line">         in the parent pom and in each module pom. Then JaCoCo will add up information in  </div><div class="line">         the same report, so that, it will give the cross-module code coverage. --&gt; </div><div class="line">    &lt;sonar.jacoco.itReportPath&gt;$&#123;project.basedir&#125;/target/jacoco.exec&lt;/sonar.jacoco.itReportPath&gt; </div><div class="line">    &lt;sonar.language&gt;java&lt;/sonar.language&gt; </div><div class="line">&lt;/properties&gt; </div><div class="line">&lt;build&gt;</div><div class="line">        &lt;pluginManagement&gt;</div><div class="line">            &lt;plugins&gt;</div><div class="line">                &lt;plugin&gt;</div><div class="line">                    &lt;groupId&gt;org.jacoco&lt;/groupId&gt;</div><div class="line">                    &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;</div><div class="line">                    &lt;version&gt;0.5.3.201107060350&lt;/version&gt;</div><div class="line">                &lt;/plugin&gt;</div><div class="line">            &lt;/plugins&gt;</div><div class="line">        &lt;/pluginManagement&gt;</div><div class="line"></div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.jacoco&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;includes&gt;com.*&lt;/includes&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">                &lt;executions&gt;</div><div class="line">                    &lt;execution&gt;</div><div class="line">                        &lt;id&gt;pre-test&lt;/id&gt;</div><div class="line">                        &lt;goals&gt;</div><div class="line">                            &lt;goal&gt;prepare-agent&lt;/goal&gt;</div><div class="line">                        &lt;/goals&gt;</div><div class="line">                    &lt;/execution&gt;</div><div class="line">                    &lt;execution&gt;</div><div class="line">                        &lt;id&gt;post-test&lt;/id&gt;</div><div class="line">                        &lt;phase&gt;test&lt;/phase&gt;</div><div class="line">                        &lt;goals&gt;</div><div class="line">                            &lt;goal&gt;report&lt;/goal&gt;</div><div class="line">                        &lt;/goals&gt;</div><div class="line">                    &lt;/execution&gt;</div><div class="line">                &lt;/executions&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">                &lt;configuration&gt;</div><div class="line">                    &lt;source&gt;1.5&lt;/source&gt;</div><div class="line">                    &lt;target&gt;1.5&lt;/target&gt;</div><div class="line">                &lt;/configuration&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/build&gt;</div></pre></td></tr></table></figure>
+<h3 id="Test-Report文件位置"><a href="#Test-Report文件位置" class="headerlink" title="Test Report文件位置"></a>Test Report文件位置</h3><p><img src="/images/maven_jacoco_0.png" alt=""> </p>
+<h2 id="Jacoco-Report-说明"><a href="#Jacoco-Report-说明" class="headerlink" title="Jacoco Report 说明"></a>Jacoco Report 说明</h2><h3 id="Branches-分支语句"><a href="#Branches-分支语句" class="headerlink" title="Branches(分支语句)"></a>Branches(分支语句)</h3><p>JaCoCo将会计算所有的<code>if</code>和<code>switch</code>分支语句的覆盖率。它将会计算出这个分支所有执行或者错过的总数。</p>
+<p>在具体的分支语句处JaCoCo用钻石给我们标出</p>
+<ul>
+<li>No coverage: 该行中没有分支已经执行<code>红钻石</code></li>
+<li>Partical coverage: 改行仅有部分分支已经被执行<code>黄钻石</code></li>
+<li>Full coverage: 改行中所有分支都已经被执行<code>绿钻石</code></li>
+</ul>
+<h3 id="Lines"><a href="#Lines" class="headerlink" title="Lines"></a>Lines</h3><p>JaCoCo可以计算每一行的被覆盖的情况。JaCoCo认这一行至少有一条指令被执行则认为这一行别执行过了。</p>
+<ul>
+<li>No coverage: 这一行没有执行过 <code>红色背景</code></li>
+<li>Partical: 这一行仅有部分指令被执行<code>黄色背景</code></li>
+<li>Full coverage: 这一行所有的指令都被执行了<code>绿色背景</code></li>
+</ul>
+<h3 id="Cyclomatic-Complexity-环路复杂度"><a href="#Cyclomatic-Complexity-环路复杂度" class="headerlink" title="Cyclomatic Complexity(环路复杂度)"></a>Cyclomatic Complexity(环路复杂度)</h3><p><strong>对于环路复杂度具体用处将不再解释</strong><br>JaCoCo会计算出每个非抽象方法的环路复杂度，和类，包的总的环路复杂度。<br>comlexity非常重要。因为它指出这些单元测试将会覆盖软件的具体的一部分</p>
+<p>环路复杂度的定义是将一个方法的控制流图转化为有向图:</p>
+<p><code>v(G) = E - N + 2</code></p>
+<p>E是边数,N是节点数. JaCoCo用如下的等效方程计算环路复杂度，其中B是此方法中的所有分支数，D是所有的decision points:</p>
+<p><code>v(G) = B - D + 1</code></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://blog.csdn.net/wangmuming/article/details/28868833" target="_blank" rel="external">Jacoco覆盖率工具使用之maven篇</a><br><a href="http://www.eclemma.org/jacoco/trunk/doc/counters.html" target="_blank" rel="external">Coverage Counters</a><br><a href="https://www.petrikainulainen.net/programming/maven/creating-code-coverage-reports-for-unit-and-integration-tests-with-the-jacoco-maven-plugin/" target="_blank" rel="external">Creating Code Coverage Reports for Unit and Integration Tests With the JaCoCo Maven Plugin</a><br><a href="https://www.javaworld.com/article/2074515/core-java/unit-test-code-coverage-with-maven-and-jacoco.html" target="_blank" rel="external">Unit Test Code Coverage With Maven And Jacoco</a><br><a href="http://blog.csdn.net/u013613428/article/details/51603082" target="_blank" rel="external">如何用maven运行特定的test case</a> </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/maven/">maven</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/maven/">maven</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2017/12/19/maven-jacoco/" data-title="maven配置JaCoCo以及Test Report的一些说明 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/11/23/simple-code-0/"  title="代码简洁日记之try-catch与while循环">
+ <strong>下一篇：</strong><br/> 
+ <span>代码简洁日记之try-catch与while循环
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Jacoco-Maven-Plugin"><span class="toc-number">1.</span> <span class="toc-text">配置Jacoco Maven Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目的"><span class="toc-number">1.1.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JaCoCo-Maven-plugin"><span class="toc-number">1.2.</span> <span class="toc-text">JaCoCo Maven plugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Test-Report文件位置"><span class="toc-number">1.3.</span> <span class="toc-text">Test Report文件位置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jacoco-Report-说明"><span class="toc-number">2.</span> <span class="toc-text">Jacoco Report 说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Branches-分支语句"><span class="toc-number">2.1.</span> <span class="toc-text">Branches(分支语句)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lines"><span class="toc-number">2.2.</span> <span class="toc-text">Lines</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cyclomatic-Complexity-环路复杂度"><span class="toc-number">2.3.</span> <span class="toc-text">Cyclomatic Complexity(环路复杂度)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/java/" title="java">java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/maven/" title="maven">maven<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/php/" title="php">php<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/总结/" title="总结">总结<sup>6</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/thinkphp/" title="thinkphp">thinkphp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/maven/" title="maven">maven<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/php/" title="php">php<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/boot/" title="boot">boot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angular/" title="angular">angular<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/lampp/" title="lampp">lampp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/mysql/" title="mysql">mysql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming in 河北工业大学 <br/>
+			Thanks to all those who bring me knowledge and accompany me, especially my parents and teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学梦云智软件开发团队成员)">高黎明(河北工业大学梦云智软件开发团队成员)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
