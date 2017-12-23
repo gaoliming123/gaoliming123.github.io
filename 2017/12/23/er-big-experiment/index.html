@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ubuntu如何设置开机自启动 | 山里的坏孩子</title>
+    <title>做实验的一些感悟 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学梦云智软件开发团队成员)">
     
 
     
-    <meta name="description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
-<meta name="keywords" content="boot">
+    <meta name="description" content="近几天做实验是关于类似于车票预定系统的功能的实验的时候记录一些自己的思考。">
+<meta name="keywords" content="总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ubuntu如何设置开机自启动">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/09/17/boot/index.html">
+<meta property="og:title" content="做实验的一些感悟">
+<meta property="og:url" content="https://gaoliming123.github.io/2017/12/23/er-big-experiment/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
-<meta property="og:updated_time" content="2017-09-17T07:46:36.927Z">
+<meta property="og:description" content="近几天做实验是关于类似于车票预定系统的功能的实验的时候记录一些自己的思考。">
+<meta property="og:updated_time" content="2017-12-23T14:20:26.102Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ubuntu如何设置开机自启动">
-<meta name="twitter:description" content="ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。">
+<meta name="twitter:title" content="做实验的一些感悟">
+<meta name="twitter:description" content="近几天做实验是关于类似于车票预定系统的功能的实验的时候记录一些自己的思考。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/09/17/boot/" title="ubuntu如何设置开机自启动" itemprop="url">ubuntu如何设置开机自启动</a>
+      <a href="/2017/12/23/er-big-experiment/" title="做实验的一些感悟" itemprop="url">做实验的一些感悟</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学梦云智软件开发团队成员)" target="_blank" itemprop="author">高黎明(河北工业大学梦云智软件开发团队成员)</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-17T03:46:15.000Z" itemprop="datePublished"> Published 2017-09-17</time>
+    <time datetime="2017-12-23T13:50:40.000Z" itemprop="datePublished"> Published 2017-12-23</time>
     
   </p>
 </header>
@@ -97,16 +97,14 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件"><span class="toc-number">1.</span> <span class="toc-text">文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线路"><span class="toc-number">1.</span> <span class="toc-text">线路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<p>ubuntu中如何设置开机自启动呢？当然我们可以使用软件来实现，但是更简单的就是使用命令行来完成。</p>
+		<p>近几天做实验是关于类似于车票预定系统的功能的实验的时候记录一些自己的思考。</p>
 <a id="more"></a>
-<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>首先我们先要知道开机自启动的文件都在哪儿？<code>cd  /etc/xdg/autostart &amp;&amp; ls</code>就会发现这里面存着好多的<code>.desktop</code>文件。</p>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>然后我们只要将自己想要开机自启动的程序都放到里面里面就好了。<br>比如我们想让<code>google chrome</code>开机自启动:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /usr/share/applications &amp;&amp; ls</div></pre></td></tr></table></figure></p>
-<p>然后我们会发现众多的<code>.desktop</code>文件中有一个<code>google-chrome.desktop</code>,然后我们执行下面代码来创建一个软链接:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -s /usr/share/applications/google-chrome.desktop /etc/xdg/autostart/</div></pre></td></tr></table></figure></p>
-<p>然后重启计算机就会发现<code>google chrome</code>已经开机自启动了。</p>
+<h2 id="线路"><a href="#线路" class="headerlink" title="线路"></a>线路</h2><p>刚开始的时候非常困惑如何存一些线路，因为一趟车走的线路<code>车站A-车站B-车站C.....</code>这条线路我们是不知道它的长度的。刚开始就是想不明白怎么在数据库中存这条线路还能不造成太多的数据冗余。想了半天才明白，也是因为平时对生活的观察不够仔细，如果够仔细的话就会知道我们在自动售票机买地铁票的时候我认为应把他的后台的数据结构体现出来了。<br>我们可以把每个车站都看成一个<strong>结点</strong>，然后如果两个车站之间有车走的话就连一条线，之后我们就会发现存储路线就是存储一张<strong>无向图</strong>，当然我们数据结构中学过多种方法来存储一张图。因为这些节点是可以增加删除的，所以我认为用链表的形式存储比较合适。<br>然后我们还需要抽出一张表来记录具体车的线路和这张图的联系。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当然只有这些仅仅是个人想法，这么简单的存储方法肯定不能完成一个真正的车票预定系统的，但是做实验好像够了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -114,13 +112,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/linux/">linux</a>
+  <a class="article-category-link" href="/categories/总结/">总结</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/boot/">boot</a>
+  <span></span> <a href="/tags/总结/">总结</a>
   </div>
 
 </div>
@@ -129,7 +127,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/09/17/boot/" data-title="ubuntu如何设置开机自启动 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2017/12/23/er-big-experiment/" data-title="做实验的一些感悟 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -142,19 +140,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/09/17/php-xdebug-phpstrom/" title="Ubuntu16.04中php + xdebug + phpstrom环境配置">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Ubuntu16.04中php + xdebug + phpstrom环境配置</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/09/10/climb-stairs/"  title="爬楼梯">
+<a href="/2017/12/19/maven-jacoco/"  title="maven配置JaCoCo以及Test Report的一些说明">
  <strong>下一篇：</strong><br/> 
- <span>爬楼梯
+ <span>maven配置JaCoCo以及Test Report的一些说明
 </span>
 </a>
 </div>
@@ -169,7 +159,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件"><span class="toc-number">1.</span> <span class="toc-text">文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线路"><span class="toc-number">1.</span> <span class="toc-text">线路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
