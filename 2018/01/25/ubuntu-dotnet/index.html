@@ -4,24 +4,27 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>对HashSet的一些理解(TODO) | 山里的坏孩子</title>
+    <title>ubuntu16.04中.NET环境配置 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学)">
     
 
     
-    <meta name="description" content="程序员总是有踩不完的坑，今天就在HashSet这个类上栽了跟头。终究还是自己对HashSet集合理解不够深刻。下面就来说一下问题及原因。">
-<meta name="keywords" content="java">
+    <meta name="description" content="在ubuntu中.NET简单的环境配置。文章基本翻译自 Get started with .NET in 10 minutes">
+<meta name="keywords" content="ubuntu,.NET">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对HashSet的一些理解(TODO)">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/07/24/HashSet/index.html">
+<meta property="og:title" content="ubuntu16.04中.NET环境配置">
+<meta property="og:url" content="https://gaoliming123.github.io/2018/01/25/ubuntu-dotnet/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="程序员总是有踩不完的坑，今天就在HashSet这个类上栽了跟头。终究还是自己对HashSet集合理解不够深刻。下面就来说一下问题及原因。">
-<meta property="og:updated_time" content="2017-09-01T06:57:48.734Z">
+<meta property="og:description" content="在ubuntu中.NET简单的环境配置。文章基本翻译自 Get started with .NET in 10 minutes">
+<meta property="og:image" content="https://gaoliming123.github.io/images/visual_studio_code.gif">
+<meta property="og:image" content="https://gaoliming123.github.io/images/dotnet_main.png">
+<meta property="og:updated_time" content="2018-01-25T12:11:14.977Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对HashSet的一些理解(TODO)">
-<meta name="twitter:description" content="程序员总是有踩不完的坑，今天就在HashSet这个类上栽了跟头。终究还是自己对HashSet集合理解不够深刻。下面就来说一下问题及原因。">
+<meta name="twitter:title" content="ubuntu16.04中.NET环境配置">
+<meta name="twitter:description" content="在ubuntu中.NET简单的环境配置。文章基本翻译自 Get started with .NET in 10 minutes">
+<meta name="twitter:image" content="https://gaoliming123.github.io/images/visual_studio_code.gif">
 
     
     
@@ -81,14 +84,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/07/24/HashSet/" title="对HashSet的一些理解(TODO)" itemprop="url">对HashSet的一些理解(TODO)</a>
+      <a href="/2018/01/25/ubuntu-dotnet/" title="ubuntu16.04中.NET环境配置" itemprop="url">ubuntu16.04中.NET环境配置</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学)" target="_blank" itemprop="author">高黎明(河北工业大学)</a>
 		
   <p class="article-time">
-    <time datetime="2017-07-24T14:55:41.000Z" itemprop="datePublished"> 发表于 2017-07-24</time>
+    <time datetime="2018-01-25T11:17:46.000Z" itemprop="datePublished"> 发表于 2018-01-25</time>
     
   </p>
 </header>
@@ -97,27 +100,39 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Visual-Studio-Code"><span class="toc-number">1.</span> <span class="toc-text">install Visual Studio Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-NET"><span class="toc-number">2.</span> <span class="toc-text">install .NET</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Add-the-dotnet-product-feed"><span class="toc-number">2.1.</span> <span class="toc-text">Add the dotnet product feed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-NET-SDK"><span class="toc-number">2.2.</span> <span class="toc-text">Install .NET SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-your-app"><span class="toc-number">2.3.</span> <span class="toc-text">Create your app</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-your-app"><span class="toc-number">2.4.</span> <span class="toc-text">Run your app</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
 		
 		</div>
 		
-		<p>程序员总是有踩不完的坑，今天就在<code>HashSet</code>这个类上栽了跟头。终究还是自己对<code>HashSet</code>集合理解不够深刻。下面就来说一下问题及原因。</p>
-<a id="more"></a>
-<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p>首先用一个简单的例子描述一下问题。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class HashCodeTest &#123;</div><div class="line">    int hashCode = 0;</div><div class="line"></div><div class="line">    //重写Object对象中的save方法</div><div class="line">    @Override</div><div class="line">    public int hashCode() &#123;</div><div class="line">        return ++hashCode;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Set&lt;HashCodeTest&gt; hashCodeTests = new HashSet&lt;&gt;();</div><div class="line"></div><div class="line">        HashCodeTest hashCodeTest = new HashCodeTest();</div><div class="line">        System.out.println(hashCodeTest.hashCode());</div><div class="line">        hashCodeTests.add(hashCodeTest);</div><div class="line"></div><div class="line">        System.out.println(hashCodeTests.size());</div><div class="line"></div><div class="line">        //迭代</div><div class="line">        Iterator&lt;HashCodeTest&gt; iterator = hashCodeTests.iterator();</div><div class="line"></div><div class="line">        while (iterator.hasNext()) &#123;</div><div class="line">            iterator.next();</div><div class="line">            iterator.remove();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println(hashCodeTests.size());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+		<p>在ubuntu中<code>.NET</code>简单的环境配置。<strong>文章基本翻译自 Get started with .NET in 10 minutes</strong><br><a id="more"></a></p>
+<h2 id="install-Visual-Studio-Code"><a href="#install-Visual-Studio-Code" class="headerlink" title="install Visual Studio Code"></a>install Visual Studio Code</h2><ul>
+<li>下载Visual Studio Code。<a href="https://code.visualstudio.com/download" target="_blank" rel="external">下载链接</a> </li>
+<li>安装。 <code>sudo dpkg -i code_1.19.2-1515599945_amd64.deb</code></li>
+<li>打开Visual Studio Code, install C#<br><img src="/images/visual_studio_code.gif" alt=""> </li>
+</ul>
+<h2 id="install-NET"><a href="#install-NET" class="headerlink" title="install .NET"></a>install .NET</h2><h3 id="Add-the-dotnet-product-feed"><a href="#Add-the-dotnet-product-feed" class="headerlink" title="Add the dotnet product feed"></a>Add the dotnet product feed</h3><p><strong>注册授信任的Microsoft签名密匙</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; microsoft.gpg</div><div class="line">sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg</div></pre></td></tr></table></figure></p>
+<p><strong>注册Microsoft产品</strong><br><code>Ubuntu 17.10</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo sh -c &apos;echo &quot;deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-artful-prod artful main&quot; &gt; /etc/apt/sources.list.d/dotnetdev.list&apos;</div></pre></td></tr></table></figure></p>
+<p><code>Ubuntu 17.04</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo sh -c &apos;echo &quot;deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-zesty-prod zesty main&quot; &gt; /etc/apt/sources.list.d/dotnetdev.list&apos;</div></pre></td></tr></table></figure></p>
+<p><code>Ubuntu 16.04 / Linux Mint 18</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo sh -c &apos;echo &quot;deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main&quot; &gt; /etc/apt/sources.list.d/dotnetdev.list&apos;</div></pre></td></tr></table></figure></p>
+<h3 id="Install-NET-SDK"><a href="#Install-NET-SDK" class="headerlink" title="Install .NET SDK"></a>Install .NET SDK</h3><p><strong>更新软件源，然后安装</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apt-transport-https</div><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install dotnet-sdk-2.1.4</div></pre></td></tr></table></figure></p>
+<h3 id="Create-your-app"><a href="#Create-your-app" class="headerlink" title="Create your app"></a>Create your app</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">dotnet new console -o myApp</div><div class="line">cd myApp</div></pre></td></tr></table></figure>
+<p><code>dotnet</code>命令将会创建一个新的<code>console</code>应用。参数<code>-o</code>将会创建一个名字为<code>myApp</code>的目录，并且创建一些必要的此应用的文件。主文件是<code>Program.cs</code>.<br><img src="/images/dotnet_main.png" alt=""> </p>
+<h3 id="Run-your-app"><a href="#Run-your-app" class="headerlink" title="Run your app"></a>Run your app</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dotnet run</div></pre></td></tr></table></figure>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://www.microsoft.com/net/learn/get-started/linuxubuntu" target="_blank" rel="external">Get started with .NET in 10 minutes</a> </p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/java/">java</a>
+  <a class="article-category-link" href="/categories/NET/">.NET</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a>
+  <span></span> <a href="/tags/ubuntu/">ubuntu</a><a href="/tags/NET/">.NET</a>
   </div>
 
 </div>
@@ -126,7 +141,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/07/24/HashSet/" data-title="对HashSet的一些理解(TODO) | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2018/01/25/ubuntu-dotnet/" data-title="ubuntu16.04中.NET环境配置 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -139,19 +154,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/07/28/inherit-hibernate/" title="在面向关系的数据库中如何实现继承">
-  <strong>上一篇：</strong><br/>
-  <span>
-  在面向关系的数据库中如何实现继承</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/07/22/start-ubuntu/"  title="Ubuntu日常使用总结">
+<a href="/2018/01/10/java-exception/"  title="java异常信息总结">
  <strong>下一篇：</strong><br/> 
- <span>Ubuntu日常使用总结
+ <span>java异常信息总结
 </span>
 </a>
 </div>
@@ -166,7 +173,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#install-Visual-Studio-Code"><span class="toc-number">1.</span> <span class="toc-text">install Visual Studio Code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#install-NET"><span class="toc-number">2.</span> <span class="toc-text">install .NET</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Add-the-dotnet-product-feed"><span class="toc-number">2.1.</span> <span class="toc-text">Add the dotnet product feed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-NET-SDK"><span class="toc-number">2.2.</span> <span class="toc-text">Install .NET SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-your-app"><span class="toc-number">2.3.</span> <span class="toc-text">Create your app</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-your-app"><span class="toc-number">2.4.</span> <span class="toc-text">Run your app</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
  
   </div>
 
