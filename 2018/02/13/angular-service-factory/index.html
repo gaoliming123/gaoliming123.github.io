@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>angular中使用ng-include后controller中$watch失去作用 | 山里的坏孩子</title>
+    <title>简单理解angular中service、factory、provider用法 | 山里的坏孩子</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="高黎明(河北工业大学)">
     
 
     
-    <meta name="description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
+    <meta name="description" content="因为实力太次不能看懂angular的源码，不能看懂这三者之间深层次的区别。所以我就简单说一下按照yeoman/generator-angular创建service、factory、provider是给的模板代码说一下简单的用法。">
 <meta name="keywords" content="angular">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular中使用ng-include后controller中$watch失去作用">
-<meta property="og:url" content="https://gaoliming123.github.io/2017/10/21/angular-ng-include-watch/index.html">
+<meta property="og:title" content="简单理解angular中service、factory、provider用法">
+<meta property="og:url" content="https://gaoliming123.github.io/2018/02/13/angular-service-factory/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
-<meta property="og:description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
-<meta property="og:updated_time" content="2017-10-21T10:42:57.394Z">
+<meta property="og:description" content="因为实力太次不能看懂angular的源码，不能看懂这三者之间深层次的区别。所以我就简单说一下按照yeoman/generator-angular创建service、factory、provider是给的模板代码说一下简单的用法。">
+<meta property="og:updated_time" content="2018-02-13T12:29:53.580Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular中使用ng-include后controller中$watch失去作用">
-<meta name="twitter:description" content="有的时候为了实现代码复用，我们会使用ng-include复用部分代码。">
+<meta name="twitter:title" content="简单理解angular中service、factory、provider用法">
+<meta name="twitter:description" content="因为实力太次不能看懂angular的源码，不能看懂这三者之间深层次的区别。所以我就简单说一下按照yeoman/generator-angular创建service、factory、provider是给的模板代码说一下简单的用法。">
 
     
     
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/21/angular-ng-include-watch/" title="angular中使用ng-include后controller中$watch失去作用" itemprop="url">angular中使用ng-include后controller中$watch失去作用</a>
+      <a href="/2018/02/13/angular-service-factory/" title="简单理解angular中service、factory、provider用法" itemprop="url">简单理解angular中service、factory、provider用法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="高黎明(河北工业大学)" target="_blank" itemprop="author">高黎明(河北工业大学)</a>
 		
   <p class="article-time">
-    <time datetime="2017-10-21T09:34:20.000Z" itemprop="datePublished"> 发表于 2017-10-21</time>
+    <time datetime="2018-02-13T12:09:26.000Z" itemprop="datePublished"> 发表于 2018-02-13</time>
     
   </p>
 </header>
@@ -97,22 +97,13 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题简化"><span class="toc-number">1.</span> <span class="toc-text">问题简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-number">3.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单例模式之factory"><span class="toc-number">1.</span> <span class="toc-text">单例模式之factory</span></a></li></ol>
 		
 		</div>
 		
-		<p>有的时候为了实现代码复用，我们会使用<code>ng-include</code>复用部分代码。</p>
+		<p>因为实力太次不能看懂<code>angular</code>的源码，不能看懂这三者之间深层次的区别。所以我就简单说一下按照<code>yeoman/generator-angular</code>创建<code>service</code>、<code>factory</code>、<code>provider</code>是给的模板代码说一下简单的用法。</p>
 <a id="more"></a>
-<h2 id="问题简化"><a href="#问题简化" class="headerlink" title="问题简化"></a>问题简化</h2><p><code>about.js</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">angular.module(&apos;angularTestApp&apos;)</div><div class="line">  .controller(&apos;AboutCtrl&apos;, function ($scope) &#123;</div><div class="line">      $scope.num = 0;</div><div class="line">      $scope.$watch(&quot;num&quot;, function () &#123;</div><div class="line">          console.log($scope.num);</div><div class="line">      &#125;);</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<p><code>about.html</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;This is the about view.&lt;/p&gt;</div><div class="line">&lt;div ng-include=&quot;&apos;views/include.html&apos;&quot;&gt;&lt;/div&gt;</div><div class="line">&#123;&#123;num&#125;&#125;</div></pre></td></tr></table></figure></p>
-<p><code>include.html</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  &lt;input type=&quot;text&quot; ng-model=&quot;num&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; num &#125;&#125;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p>如果我们运行这段代码就会发现一个问题，当我们改变<code>num</code>的值的时候控制台并没有打印<code>num</code>的值。</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是因为我们使用<code>ng-include</code>的时候会会创建一个<code>child scope</code>。然后两个<code>scope</code>的作用域是相互隔离的，所以<code>include.html</code>中的<code>ng-model</code>绑定的是自己的<code>scope</code>, 所以<code>about.js</code>中的<code>num</code>不会发生改变。</p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>将<code>include.html</code>做如下修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  &lt;input type=&quot;text&quot; ng-model=&quot;$parent.num&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; num &#125;&#125;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://stackoverflow.com/questions/32775461/ng-model-not-working-inside-ng-include" target="_blank" rel="external">ng-model not working inside ng-include</a> </p>
+<h2 id="单例模式之factory"><a href="#单例模式之factory" class="headerlink" title="单例模式之factory"></a>单例模式之factory</h2><p>## </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -120,7 +111,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  <a class="article-category-link" href="/categories/angular/">angular</a>
 </div>
 
 
@@ -135,7 +126,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://gaoliming123.github.io/2017/10/21/angular-ng-include-watch/" data-title="angular中使用ng-include后controller中$watch失去作用 | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  <div data-url="https://gaoliming123.github.io/2018/02/13/angular-service-factory/" data-title="简单理解angular中service、factory、provider用法 | 山里的坏孩子" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -148,19 +139,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/11/14/oop/" title="面向对象编程感悟">
-  <strong>上一篇：</strong><br/>
-  <span>
-  面向对象编程感悟</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/09/23/thinkphp-SqlFileObject/"  title="thinkphp中failed to open stream">
+<a href="/2018/01/25/ubuntu-dotnet/"  title="ubuntu16.04中.NET环境配置">
  <strong>下一篇：</strong><br/> 
- <span>thinkphp中failed to open stream
+ <span>ubuntu16.04中.NET环境配置
 </span>
 </a>
 </div>
@@ -175,7 +158,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题简化"><span class="toc-number">1.</span> <span class="toc-text">问题简化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决办法"><span class="toc-number">3.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单例模式之factory"><span class="toc-number">1.</span> <span class="toc-text">单例模式之factory</span></a></li></ol>
  
   </div>
 
