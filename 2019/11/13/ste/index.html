@@ -1,0 +1,619 @@
+
+ <!DOCTYPE HTML>
+<html lang="English Chinese">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>pytorch实现简单的straight-through estimator(STE) | 山里的坏孩子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="高黎明(河北工业大学)">
+    
+
+    
+    <meta name="description" content="现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用pytorch对二值化的参数进行梯度更新。">
+<meta name="keywords" content="pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch实现简单的straight-through estimator(STE)">
+<meta property="og:url" content="https://gaoliming123.github.io/2019/11/13/ste/index.html">
+<meta property="og:site_name" content="山里的坏孩子">
+<meta property="og:description" content="现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用pytorch对二值化的参数进行梯度更新。">
+<meta property="og:updated_time" content="2019-11-13T11:26:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pytorch实现简单的straight-through estimator(STE)">
+<meta name="twitter:description" content="现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用pytorch对二值化的参数进行梯度更新。">
+
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="山里的坏孩子" title="山里的坏孩子"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
+				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页 | Home</a></li>
+					
+						<li><a href="/college">大学生活 | College life</a></li>
+					
+						<li><a href="/archives">归档 | Archives</a></li>
+					
+						<li><a href="/about">关于 | About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:gaoliming123.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/11/13/ste/" title="pytorch实现简单的straight-through estimator(STE)" itemprop="url">pytorch实现简单的straight-through estimator(STE)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="高黎明(河北工业大学)" target="_blank" itemprop="author">高黎明(河北工业大学)</a>
+		
+  <p class="article-time">
+    <time datetime="2019-11-13T05:53:03.000Z" itemprop="datePublished"> 发表于 2019-11-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">2.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#torch-sign"><span class="toc-number">2.1.</span> <span class="toc-text">torch.sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#demo"><span class="toc-number">2.2.</span> <span class="toc-text">demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain"><span class="toc-number">2.3.</span> <span class="toc-text">explain</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
+		
+		</div>
+		
+		<p>现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用<code>pytorch</code>对二值化的参数进行梯度更新。</p>
+<a id="more"></a>
+<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p><code>STE</code>核心的思想就是我们的参数初始化的时候就是<code>float</code>这样的连续值，当我们<code>forward</code>的时候就将原来的连续的参数映射到{-1,, 1}带入到网络进行计算，这样就可以计算网络的输出。然后<code>backward</code>的时候直接对原来<code>float</code>的参数进行更新，而不是对二值化的参数更新。这样可以完成对整个网络的更新了。<br>首先我们对上面问题进行一下数学的讲解。</p>
+<ul>
+<li>我们希望参数的范围是$r \in \mathbb{R}$</li>
+<li>我们可以得到二值化的参数 $q = Sign(r)$, $Sign$函数可以参考<code>torch.sign</code>函数, 可以理解为取符号函数</li>
+<li><code>backward</code>的过程中对$q$求梯度可得 $\frac{\partial loss}{\partial q}$</li>
+<li>对于$\frac{\partial q}{\partial r} = 0$, 所以可以得出 $\frac{\partial loss}{\partial r} = 0$, 这样的话我们就无法完成对参数的更新，因为每次<code>loss</code>对<code>r</code>梯度都是0</li>
+<li>所以<code>backward</code>的过程我们需要修改$\frac{\partial q}{\partial r}$这部分才可以使梯度继续更新下去，所以对$\frac{\partial loss}{\partial r}$进行如下修改: $\frac{\partial q}{\partial r} = \frac{\partial loss}{\partial q} * 1_{|r| \leq 1}$, 其中<br>$1_{|r| \leq 1}$ 可以看作$Htanh(x) = Clip(x, -1, 1) = max(-1, min(1, x))$对$x$的求导过程, 也就是是说:<br>$$\frac{\partial loss}{\partial r} = \frac{\partial loss}{\partial q} \frac{\partial Htanh}{\partial r}$$</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="torch-sign"><a href="#torch-sign" class="headerlink" title="torch.sign"></a>torch.sign</h3><p>首先我们验证一下使用<code>torch.sign</code>会是参数的梯度基本上都是0:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; input = torch.randn(4, requires_grad = True)</div><div class="line">&gt;&gt;&gt; output = torch.sign(input)</div><div class="line">&gt;&gt;&gt; loss = output.mean()</div><div class="line">&gt;&gt;&gt; loss.backward()</div><div class="line">&gt;&gt;&gt; input</div><div class="line">tensor([-0.8673, -0.0299, -1.1434, -0.6172], requires_grad=True)</div><div class="line">&gt;&gt;&gt; input.grad</div><div class="line">tensor([0., 0., 0., 0.])</div></pre></td></tr></table></figure></p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><p>我们需要重写<code>sign</code>这个函数，就好像写一个激活函数一样。先看一下代码, <a href="https://github.com/gaoliming123/learn/tree/master/ste" target="_blank" rel="external">github源码</a>:<br><code>LBSign.py</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import torch</div><div class="line"></div><div class="line">class LBSign(torch.autograd.Function):</div><div class="line"></div><div class="line">    @staticmethod</div><div class="line">    def forward(ctx, input):</div><div class="line">        return torch.sign(input)</div><div class="line"></div><div class="line">    @staticmethod</div><div class="line">    def backward(ctx, grad_output):</div><div class="line">        return grad_output.clamp_(-1, 1)</div></pre></td></tr></table></figure></p>
+<p>接下来我们做一下测试<br><code>main.py</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">import torch</div><div class="line">from LBSign import LBSign</div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line"></div><div class="line">    sign = LBSign.apply</div><div class="line">    params = torch.randn(4, requires_grad = True)                                                                                                  </div><div class="line">    output = sign(params)</div><div class="line">    loss = output.mean()</div><div class="line">    loss.backward()</div></pre></td></tr></table></figure></p>
+<p>然后我们发现有梯度了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; params</div><div class="line">tensor([-0.9143,  0.8993, -1.1235, -0.7928], requires_grad=True)</div><div class="line">&gt;&gt;&gt; params.grad</div><div class="line">tensor([0.2500, 0.2500, 0.2500, 0.2500])</div></pre></td></tr></table></figure></p>
+<h3 id="explain"><a href="#explain" class="headerlink" title="explain"></a>explain</h3><p>接下来我们对代码就行一下解释<a href="https://pytorch.org/docs/stable/autograd.html#function" target="_blank" rel="external">pytorch文档链接</a>:</p>
+<ul>
+<li>forward中的参数<code>ctx</code>是保存的上下文信息，<code>input</code>是输入</li>
+<li>backward中的参数<code>ctx</code>是保存的上下文信息，<code>grad_output</code>可以理解成 $\frac{\partial loss}{\partial q}$这一步的梯度信息，我们需要做的就是让<br>$$gradoutput * \frac{\partial Htanh}{\partial r}$$ 而不是让<code>pytorch</code>继续默认的 $$gradoutput * \frac{\partial q}{\partial r}$$<br>但是我们可以从上面的公式可以看出函数$Htanh$对$x$求导是1， 当$x \in [-1, 1]$，所以程序就可以化简成保留原来的梯度就行了，然后裁剪到其他范围的。</li>
+</ul>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://pytorch.org/docs/stable/autograd.html#function" target="_blank" rel="external">torch.autograd.Function</a></p>
+<p><a href="https://arxiv.org/abs/1602.02830" target="_blank" rel="external">Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/72681647" target="_blank" rel="external">二值网络，围绕STE的那些事儿</a></p>
+<p><a href="https://discuss.pytorch.org/t/custom-binarization-layer-with-straight-through-estimator-gives-error/4539" target="_blank" rel="external">Custom binarization layer with straight through estimator gives error</a></p>
+<p><a href="https://blog.csdn.net/tsq292978891/article/details/79364140" target="_blank" rel="external">定义torch.autograd.Function的子类，自己定义某些操作，且定义反向求导函数</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/pytorch/">pytorch</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://gaoliming123.github.io/2019/11/13/ste/" data-title="pytorch实现简单的straight-through estimator(STE) | 山里的坏孩子" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2019/04/12/hello-world/"  title="Hello World">
+ <strong>下一篇：</strong><br/> 
+ <span>Hello World
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">2.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#torch-sign"><span class="toc-number">2.1.</span> <span class="toc-text">torch.sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#demo"><span class="toc-number">2.2.</span> <span class="toc-text">demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain"><span class="toc-number">2.3.</span> <span class="toc-text">explain</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/NET/" title=".NET">.NET<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>2</sup></a></li>
+		  
+		
+		  
+		
+		  
+			<li><a href="/categories/hibernate/" title="hibernate">hibernate<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/java/" title="java">java<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/javascript/" title="javascript">javascript<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/linux/" title="linux">linux<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/maven/" title="maven">maven<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/php/" title="php">php<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/spring/" title="spring">spring<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/总结/" title="总结">总结<sup>8</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/java/" title="java">java<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hibernate/" title="hibernate">hibernate<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/spring/" title="spring">spring<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/php/" title="php">php<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/jackson/" title="jackson">jackson<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/maven/" title="maven">maven<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/thinkphp/" title="thinkphp">thinkphp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/query/" title="query">query<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/angular/" title="angular">angular<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/boot/" title="boot">boot<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/跨域请求/" title="跨域请求">跨域请求<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/jpa/" title="jpa">jpa<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/lampp/" title="lampp">lampp<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.mengyunzhi.com/" target="_blank" title="河北工业大学梦云智开发团队">河北工业大学梦云智开发团队</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://segmentfault.com/" target="_blank" title="segmentfault">segmentfault</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Gaoliming in 河北工业大学 <br/>
+			Thanks to all those who bring me knowledge and accompany me, especially my parents and teachers</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/gaoliming123" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:2022180258@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="高黎明(河北工业大学)">高黎明(河北工业大学)</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>
