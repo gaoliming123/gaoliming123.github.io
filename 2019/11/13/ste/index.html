@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://gaoliming123.github.io/2019/11/13/ste/index.html">
 <meta property="og:site_name" content="山里的坏孩子">
 <meta property="og:description" content="现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用pytorch对二值化的参数进行梯度更新。">
-<meta property="og:updated_time" content="2019-11-13T11:26:36.000Z">
+<meta property="og:updated_time" content="2019-11-13T11:29:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pytorch实现简单的straight-through estimator(STE)">
 <meta name="twitter:description" content="现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用pytorch对二值化的参数进行梯度更新。">
@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="山里的坏孩子">山里的坏孩子</a></h1>
 				<h2 class="blog-motto">仰望星空 脚踏实地</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -88,14 +88,14 @@
 		<a href="/about" title="高黎明(河北工业大学)" target="_blank" itemprop="author">高黎明(河北工业大学)</a>
 		
   <p class="article-time">
-    <time datetime="2019-11-13T05:53:03.000Z" itemprop="datePublished"> 发表于 2019-11-13</time>
+    <time datetime="2019-11-13T05:53:03.000Z" itemprop="datePublished"> 發表於 2019-11-13</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">2.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#torch-sign"><span class="toc-number">2.1.</span> <span class="toc-text">torch.sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#demo"><span class="toc-number">2.2.</span> <span class="toc-text">demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain"><span class="toc-number">2.3.</span> <span class="toc-text">explain</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
 		
@@ -103,7 +103,7 @@
 		
 		<p>现在深度学习中一般我们学习的参数都是连续的，因为这样在反向传播的时候才可以对梯度进行更新。但是有的时候我们也会遇到参数是离散的情况，这样就没有办法进行反向传播了，比如二值神经网络。本文中讲解了如何用<code>pytorch</code>对二值化的参数进行梯度更新。</p>
 <a id="more"></a>
-<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p><code>STE</code>核心的思想就是我们的参数初始化的时候就是<code>float</code>这样的连续值，当我们<code>forward</code>的时候就将原来的连续的参数映射到{-1,, 1}带入到网络进行计算，这样就可以计算网络的输出。然后<code>backward</code>的时候直接对原来<code>float</code>的参数进行更新，而不是对二值化的参数更新。这样可以完成对整个网络的更新了。<br>首先我们对上面问题进行一下数学的讲解。</p>
+<h2 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h2><p><code>提示</code>: 保证公式能正常显示请使用google chrome<br><code>STE</code>核心的思想就是我们的参数初始化的时候就是<code>float</code>这样的连续值，当我们<code>forward</code>的时候就将原来的连续的参数映射到{-1,, 1}带入到网络进行计算，这样就可以计算网络的输出。然后<code>backward</code>的时候直接对原来<code>float</code>的参数进行更新，而不是对二值化的参数更新。这样可以完成对整个网络的更新了。<br>首先我们对上面问题进行一下数学的讲解。</p>
 <ul>
 <li>我们希望参数的范围是$r \in \mathbb{R}$</li>
 <li>我们可以得到二值化的参数 $q = Sign(r)$, $Sign$函数可以参考<code>torch.sign</code>函数, 可以理解为取符号函数</li>
@@ -162,7 +162,7 @@
  
 
 <div class="next">
-<a href="/2019/04/12/hello-world/"  title="Hello World">
+<a href="/2019/10/29/hello-world/"  title="Hello World">
  <strong>下一篇：</strong><br/> 
  <span>Hello World
 </span>
@@ -174,22 +174,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">1.</span> <span class="toc-text">Question</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-number">2.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#torch-sign"><span class="toc-number">2.1.</span> <span class="toc-text">torch.sign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#demo"><span class="toc-number">2.2.</span> <span class="toc-text">demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#explain"><span class="toc-number">2.3.</span> <span class="toc-text">explain</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
@@ -198,8 +198,6 @@
 		
 		  
 			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>2</sup></a></li>
-		  
-		
 		  
 		
 		  
@@ -240,7 +238,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
@@ -260,19 +258,23 @@
 			
 		
 			
-				<li><a href="/tags/php/" title="php">php<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/REST/" title="REST">REST<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/总结/" title="总结">总结<sup>2</sup></a></li>
+				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Spring/" title="Spring">Spring<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/php/" title="php">php<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/总结/" title="总结">总结<sup>2</sup></a></li>
 			
 		
 			
@@ -284,15 +286,15 @@
 			
 		
 			
-				<li><a href="/tags/JPA/" title="JPA">JPA<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/maven/" title="maven">maven<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/thinkphp/" title="thinkphp">thinkphp<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ORM/" title="ORM">ORM<sup>1</sup></a></li>
 			
 		
 			
@@ -304,10 +306,6 @@
 			
 		
 			
-				<li><a href="/tags/boot/" title="boot">boot<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/computer/" title="computer">computer<sup>1</sup></a></li>
 			
 		
@@ -316,11 +314,11 @@
 			
 		
 			
-				<li><a href="/tags/jpa/" title="jpa">jpa<sup>1</sup></a></li>
+				<li><a href="/tags/boot/" title="boot">boot<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/lampp/" title="lampp">lampp<sup>1</sup></a></li>
+				<li><a href="/tags/jpa/" title="jpa">jpa<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -328,7 +326,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -570,7 +568,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
